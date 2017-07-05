@@ -15,7 +15,7 @@ computeAUC <- function(alpha, beta, lower, upper, SF_as_log = TRUE) { #need to m
   }
 }
 
-computeSFn <- function(D, alpha, beta, SF_as_log = TRUE) { # returns ln(SF); this and all functions below it assume SF is a fraction (or log thereof) and not a percentage (or log thereof)
+computeSFFromD <- function(D, alpha, beta, SF_as_log = TRUE) { # returns ln(SF); this and all functions below it assume SF is a fraction (or log thereof) and not a percentage (or log thereof)
   SF <- -(alpha * D + beta * D ^ 2)
   
   if (!SF_as_log) {
@@ -38,20 +38,7 @@ computeSF2 <- function(alpha, beta, SF_as_log = TRUE) {
   return(SF)
 }
 
-computeSF10 <- function(alpha, beta) {
-  SF <- computeSFn(D = 10,
-                   alpha = alpha,
-                   beta = beta,
-                   SF_as_log = SF_as_log)
-  
-  if (!SF_as_log) {
-    SF <- exp(SF)
-  }
-  
-  return(SF)
-}
-
-computeDn <- function(SF, alpha, beta, SF_as_log = TRUE) {
+computeDFromSF <- function(SF, alpha, beta, SF_as_log = TRUE) {
   if (!SF_as_log) {
     SF <- log(SF)
   }
