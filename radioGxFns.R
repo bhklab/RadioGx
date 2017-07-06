@@ -15,7 +15,11 @@ computeAUC <- function(alpha, beta, lower, upper, SF_as_log = TRUE) { #need to m
   }
 }
 
-computeSFFromD <- function(D, alpha, beta, SF_as_log = TRUE) { # returns ln(SF); this and all functions below it assume SF is a fraction (or log thereof) and not a percentage (or log thereof)
+linearQuadratic <- function(D, alpha, beta, SF_as_log = TRUE) {
+  return(.linearQuadratic(D = D, alpha = alpha, beta = beta, SF_as_log = SF_as_log))
+}
+
+.linearQuadratic <- function(D, alpha, beta, SF_as_log = TRUE) { # returns ln(SF); this and all functions below it assume SF is a fraction (or log thereof) and not a percentage (or log thereof)
   SF <- -(alpha * D + beta * D ^ 2)
   
   if (!SF_as_log) {
@@ -38,7 +42,11 @@ computeSF2 <- function(alpha, beta, SF_as_log = TRUE) {
   return(SF)
 }
 
-computeDFromSF <- function(SF, alpha, beta, SF_as_log = TRUE) {
+linearQuadraticInv <- function(SF, alpha, beta, SF_as_log = TRUE) {
+  return(.linearQuadraticInv(SF = SF, alpha = alpha, beta = beta, SF_as_log = SF_as_log))
+}
+
+.linearQuadraticInv <- function(SF, alpha, beta, SF_as_log = TRUE) {
   if (!SF_as_log) {
     SF <- log(SF)
   }

@@ -1,10 +1,11 @@
-plotCurve <- function(D, SF, alpha, beta, fit_curve = TRUE, SF_as_log = TRUE, padding = 1.1) {
+plotCurve <- function(D, SF, alpha, beta, filename = "dose_response_plot.pdf", fit_curve = TRUE, SF_as_log = TRUE, padding = 1.1) {
   if (fit_curve) {
-    alphaBeta <- linQuadRegression(D, SF, SF_as_log = SF_as_log)
-    print(alphaBeta)
-    alpha <- alphaBeta[["alpha"]]
-    beta <- alphaBeta[["beta"]]
-    print("A linear-quadratic curve was fit to the data with ")
+    if (missing(alpha) || missing(beta)) {
+      alphaBeta <- linQuadRegression(D, SF, SF_as_log = SF_as_log)
+      alpha <- alphaBeta[["alpha"]]
+      beta <- alphaBeta[["beta"]]
+    }
+    print(paste0("A linear-quadratic curve was fit to the data with parameters alpha = ", alpha, " and beta = ", beta, "."))
     trendlineDs <- .GetSupportVec(D)
     trendlineSFs <- computeSFFromD(trendlineDs, alpha = alpha, beta = beta, SF_as_log = SF_as_log)
   }
@@ -26,6 +27,8 @@ plotCurve <- function(D, SF, alpha, beta, fit_curve = TRUE, SF_as_log = TRUE, pa
     ylim <- c(0, 1)
   }
   
+  pdf(file = filename)
+  
   plot(NULL,
        xlim = xlim,
        ylim = ylim,
@@ -40,4 +43,6 @@ plotCurve <- function(D, SF, alpha, beta, fit_curve = TRUE, SF_as_log = TRUE, pa
   if (missing(SF) || fit_curve) {
     lines(trendlineDs, trendlineSFs, col = "blue", pch = 19)
   }
+  
+  dev.off()
 }

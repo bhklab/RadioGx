@@ -1,16 +1,17 @@
-linQuadRegression <- function (D,
-                               SF,
-                               density = c(100, 100),
-                               step = 0.5 / density,
-                               precision = 0.05,
-                               lower_bounds = c(0, 0),
-                               upper_bounds = c(0.3, 0.3),
-                               scale = 0.07,
-                               family = c("normal", "Cauchy"),
-                               median_n = 1,
-                               SF_as_log = TRUE,
-                               trunc = FALSE,
-                               verbose = FALSE) {
+linearQuadraticModel <- function (D,
+                                  SF,
+                                  density = c(100, 100),
+                                  step = 0.5 / density,
+                                  precision = 0.005,
+                                  lower_bounds = c(0, 0),
+                                  upper_bounds = c(0.3, 0.3),
+                                  scale = 0.07,
+                                  family = c("normal", "Cauchy"),
+                                  median_n = 1,
+                                  SF_as_log = TRUE,
+                                  trunc = FALSE,
+                                  verbose = FALSE) {
+  match.arg(family)
   
   if (!SF_as_log) {
     SF <- log(SF)
@@ -88,7 +89,7 @@ linQuadRegression <- function (D,
     guess <- sieve_guess
     guess_residual <- sieve_guess_residual
     
-    span <- 1
+    span <- 0.1
     while (span > precision) {
       neighbours <- rbind(guess, guess, guess, guess)
       neighbour_residuals <- matrix(NA, nrow = 1, ncol = length(neighbours))
@@ -96,7 +97,7 @@ linQuadRegression <- function (D,
       neighbours[2, 1] <- pmax(neighbours[2, 1] - span * step[1], lower_bounds[1])
       neighbours[3, 2] <- pmin(neighbours[3, 2] + span * step[2], upper_bounds[2])
       neighbours[4, 2] <- pmax(neighbours[4, 2] - span * step[2], lower_bounds[2])
-
+      
       for (i in 1:nrow(neighbours)) {
         neighbour_residuals[i] <- .residual(D, 
                                             SF,
