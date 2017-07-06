@@ -9,11 +9,15 @@ linQuadRegression <- function (D,
                                family = c("normal", "Cauchy"),
                                median_n = 1,
                                SF_as_log = TRUE,
-                               trunc = TRUE,
+                               trunc = FALSE,
                                verbose = FALSE) {
   
   if (!SF_as_log) {
     SF <- log(SF)
+  }
+  
+  if (trunc) {
+    SF[which(SF > 0)] <- 0
   }
   
   dFromD2 <- abs(D - 2)
@@ -31,8 +35,8 @@ linQuadRegression <- function (D,
   D10 <- D[D10Ind]
   SFD10 <- SF[D10Ind]
   
-  gritty_guess <- c((SF[D10Ind] * D[SF2Ind] ^ 2 - SF[SF2Ind] * D[D10Ind] ^ 2) / D[SF2Ind] / D[D10Ind] / (D[D10Ind] - D[SF2Ind]),
-                    (SF[D10Ind] * D[SF2Ind] - SF[SF2Ind] * D[D10Ind]) / D[SF2Ind] / D[D10Ind] / (D[SF2Ind] - D[D10Ind])) # assumes the SF2Indth point is SF2 and D10Indth point is D10 and imputes alpha, beta from that assumption
+  gritty_guess <- pmin(pmax(c((SF[D10Ind] * D[SF2Ind] ^ 2 - SF[SF2Ind] * D[D10Ind] ^ 2) / D[SF2Ind] / D[D10Ind] / (D[D10Ind] - D[SF2Ind]),
+                              (SF[D10Ind] * D[SF2Ind] - SF[SF2Ind] * D[D10Ind]) / D[SF2Ind] / D[D10Ind] / (D[SF2Ind] - D[D10Ind])), lower_bounds), upper_bounds) # assumes the SF2Indth point is SF2 and D10Indth point is D10 and imputes alpha, beta from that assumption unless either would thus be out of bounds
   
   guess <- tryCatch(optim(par = gritty_guess,
                           fn = function(x) {.residual(D,
