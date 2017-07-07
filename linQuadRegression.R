@@ -89,32 +89,13 @@ linearQuadraticModel <- function (D,
     guess <- sieve_guess
     guess_residual <- sieve_guess_residual
     
-    span <- 0.1
-    while (span > precision) {
-      neighbours <- rbind(guess, guess, guess, guess)
-      neighbour_residuals <- matrix(NA, nrow = 1, ncol = length(neighbours))
-      neighbours[1, 1] <- pmin(neighbours[1, 1] + span * step[1], upper_bounds[1])
-      neighbours[2, 1] <- pmax(neighbours[2, 1] - span * step[1], lower_bounds[1])
-      neighbours[3, 2] <- pmin(neighbours[3, 2] + span * step[2], upper_bounds[2])
-      neighbours[4, 2] <- pmax(neighbours[4, 2] - span * step[2], lower_bounds[2])
-      
-      for (i in 1:nrow(neighbours)) {
-        neighbour_residuals[i] <- .residual(D, 
-                                            SF,
-                                            pars = neighbours[i, ],
-                                            n = median_n, 
-                                            scale = scale,
-                                            family = family,
-                                            trunc = trunc)
-      }
-      if (min(neighbour_residuals) < guess_residual) {
-        guess <- neighbours[which.min(neighbour_residuals)[1], ]
-        guess_residual <- min(neighbour_residuals)[1]
-      }
-      else {
-        span <- span / 2
-      }
-    }
+    guess <- .patternSearch(guess = sieve_guess,
+                            guess_residual = sieve_guess_residual,
+                            span = 0.1,
+                            precision = precision,
+                            step = step,
+                            f = f)
   }
+  
   return(list(alpha = guess[1], beta = guess[2]))
 }
