@@ -1,4 +1,4 @@
-.makeGrittyGuess <- function(D, SF) {
+.makeGrittyGuess <- function(lower_bounds, upper_bounds, D, SF) {
   dFromD2 <- abs(D - 2)
   dFromSF10 <- abs(exp(SF) - 0.1)
   D10Ind <- which.min(dFromSF10)[1]
