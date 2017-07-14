@@ -23,7 +23,7 @@ linearQuadraticModel <- function (D,
                                    D = D,
                                    SF = SF)
   
-  guess <- PharmacoGx-API-Design:::.fitCurve(x = D,
+  guess <- CoreGx:::.fitCurve(x = D,
                                              y = SF,
                                              f = .linearQuadratic,
                                              density = c(100, 100),
