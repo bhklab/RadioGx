@@ -24,20 +24,20 @@ linearQuadraticModel <- function (D,
                                    SF = SF)
   
   guess <- CoreGx:::.fitCurve(x = D,
-                                             y = SF,
-                                             f = .linearQuadratic,
-                                             density = c(100, 100),
-                                             step = c(0.005, 0.005),
-                                             precision = 0.005,
-                                             lower_bounds = lower_bounds,
-                                             upper_bounds = upper_bounds,
-                                             scale = scale,
-                                             family = family,
-                                             median_n = median_n,
-                                             trunc = trunc,
-                                             verbose = verbose,
-                                             gritty_guess = gritty_guess,
-                                             span = 0.1)
+                              y = SF,
+                              f = RadioGx:::.linearQuadratic,
+                              density = c(100, 100),
+                              step = c(0.005, 0.005),
+                              precision = 0.005,
+                              lower_bounds = lower_bounds,
+                              upper_bounds = upper_bounds,
+                              scale = scale,
+                              family = family,
+                              median_n = median_n,
+                              trunc = trunc,
+                              verbose = verbose,
+                              gritty_guess = gritty_guess,
+                              span = 0.1)
   
   return(list(alpha = guess[1], beta = guess[2]))
 }
