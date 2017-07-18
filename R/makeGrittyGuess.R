@@ -1,3 +1,10 @@
+#' GrittyGuesser: Makes initial guesses for curve-fitting
+#' @param lower_bounds
+#' @param upper_bounds
+#' @param D
+#' @param SF
+#' .makeGrittyGuess()
+
 .makeGrittyGuess <- function(lower_bounds, upper_bounds, D, SF) {
   dFromD2 <- abs(D - 2)
   dFromSF10 <- abs(exp(SF) - 0.1)

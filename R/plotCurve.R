@@ -1,4 +1,18 @@
-plotCurve <- function(D, SF, alpha, beta, filename = "dose_response_plot.pdf", fit_curve = TRUE, SF_as_log = TRUE, padding = 1.1) {
+#' plotCurve: Produces plot of dose and response
+#' @param D vector of radiation doses
+#' @param SF vector of survival fractions corresponding to the doses
+#' @param alpha parameter in the equation SF = exp(-alpha * D - beta * D ^ 2)
+#' @param beta parameter in the equation SF = exp(-alpha * D - beta * D ^ 2)
+#' @param filename name of PDF which will be created by the function
+#' @param fit_curve should the graph include a linear-quadratic curve of best fit? Defaults to TRUE.
+#' @param SF_as_log should SF be expressed in log10 on the graph? Defaults to TRUE.
+#' @export
+#' plotCurve()
+
+plotCurve <- function(D, SF, alpha, beta, filename = "dose_response_plot.pdf", fit_curve = TRUE, SF_as_log = TRUE) {
+  
+  padding <- 1.1
+  
   if (fit_curve) {
     if (missing(alpha) || missing(beta)) {
       alphaBeta <- linQuadRegression(D, SF, SF_as_log = SF_as_log)
