@@ -1,15 +1,8 @@
-#' .linearQuadraticInv: computes radiation dose given survival fraction, alpha, beta
-#' @param SF
-#' @param alpha
-#' @param beta
-#' @param SF_as_log
-#' .linearQuadraticInv()
-
 .linearQuadraticInv <- function(SF, alpha, beta, SF_as_log = TRUE) {
   if (!SF_as_log) {
     SF <- log(SF)
   }
-  
+
   if (SF > 0) {
     warning("Positive log survival fraction ", SF,  "cannot be reached at any dose of radiation with linear quadratic paramaters alpha, beta > 0.")
   }

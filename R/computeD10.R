@@ -1,13 +1,15 @@
-#' computeD10: computes D10 given alpha, beta
+#' Compute D10
+#'
+#' @description This function computes the radiation dose at which only 10% of cancer cells survive under the exponential model SF = exp(-alpha * D - beta * D ^ 2) given alpha and beta, where D is the radiation dose given and SF is the fraction of cells surviving
 #' @param alpha parameter in equation y = exp(-alpha * x - beta * x ^ 2)
 #' @param beta parameter in equation y = exp(-alpha * x - beta * x ^ 2)
+#' @details The units of the returned dose are the inverses of the units of the alpha and beta passed in.
 #' @example computeD10(0.2, 0.1)
 #' @export
-#' computeD10()
 
 computeD10 <- function(alpha, beta) {
-  D <- computeDn(SF = 0.1,
-                 alpha = alpha,
-                 beta = beta,
-                 SF_as_log = FALSE)
+  D <- .linearQuadraticInv(SF = 0.1,
+                           alpha = alpha,
+                           beta = beta,
+                           SF_as_log = FALSE)
 }
