@@ -1,6 +1,7 @@
 #' computeD10: computes D10 given alpha, beta
 #' @param alpha parameter in equation y = exp(-alpha * x - beta * x ^ 2)
 #' @param beta parameter in equation y = exp(-alpha * x - beta * x ^ 2)
+#' @example computeD10(0.2, 0.1)
 #' @export
 #' computeD10()
 

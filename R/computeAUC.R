@@ -4,6 +4,7 @@
 #' @param lower lower bound of dose region to compute AUC over
 #' @param upper upper bound of dose region to compute AUC over
 #' @param SF_as_log should AUC be computed with log10(survival fraction) instead of survival fraction? Defaults to FALSE.
+#' @example computeAUC(0.2, 0.1, 0, 4)
 #' @export
 #' computeAUC()
 

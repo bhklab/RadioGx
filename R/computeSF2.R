@@ -2,6 +2,7 @@
 #' @param alpha parameter in equation y = exp(-alpha * x - beta * x ^ 2)
 #' @param beta parameter in equation y = exp(-alpha * x - beta * x ^ 2)
 #' @param SF_as_log should log10(SF2) be returned instead of SF2? Defaults to TRUE.
+#' @example computeSF2(0.2, 0.1)
 #' @export
 #' computeSF2()
 
