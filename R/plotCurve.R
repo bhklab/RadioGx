@@ -10,11 +10,8 @@
 #' @param SF_as_log should SF be expressed in log10 on the graph? Defaults to TRUE.
 #' @example plotCurve(c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10), c(1.1, 0.8, 0.7, 0.45, 0.15, -0.1, -0.1, -0.4, -0.65, -0.75, -1.1))
 #' @export
-#' @importFrom graphics lines
-#' @importFrom graphics plot
-#' @importFrom graphics points
-#' @importFrom grDevices dev
-#' @importFrom grDevices pdf
+#' @importFrom graphics lines plot points
+#' @importFrom grDevices dev.off pdf
 
 plotCurve <- function(D, SF, alpha, beta, filename = "dose_response_plot.pdf", fit_curve = TRUE, SF_as_log = TRUE) {
 
