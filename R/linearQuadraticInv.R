@@ -1,4 +1,12 @@
 .linearQuadraticInv <- function(SF, alpha, beta, SF_as_log = TRUE) {
+  CoreGx:::.sanitizeInput(y = SF,
+                          pars = c(alpha, beta),
+                          x_as_log = FALSE,
+                          y_as_log = SF_as_log,
+                          y_as_pct = FALSE,
+                          trunc = FALSE,
+                          verbose = FALSE)
+  
   if (!SF_as_log) {
     SF <- log(SF)
   }

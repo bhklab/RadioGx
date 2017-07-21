@@ -8,6 +8,13 @@
 #' @export
 
 computeD10 <- function(alpha, beta) {
+  CoreGx:::.sanitizeInput(pars = c(alpha, beta),
+                          x_as_log = FALSE,
+                          y_as_log = FALSE,
+                          y_as_pct = FALSE,
+                          trunc = FALSE,
+                          verbose = FALSE)
+  
   D <- .linearQuadraticInv(SF = 0.1,
                            alpha = alpha,
                            beta = beta,

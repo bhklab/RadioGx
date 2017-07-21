@@ -14,6 +14,14 @@
 #' @importFrom grDevices dev.off pdf
 
 plotCurve <- function(D, SF, alpha, beta, filename = "dose_response_plot.pdf", fit_curve = TRUE, SF_as_log = TRUE) {
+  CoreGx:::.sanitizeInput(x = D,
+                          y = SF,
+                          pars = c(alpha, beta),
+                          x_as_log = FALSE,
+                          y_as_log = SF_as_log,
+                          y_as_pct = FALSE,
+                          trunc = FALSE,
+                          verbose = FALSE)
 
   padding <- 1.1 # whitespace on graph around function range
 

@@ -26,20 +26,38 @@ linearQuadraticModel <- function (D,
                                   trunc = FALSE,
                                   verbose = FALSE) {
   match.arg(family)
-
-  if (!SF_as_log) {
-    SF <- log(SF)
+  
+  CoreGx:::.sanitizeInput(x = D,
+                          y = SF,
+                          x_as_log = FALSE,
+                          y_as_log = SF_as_log,
+                          y_as_pct = FALSE,
+                          trunc = trunc,
+                          verbose = verbose)
+  
+  SF <- CoreGx:::.reformatData(x = D,
+                               y = SF,
+                               x_to_log = FALSE,
+                               y_to_log = FALSE,
+                               y_to_frac = FALSE,
+                               trunc = trunc,
+                               verbose = verbose)[["y"]]
+  
+  if (!(all(lower_bounds < upper_bounds))) {
+    if (verbose == 2) {
+      print("lower_bounds:")
+      print(lower_bounds)
+      print("upper_bounds:")
+      print(upper_bounds)
+    }
+    stop ("All lower bounds must be less than the corresponding upper_bounds.")
   }
-
-  if (trunc) {
-    SF[which(SF > 0)] <- 0
-  }
-
+  
   gritty_guess <- .makeGrittyGuess(lower_bounds = lower_bounds,
                                    upper_bounds = upper_bounds,
                                    D = D,
                                    SF = SF)
-
+  
   guess <- CoreGx:::.fitCurve(x = D,
                               y = SF,
                               f = RadioGx:::.linearQuadratic,
@@ -55,6 +73,6 @@ linearQuadraticModel <- function (D,
                               verbose = verbose,
                               gritty_guess = gritty_guess,
                               span = 0.1)
-
+  
   return(list(alpha = guess[1], beta = guess[2]))
 }
