@@ -16,9 +16,8 @@
 #' @importFrom stats pnorm
 #' @importFrom caTools trapz
 
-computeAUC <- function(D, SF, pars, lower, upper, SF_as_log = TRUE, trunc = FALSE, area.type = c("Fitted", "Actual"), verbose = c(0, 1, 2)) {
+computeAUC <- function(D, SF, pars, lower, upper, SF_as_log = TRUE, trunc = FALSE, area.type = c("Fitted", "Actual"), verbose = TRUE) {
   area.type <- match.arg(area.type)
-  verbose <- match.arg(verbose)
   
   if (!missing(SF)) {
     CoreGx:::.sanitizeInput(x = D,
