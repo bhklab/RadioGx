@@ -1,37 +1,102 @@
 #' computeAUC: computes AUC
 #'
 #' @description This function computes the area under a dose-response curve of the form survival fraction SF = exp(-alpha * D - beta * D ^ 2).
-#' @param alpha parameter in equation y = exp(-alpha * x - beta * x ^ 2)
-#' @param beta parameter in equation y = exp(-alpha * x - beta * x ^ 2)
+#' @param D vector of dosages
+#' @param SF vector of survival fractions
+#' @param pars parameters (alpha, beta) in equation y = exp(-alpha * x - beta * x ^ 2)
 #' @param lower lower bound of dose region to compute AUC over
 #' @param upper upper bound of dose region to compute AUC over
 #' @param SF_as_log should AUC be computed with log10(survival fraction) instead of survival fraction? Defaults to FALSE.
+#' @param trunc should survival fractions be truncated downward to 1 if they exceed 1?
+#' @param area.type should the AUC of the raw (D, SF) points be returned, or should the AUC of a curve fit to said points be returned instead?
+#' @param verbose how detailed should error and warning messages be? See details.
+#' @details If lower and/or upper are missing, the function assumes their values to be the minimum and maximum D-values, respectively. For all warnings to be silent, set trunc = FALSE. For warnings to be output, set trunc = TRUE. For warnings to be output along with the arguments that triggered them, set trunc = 2.
 #' @example computeAUC(0.2, 0.1, 0, 4)
 #' @export
 #' @importFrom stats pnorm
+#' @importFrom caTools trapz
 
-computeAUC <- function(alpha, beta, lower, upper, SF_as_log = TRUE) {
-  CoreGx:::.sanitizeInput(pars = c(alpha, beta),
-                          lower = lower,
-                          upper = upper,
-                          x_as_log = FALSE,
-                          y_as_log = SF_as_log,
-                          y_as_pct = FALSE,
-                          trunc = FALSE,
-                          verbose = FALSE)
+computeAUC <- function(D, SF, pars, lower, upper, SF_as_log = TRUE, trunc = FALSE, area.type = c("Fitted", "Actual"), verbose = c(0, 1, 2)) {
+  area.type <- match.arg(area.type)
+  verbose <- match.arg(verbose)
   
-  if (SF_as_log) {
-    return(alpha / 2 * (lower ^ 2 - upper ^ 2) + beta / 3 * (lower ^ 3 - upper ^ 3))
+  if (!missing(SF)) {
+    CoreGx:::.sanitizeInput(x = D,
+                            y = SF,
+                            x_as_log = FALSE,
+                            y_as_log = SF_as_log,
+                            y_as_pct = FALSE,
+                            trunc = trunc,
+                            verbose = verbose)
+    
+    CoreGx:::.reformatData(x = D,
+                           y = SF,
+                           x_to_log = FALSE,
+                           y_to_log = FALSE,
+                           y_to_frac = FALSE,
+                           trunc = trunc)
+  } else if (!missing(pars)) {
+    CoreGx:::.sanitizeInput(pars = pars,
+                            x_as_log = FALSE,
+                            y_as_log = SF_as_log,
+                            y_as_pct = FALSE,
+                            trunc = trunc,
+                            verbose = verbose)
+    CoreGx:::.reformatData(x = D,
+                           pars = pars,
+                           x_to_log = FALSE,
+                           y_to_log = FALSE,
+                           y_to_frac = FALSE,
+                           trunc = trunc)
   } else {
-    if (beta == 0) {
-      if (alpha == 0) {
-        return(upper - lower)
-      } else {
-        return((exp(-alpha * lower) - exp(-alpha * upper)) / alpha)
-      }
+    stop("SF and pars can't both be missing.")
+  }
+  
+  if (!missing(lower) && !missing(upper)) {
+    CoreGx:::.sanitizeInput(lower = lower,
+                            upper = upper,
+                            x_as_log = FALSE,
+                            y_as_log = SF_as_log,
+                            y_as_pct = FALSE,
+                            trunc = trunc,
+                            verbose = verbose)
+  }
+  
+  if (area.type == "Fitted") {
+    if (missing(pars)) {
+      pars <- unlist(linearQuadraticModel(D = D,
+                                          SF = SF,
+                                          SF_as_log = SF_as_log,
+                                          trunc = trunc,
+                                          verbose = verbose))
+    }
+    if (missing(lower)) {
+      lower <- min(D)
+    }
+    if (missing(upper)) {
+      upper <- max(D)
+    }
+    
+    if (SF_as_log) {
+      return(pars[[1]] / 2 * (lower ^ 2 - upper ^ 2) + pars[[2]] / 3 * (lower ^ 3 - upper ^ 3))
     } else {
-      return(exp(alpha ^ 2 / 4 / beta) * sqrt(pi / beta) * (pnorm(sqrt(2 * beta) * (upper + alpha / 2 / beta)) -
-                                                              pnorm(sqrt(2 * beta) * (lower + alpha / 2 / beta))))
+      if (pars[[2]] == 0) {
+        if (pars[[1]] == 0) {
+          return(upper - lower)
+        } else {
+          return((exp(-pars[[1]] * lower) - exp(-pars[[1]] * upper)) / pars[[1]])
+        }
+      } else {
+        return(exp(pars[[1]] ^ 2 / 4 / pars[[2]]) * sqrt(pi / pars[[2]]) * (pnorm(sqrt(2 * pars[[2]]) * (upper + pars[[1]] / 2 / pars[[2]])) -
+                                                                              pnorm(sqrt(2 * pars[[2]]) * (lower + pars[[1]] / 2 / pars[[2]]))))
+      }
+    }
+    
+  } else if (area.type == "Actual") {
+    if (missing(SF)) {
+      stop("Please pass in SF-values.")
+    } else {
+      return(trapz(x = D, y = SF))
     }
   }
 }

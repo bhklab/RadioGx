@@ -3,8 +3,7 @@
 #' @description This function plots doses of radiation against the cancer cell survival fractions thereby observed.
 #' @param D vector of radiation doses
 #' @param SF vector of survival fractions corresponding to the doses
-#' @param alpha parameter in the equation SF = exp(-alpha * D - beta * D ^ 2)
-#' @param beta parameter in the equation SF = exp(-alpha * D - beta * D ^ 2)
+#' @param pars parameters (alpha, beta) in the equation SF = exp(-alpha * D - beta * D ^ 2)
 #' @param filename name of PDF which will be created by the function
 #' @param fit_curve should the graph include a linear-quadratic curve of best fit? Defaults to TRUE.
 #' @param SF_as_log should SF be expressed in log10 on the graph? Defaults to TRUE.
@@ -13,7 +12,7 @@
 #' @importFrom graphics lines plot points
 #' @importFrom grDevices dev.off pdf
 
-plotCurve <- function(D, SF, alpha, beta, filename = "dose_response_plot.pdf", fit_curve = TRUE, SF_as_log = TRUE) {
+plotCurve <- function(D, SF, pars, filename = "dose_response_plot.pdf", fit_curve = TRUE, SF_as_log = TRUE) {
   CoreGx:::.sanitizeInput(x = D,
                           y = SF,
                           x_as_log = FALSE,
@@ -25,21 +24,19 @@ plotCurve <- function(D, SF, alpha, beta, filename = "dose_response_plot.pdf", f
   padding <- 1.1 # whitespace on graph around function range
 
   if (fit_curve) {
-    if (missing(alpha) || missing(beta)) {
-      alphaBeta <- linearQuadraticModel(D, SF, SF_as_log = SF_as_log)
-      alpha <- alphaBeta[["alpha"]]
-      beta <- alphaBeta[["beta"]]
+    if (missing(pars)) {
+      pars <- unlist(linearQuadraticModel(D, SF, SF_as_log = SF_as_log))
     } else {
-      CoreGx:::.sanitizeInput(pars = c(alpha, beta),
+      CoreGx:::.sanitizeInput(pars = pars,
                               x_as_log = FALSE,
                               y_as_log = SF_as_log,
                               y_as_pct = FALSE,
                               trunc = FALSE,
                               verbose = FALSE)
     }
-    print(paste0("A linear-quadratic curve was fit to the data with parameters alpha = ", alpha, " and beta = ", beta, "."))
+    print(paste0("A linear-quadratic curve was fit to the data with parameters alpha = ", pars[[1]], " and beta = ", pars[[2]], "."))
     trendlineDs <- CoreGx:::.GetSupportVec(D)
-    trendlineSFs <- .linearQuadratic(trendlineDs, pars = c(alpha, beta), SF_as_log = SF_as_log)
+    trendlineSFs <- .linearQuadratic(trendlineDs, pars = pars, SF_as_log = SF_as_log)
   }
 
   xlim <- range(D)
