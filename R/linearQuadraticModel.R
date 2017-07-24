@@ -40,8 +40,7 @@ linearQuadraticModel <- function (D,
                                x_to_log = FALSE,
                                y_to_log = FALSE,
                                y_to_frac = FALSE,
-                               trunc = trunc,
-                               verbose = verbose)[["y"]]
+                               trunc = trunc)[["y"]]
   
   if (!(all(lower_bounds < upper_bounds))) {
     if (verbose == 2) {

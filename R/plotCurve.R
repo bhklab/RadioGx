@@ -16,7 +16,6 @@
 plotCurve <- function(D, SF, alpha, beta, filename = "dose_response_plot.pdf", fit_curve = TRUE, SF_as_log = TRUE) {
   CoreGx:::.sanitizeInput(x = D,
                           y = SF,
-                          pars = c(alpha, beta),
                           x_as_log = FALSE,
                           y_as_log = SF_as_log,
                           y_as_pct = FALSE,
@@ -27,13 +26,20 @@ plotCurve <- function(D, SF, alpha, beta, filename = "dose_response_plot.pdf", f
 
   if (fit_curve) {
     if (missing(alpha) || missing(beta)) {
-      alphaBeta <- linQuadRegression(D, SF, SF_as_log = SF_as_log)
+      alphaBeta <- linearQuadraticModel(D, SF, SF_as_log = SF_as_log)
       alpha <- alphaBeta[["alpha"]]
       beta <- alphaBeta[["beta"]]
+    } else {
+      CoreGx:::.sanitizeInput(pars = c(alpha, beta),
+                              x_as_log = FALSE,
+                              y_as_log = SF_as_log,
+                              y_as_pct = FALSE,
+                              trunc = FALSE,
+                              verbose = FALSE)
     }
     print(paste0("A linear-quadratic curve was fit to the data with parameters alpha = ", alpha, " and beta = ", beta, "."))
     trendlineDs <- CoreGx:::.GetSupportVec(D)
-    trendlineSFs <- .linearQuadratic(trendlineDs, alpha = alpha, beta = beta, SF_as_log = SF_as_log)
+    trendlineSFs <- .linearQuadratic(trendlineDs, pars = c(alpha, beta), SF_as_log = SF_as_log)
   }
 
   xlim <- range(D)

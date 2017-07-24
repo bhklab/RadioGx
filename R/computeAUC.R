@@ -12,19 +12,13 @@
 
 computeAUC <- function(alpha, beta, lower, upper, SF_as_log = TRUE) {
   CoreGx:::.sanitizeInput(pars = c(alpha, beta),
+                          lower = lower,
+                          upper = upper,
                           x_as_log = FALSE,
                           y_as_log = SF_as_log,
                           y_as_pct = FALSE,
                           trunc = FALSE,
                           verbose = FALSE)
-  
-  if (lower >= upper) {
-    print("lower:")
-    print(lower)
-    print("upper:")
-    print(upper)
-    stop("The lower bound of the region of allowed x-values must be less than the upper bound.")
-  }
   
   if (SF_as_log) {
     return(alpha / 2 * (lower ^ 2 - upper ^ 2) + beta / 3 * (lower ^ 3 - upper ^ 3))

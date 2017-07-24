@@ -15,8 +15,8 @@ computeD10 <- function(alpha, beta) {
                           trunc = FALSE,
                           verbose = FALSE)
   
-  D <- .linearQuadraticInv(SF = 0.1,
-                           alpha = alpha,
-                           beta = beta,
-                           SF_as_log = FALSE)
+  return(.linearQuadraticInv(SF = 0.1,
+                             alpha = alpha,
+                             beta = beta,
+                             SF_as_log = FALSE))
 }
