@@ -28,12 +28,14 @@ computeAUC <- function(D, SF, pars, lower, upper, SF_as_log = TRUE, trunc = FALS
                             trunc = trunc,
                             verbose = verbose)
     
-    CoreGx:::.reformatData(x = D,
-                           y = SF,
-                           x_to_log = FALSE,
-                           y_to_log = FALSE,
-                           y_to_frac = FALSE,
-                           trunc = trunc)
+    DSF <- CoreGx:::.reformatData(x = D,
+                                 y = SF,
+                                 x_to_log = FALSE,
+                                 y_to_log = FALSE,
+                                 y_to_frac = FALSE,
+                                 trunc = trunc)
+    D <- DSF[["x"]]
+    SF <- DSF[["y"]]
   } else if (!missing(pars)) {
     CoreGx:::.sanitizeInput(pars = pars,
                             x_as_log = FALSE,
@@ -41,12 +43,14 @@ computeAUC <- function(D, SF, pars, lower, upper, SF_as_log = TRUE, trunc = FALS
                             y_as_pct = FALSE,
                             trunc = trunc,
                             verbose = verbose)
-    CoreGx:::.reformatData(x = D,
-                           pars = pars,
-                           x_to_log = FALSE,
-                           y_to_log = FALSE,
-                           y_to_frac = FALSE,
-                           trunc = trunc)
+    Dpars <- CoreGx:::.reformatData(x = D,
+                                    pars = pars,
+                                    x_to_log = FALSE,
+                                    y_to_log = FALSE,
+                                    y_to_frac = FALSE,
+                                    trunc = trunc)
+    D <- Dpars[["x"]]
+    pars <- Dpars[["pars"]]
   } else {
     stop("SF and pars can't both be missing.")
   }

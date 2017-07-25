@@ -74,4 +74,6 @@ plotCurve <- function(D, SF, pars, filename = "dose_response_plot.pdf", fit_curv
   }
 
   dev.off()
+  
+  return(invisible(0))
 }
