@@ -8,7 +8,6 @@
 #' @param scale parameter of the assumed error distribution of the data; see details
 #' @param family family of distributions of the error terms in the data; currently supported options are "normal" and "cauchy"
 #' @param median_n see details
-#' @param SF_as_log should SF be expressed in log10 on the graph? Defaults to TRUE.
 #' @param trunc should survival fractions be truncated downward to 1? Defaults to FALSE.
 #' @param verbose see details
 #' @details 'verbose' outputs warnings that are otherwised suppressed when the function sanity-checks user inputs. 'median_n' denotes the number of distributions from family 'family' that are medianned. (Note that setting n = 1 (the default) is equivalent to using a simple normal or cauchy distribution without taking any medians.)
@@ -18,11 +17,11 @@
 linearQuadraticModel <- function (D,
                                   SF,
                                   lower_bounds = c(0, 0),
-                                  upper_bounds = c(0.3, 0.3),
+                                  upper_bounds = c(1, 1),
                                   scale = 0.07,
                                   family = c("normal", "Cauchy"),
                                   median_n = 1,
-                                  SF_as_log = TRUE,
+                                  # SF_as_log = TRUE,
                                   trunc = FALSE,
                                   verbose = FALSE) {
   match.arg(family)
@@ -30,17 +29,19 @@ linearQuadraticModel <- function (D,
   CoreGx:::.sanitizeInput(x = D,
                           y = SF,
                           x_as_log = FALSE,
-                          y_as_log = SF_as_log,
+                          y_as_log = FALSE,
                           y_as_pct = FALSE,
                           trunc = trunc,
                           verbose = verbose)
   
-  SF <- CoreGx:::.reformatData(x = D,
+  DSF <- CoreGx:::.reformatData(x = D,
                                y = SF,
                                x_to_log = FALSE,
-                               y_to_log = !SF_as_log,
+                               y_to_log = TRUE,
                                y_to_frac = FALSE,
-                               trunc = trunc)[["y"]]
+                               trunc = trunc)
+  D <- DSF[["x"]]
+  SF <- DSF[["y"]]
   
   if (!(all(lower_bounds < upper_bounds))) {
     if (verbose == 2) {

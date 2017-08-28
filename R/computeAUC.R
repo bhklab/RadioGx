@@ -6,7 +6,6 @@
 #' @param pars parameters (alpha, beta) in equation y = exp(-alpha * x - beta * x ^ 2)
 #' @param lower lower bound of dose region to compute AUC over
 #' @param upper upper bound of dose region to compute AUC over
-#' @param SF_as_log should AUC be computed with log10(survival fraction) instead of survival fraction? Defaults to FALSE.
 #' @param trunc should survival fractions be truncated downward to 1 if they exceed 1?
 #' @param area.type should the AUC of the raw (D, SF) points be returned, or should the AUC of a curve fit to said points be returned instead?
 #' @param verbose how detailed should error and warning messages be? See details.
@@ -16,17 +15,17 @@
 #' @importFrom stats pnorm
 #' @importFrom caTools trapz
 
-computeAUC <- function(D, SF, pars, lower, upper, SF_as_log = TRUE, trunc = FALSE, area.type = c("Fitted", "Actual"), verbose = TRUE) {
+computeAUC <- function(D, SF, pars, lower, upper, trunc = FALSE, area.type = c("Fitted", "Actual"), verbose = TRUE) {
   area.type <- match.arg(area.type)
   
   if (!missing(SF)) {
     CoreGx:::.sanitizeInput(x = D,
                             y = SF,
                             x_as_log = FALSE,
-                            y_as_log = SF_as_log,
+                            y_as_log = FALSE,
                             y_as_pct = FALSE,
                             trunc = trunc,
-                            verbose = verbose)
+                            verbose = FALSE)
     
     DSF <- CoreGx:::.reformatData(x = D,
                                  y = SF,
@@ -39,10 +38,10 @@ computeAUC <- function(D, SF, pars, lower, upper, SF_as_log = TRUE, trunc = FALS
   } else if (!missing(pars)) {
     CoreGx:::.sanitizeInput(pars = pars,
                             x_as_log = FALSE,
-                            y_as_log = SF_as_log,
+                            y_as_log = FALSE,
                             y_as_pct = FALSE,
                             trunc = trunc,
-                            verbose = verbose)
+                            verbose = FALSE)
     Dpars <- CoreGx:::.reformatData(x = D,
                                     pars = pars,
                                     x_to_log = FALSE,
@@ -59,7 +58,7 @@ computeAUC <- function(D, SF, pars, lower, upper, SF_as_log = TRUE, trunc = FALS
     CoreGx:::.sanitizeInput(lower = lower,
                             upper = upper,
                             x_as_log = FALSE,
-                            y_as_log = SF_as_log,
+                            y_as_log = FALSE,
                             y_as_pct = FALSE,
                             trunc = trunc,
                             verbose = verbose)
@@ -69,7 +68,6 @@ computeAUC <- function(D, SF, pars, lower, upper, SF_as_log = TRUE, trunc = FALS
     if (missing(pars)) {
       pars <- unlist(linearQuadraticModel(D = D,
                                           SF = SF,
-                                          SF_as_log = SF_as_log,
                                           trunc = trunc,
                                           verbose = verbose))
     }
@@ -80,7 +78,8 @@ computeAUC <- function(D, SF, pars, lower, upper, SF_as_log = TRUE, trunc = FALS
       upper <- max(D)
     }
     
-    if (SF_as_log) {
+    # if (SF_as_log) {
+    if (FALSE) {
       return(pars[[1]] / 2 * (lower ^ 2 - upper ^ 2) + pars[[2]] / 3 * (lower ^ 3 - upper ^ 3))
     } else {
       if (pars[[2]] == 0) {
