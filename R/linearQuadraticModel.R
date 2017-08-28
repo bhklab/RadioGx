@@ -38,7 +38,7 @@ linearQuadraticModel <- function (D,
   SF <- CoreGx:::.reformatData(x = D,
                                y = SF,
                                x_to_log = FALSE,
-                               y_to_log = FALSE,
+                               y_to_log = !SF_as_log,
                                y_to_frac = FALSE,
                                trunc = trunc)[["y"]]
   
