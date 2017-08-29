@@ -4,15 +4,14 @@
 \alias{computeSF2}
 \title{Compute SF2}
 \usage{
-computeSF2(alpha, beta, SF_as_log = TRUE)
+computeSF2(pars)
 }
 \arguments{
-\item{alpha}{parameter in equation y = exp(-alpha * x - beta * x ^ 2)}
-
-\item{beta}{parameter in equation y = exp(-alpha * x - beta * x ^ 2)}
-
-\item{SF_as_log}{should log10(SF2) be returned instead of SF2? Defaults to TRUE.}
+\item{pars}{parameters (alpha, beta) in equation y = exp(-alpha * x - beta * x ^ 2)}
 }
 \description{
 This function computes the survival fraction after administering 2 units of radiation, given alpha and beta in the equation SF = exp(-alpha * D - beta * D ^ 2).
+}
+\examples{
+computeSF2(c(0.2, 0.1))
 }

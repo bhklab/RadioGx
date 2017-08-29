@@ -4,7 +4,7 @@
 \alias{plotCurve}
 \title{Plot radiation dose-response curve}
 \usage{
-plotCurve(D, SF, alpha, beta, filename = "dose_response_plot.pdf",
+plotCurve(D, SF, pars, filename = "dose_response_plot.pdf",
   fit_curve = TRUE, SF_as_log = TRUE)
 }
 \arguments{
@@ -12,9 +12,7 @@ plotCurve(D, SF, alpha, beta, filename = "dose_response_plot.pdf",
 
 \item{SF}{vector of survival fractions corresponding to the doses}
 
-\item{alpha}{parameter in the equation SF = exp(-alpha * D - beta * D ^ 2)}
-
-\item{beta}{parameter in the equation SF = exp(-alpha * D - beta * D ^ 2)}
+\item{pars}{parameters (alpha, beta) in the equation SF = exp(-alpha * D - beta * D ^ 2)}
 
 \item{filename}{name of PDF which will be created by the function}
 
@@ -24,4 +22,7 @@ plotCurve(D, SF, alpha, beta, filename = "dose_response_plot.pdf",
 }
 \description{
 This function plots doses of radiation against the cancer cell survival fractions thereby observed.
+}
+\examples{
+plotCurve(c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10), c(1.1, 0.8, 0.7, 0.45, 0.15, -0.1, -0.1, -0.4, -0.65, -0.75, -1.1))
 }

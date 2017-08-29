@@ -1,6 +1,9 @@
 #' computeAUC: computes AUC
 #'
 #' @description This function computes the area under a dose-response curve of the form survival fraction SF = exp(-alpha * D - beta * D ^ 2).
+#' 
+#' @examples computeAUC(pars = c(0.2, 0.1), lower = 0, upper = 4)
+#' 
 #' @param D vector of dosages
 #' @param SF vector of survival fractions
 #' @param pars parameters (alpha, beta) in equation y = exp(-alpha * x - beta * x ^ 2)
@@ -9,8 +12,8 @@
 #' @param trunc should survival fractions be truncated downward to 1 if they exceed 1?
 #' @param area.type should the AUC of the raw (D, SF) points be returned, or should the AUC of a curve fit to said points be returned instead?
 #' @param verbose how detailed should error and warning messages be? See details.
+#' 
 #' @details If lower and/or upper are missing, the function assumes their values to be the minimum and maximum D-values, respectively. For all warnings to be silent, set trunc = FALSE. For warnings to be output, set trunc = TRUE. For warnings to be output along with the arguments that triggered them, set trunc = 2.
-#' @example computeAUC(0.2, 0.1, 0, 4)
 #' @export
 #' @importFrom stats pnorm
 #' @importFrom caTools trapz
