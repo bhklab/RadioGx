@@ -12,11 +12,11 @@
 #' @importFrom graphics lines plot points
 #' @importFrom grDevices dev.off pdf
 
-plotCurve <- function(D, SF, pars, filename = "dose_response_plot.pdf", fit_curve = TRUE, SF_as_log = TRUE) {
+plotCurve <- function(D, SF, pars, filename = "dose_response_plot.pdf", fit_curve = TRUE) {
   CoreGx:::.sanitizeInput(x = D,
                           y = SF,
                           x_as_log = FALSE,
-                          y_as_log = SF_as_log,
+                          y_as_log = FALSE,
                           y_as_pct = FALSE,
                           trunc = FALSE,
                           verbose = FALSE)
@@ -25,24 +25,24 @@ plotCurve <- function(D, SF, pars, filename = "dose_response_plot.pdf", fit_curv
 
   if (fit_curve) {
     if (missing(pars)) {
-      pars <- unlist(linearQuadraticModel(D, SF, SF_as_log = SF_as_log))
+      pars <- unlist(linearQuadraticModel(D, SF))
     } else {
       CoreGx:::.sanitizeInput(pars = pars,
                               x_as_log = FALSE,
-                              y_as_log = SF_as_log,
+                              y_as_log = FALSE,
                               y_as_pct = FALSE,
                               trunc = FALSE,
                               verbose = FALSE)
     }
     print(paste0("A linear-quadratic curve was fit to the data with parameters alpha = ", pars[[1]], " and beta = ", pars[[2]], "."))
     trendlineDs <- CoreGx:::.GetSupportVec(D)
-    trendlineSFs <- .linearQuadratic(trendlineDs, pars = pars, SF_as_log = SF_as_log)
+    trendlineSFs <- .linearQuadratic(trendlineDs, pars = pars, SF_as_log = TRUE)
   }
 
   xlim <- range(D)
   xlim <- mean(xlim) + padding * c((xlim[1] - mean(xlim)), xlim[2] - mean(xlim))
 
-  if (SF_as_log) {
+  if (TRUE) {
     if (!missing(SF)) {
       if (fit_curve) {
         ylim <- padding * c(min(c(SF, trendlineSFs[length(trendlineSFs)])), 0)
@@ -66,6 +66,14 @@ plotCurve <- function(D, SF, pars, filename = "dose_response_plot.pdf", fit_curv
        col = "red")
 
   if (!missing(SF)) {
+    DSF <- CoreGx:::.reformatData(x = D,
+                                 y = SF,
+                                 x_to_log = FALSE,
+                                 y_to_log = TRUE,
+                                 y_to_frac = FALSE,
+                                 trunc = FALSE)
+    D <- DSF[["x"]]
+    SF <- DSF[["y"]]
     points(D, SF, col = "red", pch = 19)
   }
 
