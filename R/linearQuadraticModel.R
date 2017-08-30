@@ -69,7 +69,7 @@ linearQuadraticModel <- function (D,
                               scale = scale,
                               family = family,
                               median_n = median_n,
-                              trunc = trunc,
+                              trunc = FALSE,
                               verbose = verbose,
                               gritty_guess = gritty_guess,
                               span = 0.1)

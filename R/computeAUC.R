@@ -18,7 +18,7 @@
 #' @importFrom stats pnorm
 #' @importFrom caTools trapz
 
-computeAUC <- function(D, SF, pars, lower, upper, trunc = FALSE, area.type = c("Fitted", "Actual"), verbose = TRUE) {
+computeAUC <- function(D, SF, pars, lower, upper, trunc = TRUE, area.type = c("Fitted", "Actual"), verbose = TRUE) {
   area.type <- match.arg(area.type)
   
   if (!missing(SF)) {
