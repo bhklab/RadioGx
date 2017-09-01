@@ -4,7 +4,7 @@
 \alias{computeAUC}
 \title{computeAUC: computes AUC}
 \usage{
-computeAUC(D, SF, pars, lower, upper, trunc = FALSE, area.type = c("Fitted",
+computeAUC(D, SF, pars, lower, upper, trunc = TRUE, area.type = c("Fitted",
   "Actual"), verbose = TRUE)
 }
 \arguments{

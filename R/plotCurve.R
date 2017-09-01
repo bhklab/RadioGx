@@ -41,6 +41,17 @@ plotCurve <- function(D, SF, pars, filename = "dose_response_plot.pdf", fit_curv
 
   xlim <- range(D)
   xlim <- mean(xlim) + padding * c((xlim[1] - mean(xlim)), xlim[2] - mean(xlim))
+  if (!missing(SF)) {
+    DSF <- CoreGx:::.reformatData(x = D,
+                                 y = SF,
+                                 x_to_log = FALSE,
+                                 y_to_log = TRUE,
+                                 y_to_frac = FALSE,
+                                 trunc = FALSE)
+    D <- DSF[["x"]]
+    SF <- DSF[["y"]]
+  }
+
 
   if (TRUE) {
     if (!missing(SF)) {
@@ -63,17 +74,10 @@ plotCurve <- function(D, SF, pars, filename = "dose_response_plot.pdf", fit_curv
        ylim = ylim,
        xlab = "Dose (Gy)",
        ylab = "Survival Fraction",
-       col = "red")
+       col = "red",
+       yaxt="n")
 
   if (!missing(SF)) {
-    DSF <- CoreGx:::.reformatData(x = D,
-                                 y = SF,
-                                 x_to_log = FALSE,
-                                 y_to_log = TRUE,
-                                 y_to_frac = FALSE,
-                                 trunc = FALSE)
-    D <- DSF[["x"]]
-    SF <- DSF[["y"]]
     points(D, SF, col = "red", pch = 19)
   }
 
@@ -81,6 +85,10 @@ plotCurve <- function(D, SF, pars, filename = "dose_response_plot.pdf", fit_curv
     lines(trendlineDs, trendlineSFs, col = "blue", pch = 19)
   }
 
+  ticks <- CoreGx:::.GetSupportVec(x=signif(ylim,1), 10)
+  # labels <- sapply(ticks, function(i) as.expression(bquote(10^ .(i))))
+  labels <- sapply(ticks, function(i) return(sprintf("%0.1e", 10^i)))
+  axis(2, at=ticks, labels=labels)
   dev.off()
   
   return(invisible(0))
