@@ -178,7 +178,7 @@ radSensitivitySig <- function(rSet,
     names(batch) <- phenoInfo(rSet, mDataType)[ , "cellid"]
     batch <- batch[rownames(drugpheno.all[[1]])]
     if (verbose) {
-      message("Computing drug sensitivity signatures...")
+      message("Computing radiation sensitivity signatures...")
     }
     
     splitix <- parallel::splitIndices(nx = length(drugn), ncl = 1)
@@ -217,7 +217,7 @@ radSensitivitySig <- function(rSet,
       drug.sensitivity[rownames(featureInfo(rSet, mDataType)[features,, drop = FALSE]), names(res), j] <- ttt
     }
     
-    drug.sensitivity <- PharmacoSig(drug.sensitivity, PSetName = rSetName(rSet), Call ="as.character(match.call())", SigType='Sensitivity')
+    drug.sensitivity <- RadioSig(drug.sensitivity, PSetName = rSetName(rSet), Call ="as.character(match.call())", SigType='Sensitivity')
     
     return(drug.sensitivity)
   }

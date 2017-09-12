@@ -40,17 +40,17 @@ summarizeSensitivityProfiles <- function(rSet, sensitivity.measure="auc_recomput
   if (missing(cell.lines)) {
     cell.lines <- cellNames(rSet)
   }
-  if (missing(drugs)) {
+  if (missing(radiation.types)) {
     if (sensitivity.measure != "Synergy_score")
     {
       drugs <- radiationTypes(rSet)
     }else{
-      drugs <- sensitivityInfo(rSet)[grep("///", sensitivityInfo(rSet)$drugid), "drugid"]
+      drugs <- sensitivityInfo(rSet)[grep("///", sensitivityInfo(rSet)$radiation.types), "radiation.types"]
     }
   }
   
   pp <- sensitivityInfo(rSet)
-  ppRows <- which(pp$cellid %in% cell.lines & pp$drugid %in% drugs) ### NEEDED to deal with duplicated rownames!!!!!!!
+  ppRows <- which(pp$cellid %in% cell.lines & pp$radiation.type %in% drugs) ### NEEDED to deal with duplicated rownames!!!!!!!
   if(sensitivity.measure != "max.conc") {
     dd <- sensitivityProfiles(rSet)
   } else {
@@ -79,7 +79,7 @@ summarizeSensitivityProfiles <- function(rSet, sensitivity.measure="auc_recomput
 
   # }
 
-  pp_dd <- cbind(pp[,c("cellid", "drugid")], "sensitivity.measure"=dd[, sensitivity.measure])
+  pp_dd <- cbind(pp[,c("cellid", "radiation.type")], "sensitivity.measure"=dd[, sensitivity.measure])
 
 
   summary.function <- function(x) {
@@ -108,9 +108,9 @@ summarizeSensitivityProfiles <- function(rSet, sensitivity.measure="auc_recomput
 
   }
   
-  pp_dd <- pp_dd[pp_dd[,"cellid"]%in%cell.lines & pp_dd[,"drugid"]%in%drugs,]
+  pp_dd <- pp_dd[pp_dd[,"cellid"]%in%cell.lines & pp_dd[,"radiation.type"]%in%drugs,]
 
-  tt <- reshape2::acast(pp_dd, drugid~cellid, fun.aggregate=summary.function, value.var="sensitivity.measure")
+  tt <- reshape2::acast(pp_dd, radiation.type~cellid, fun.aggregate=summary.function, value.var="sensitivity.measure")
  # tt <- tt[drugs, cell.lines]
   
   

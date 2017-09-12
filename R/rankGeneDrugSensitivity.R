@@ -88,9 +88,26 @@ rankGeneDrugSensitivity <- function (data, drugpheno, type, batch, single.type=F
     iix <- !is.na(type) & is.element(type, ltype[[ll]])
     # ccix <- complete.cases(data[iix, , drop=FALSE], drugpheno[iix,,drop=FALSE], type[iix], batch[iix]) ### HACK???
     
-    ccix <- !sapply(seq_len(NROW(data[iix,,drop=FALSE])), function(x) {
-      return(all(is.na(data[iix,,drop=FALSE][x,])) || all(is.na(drugpheno[iix,,drop=FALSE][x,])) || all(is.na(type[iix][x])) || all(is.na(batch[iix][x])))
+    # ccix <- sapply(seq_len(NROW(data[iix,,drop=FALSE])), function(x) {
+    #   return(any(!is.na(data[iix,,drop=FALSE][x,])) && any(!is.na(drugpheno[iix,,drop=FALSE][x,])) && any(!is.na(type[iix][x])) && any(!is.na(batch[iix][x])))
+    # })
+
+    data.not.all.na <- apply(data[iix,,drop=FALSE], 1, function(x) {
+      any(!is.na(x))
     })
+    drugpheno.not.all.na <- apply(drugpheno[iix,,drop=FALSE], 1, function(x) {
+      any(!is.na(x))
+    })
+    type.not.all.na <- sapply(type[iix], function(x) {
+      !is.na(x)
+    })
+    batch.not.all.na <- sapply(batch[iix], function(x) {
+      !is.na(x)
+    })
+
+    ccix <- data.not.all.na & drugpheno.not.all.na & type.not.all.na & batch.not.all.na
+
+
 
     if (sum(ccix) < 3) {
       ## not enough experiments
