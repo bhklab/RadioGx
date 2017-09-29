@@ -92,8 +92,18 @@ computeAUC <- function(D, SF, pars, lower, upper, trunc = TRUE, area.type = c("F
           return((exp(-pars[[1]] * lower) - exp(-pars[[1]] * upper)) / pars[[1]])
         }
       } else {
-        return(exp(pars[[1]] ^ 2 / 4 / pars[[2]]) * sqrt(pi / pars[[2]]) * (pnorm(sqrt(2 * pars[[2]]) * (upper + pars[[1]] / 2 / pars[[2]])) -
-                                                                              pnorm(sqrt(2 * pars[[2]]) * (lower + pars[[1]] / 2 / pars[[2]]))))
+        # return(exp(pars[[1]] ^ 2 / 4 / pars[[2]]) * 
+        #        sqrt(pi / pars[[2]]) * 
+        #        (pnorm(sqrt(2 * pars[[2]]) * (upper + pars[[1]] / 2 / pars[[2]])) -
+        #         pnorm(sqrt(2 * pars[[2]]) * (lower + pars[[1]] / 2 / pars[[2]]))))
+        # return(sqrt(pi / pars[[2]]) * 
+        #       (exp(pars[[1]] ^ 2 / 4 / pars[[2]] + pnorm(sqrt(2 * pars[[2]]) * (upper + pars[[1]] / 2 / pars[[2]]), log.p = TRUE)) 
+        #        -
+        #        exp(pars[[1]] ^ 2 / 4 / pars[[2]] + pnorm(sqrt(2 * pars[[2]]) * (lower + pars[[1]] / 2 / pars[[2]]), log.p = TRUE))))
+        x <- CoreGx:::.GetSupportVec(x=D, output_length = 1000)
+        y <- .linearQuadratic(D=x, pars=pars, SF_as_log=FALSE)
+        return(caTools::trapz(x, y))
+
       }
     }
     
