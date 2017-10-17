@@ -20,8 +20,8 @@
 \alias{sensitivityProfiles<-,RadioSet,data.frame-method}
 \alias{sensitivityProfiles<-,RadioSet,matrix-method}
 \alias{sensitivityMeasures,RadioSet-method}
-\alias{radiationNames,RadioSet-method}
-\alias{radiationNames<-,RadioSet,character-method}
+\alias{radiationTypes,RadioSet-method}
+\alias{radiationTypes<-,RadioSet,character-method}
 \alias{cellNames,RadioSet-method}
 \alias{cellNames<-,RadioSet,character-method}
 \alias{fNames,RadioSet,character-method}
@@ -68,9 +68,9 @@
 
 \S4method{sensitivityMeasures}{RadioSet}(cSet)
 
-\S4method{radiationNames}{RadioSet}(rSet)
+\S4method{radiationTypes}{RadioSet}(rSet)
 
-\S4method{radiationNames}{RadioSet,character}(object) <- value
+\S4method{radiationTypes}{RadioSet,character}(object) <- value
 
 \S4method{cellNames}{RadioSet}(cSet)
 
@@ -161,7 +161,7 @@
 
 \item{object}{A \code{RadioSet}}
 
-\item{value}{A new 3D \code{array} with the number of perturbation experiments per radiation and cell line, and data type}
+\item{value}{A new 3D \code{array} with the number of perturbation experiments per radiation type and cell line, and data type}
 
 \item{object}{A \code{RadioSet}}
 
@@ -200,9 +200,9 @@ A \code{character} vector of the feature names
 
 The date the RadioSet was created
 
-A 3D \code{array} with the number of perturbation experiments per radiation and cell line, and data type
+A 3D \code{array} with the number of perturbation experiments per radiation type and cell line, and data type
 
-A \code{data.frame} with the number of sensitivity experiments per radiation and cell line
+A \code{data.frame} with the number of sensitivity experiments per radiation type and cell line
 
 The updated \code{RadioSet}
 
@@ -295,9 +295,9 @@ sensitivity
 \item \code{sensitivityMeasures}: Returns the available sensitivity profile
 summaries, for example, whether there are IC50 values available
 
-\item \code{radiationNames}: Return the names of the radiations used in the RadioSet
+\item \code{radiationTypes}: Return the names of the radiations used in the RadioSet
 
-\item \code{radiationNames<-}: Update the radiation names used in the dataset
+\item \code{radiationTypes<-}: Update the radiation names used in the dataset
 
 \item \code{cellNames}: Return the cell names used in the dataset
 

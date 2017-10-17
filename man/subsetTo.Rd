@@ -4,7 +4,7 @@
 \alias{subsetTo}
 \title{A function to subset a RadioSet to data containing only specified radiations, cells and genes}
 \usage{
-subsetTo(rSet, cells = NULL, radiations = NULL,
+subsetTo(rSet, cells = NULL, radiationTypes = NULL,
   molecular.data.cells = NULL, keep.controls = TRUE, ...)
 }
 \arguments{
@@ -14,8 +14,8 @@ subsetTo(rSet, cells = NULL, radiations = NULL,
 the object will be subsetted. If left blank, then all cells will be left in
 the dataset.}
 
-\item{radiations}{A list or vector of radiation names as used in the dataset to which
-the object will be subsetted. If left blank, then all radiations will be left in
+\item{radiationTypes}{A list or vector of radiation names as used in the dataset to which
+the object will be subsetted. If left blank, then all radiationTypes will be left in
 the dataset.}
 
 \item{molecular.data.cells}{A list or vector of cell names to keep in the
@@ -27,7 +27,7 @@ the controls be kept in the dataset? Defaults to true.}
 \item{...}{Other arguments passed by other function within the package}
 }
 \value{
-A RadioSet with only the selected radiations and cells
+A RadioSet with only the selected radiation types and cells
 }
 \description{
 This is the prefered method of subsetting a RadioSet. This function allows
@@ -40,9 +40,9 @@ to keep track of all the metadata conventions between different datasets.
 }
 \examples{
 data(CCLEsmall)
-CCLEradiations  <- radiationNames(CCLEsmall)
+CCLEradiationTypes  <- radiationNames(CCLEsmall)
 CCLEcells <- cellNames(CCLEsmall)
-RSet <- subsetTo(CCLEsmall,radiations = CCLEradiations[1], cells = CCLEcells[1])
+RSet <- subsetTo(CCLEsmall,radiationTypes = CCLEradiationTypes[1], cells = CCLEcells[1])
 RSet
 
 }
