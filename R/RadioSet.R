@@ -120,7 +120,7 @@ RadioSet <-  function(name,
     annotation$call <- match.call()
     
     #molecularProfiles <- list("dna"=dna, "rna"=rna, "snp"=snp, "cnv"=cnv)
-    for (i in 1:length(molecularProfiles)){
+    for (i in seq_along(molecularProfiles)){
         if (class(molecularProfiles[[i]]) != "ExpressionSet"){
             stop(sprintf("Please provide the %s data as an ExpressionSet", names(molecularProfiles[i])))
         }else{
@@ -511,9 +511,9 @@ setGeneric("radiationTypes", function(rSet) standardGeneric("radiationTypes"))
 setMethod(radiationTypes, "RadioSet", function(rSet){
   
   # if (unique){
-#     unique(pData(rSet)[["radiationid"]])
+#     unique(pData(rSet)[["radiation.type"]])
 #   } else {
-#     pData(rSet)[["radiationid"]]
+#     pData(rSet)[["radiation.type"]]
 #   
 #  }
   rownames(radiationInfo(rSet))
@@ -916,7 +916,7 @@ subsetTo <- function(rSet, cells=NULL, radiationTypes=NULL, molecular.data.cells
             if (!all(radiationTypes %in% radiationNames(rSet))){
                   stop("Some of the radiation names passed to function did not match to names in the RadioSet. Please ensure you are using radiation names as returned by the radiationNames function")
             }
-          radiationTypes_index <- which(Biobase::pData(eset)[["radiationid"]] %in% radiationTypes)
+          radiationTypes_index <- which(Biobase::pData(eset)[["radiation.type"]] %in% radiationTypes)
           # if (length(radiationTypes_index)==0){
     #         stop("No radiationTypes matched")
     #       }
@@ -962,7 +962,7 @@ subsetTo <- function(rSet, cells=NULL, radiationTypes=NULL, molecular.data.cells
   }
   else if ((rSet@datasetType == "sensitivity" | rSet@datasetType == "both") & (length(radiationTypes) != 0 | length(cells) != 0)) {
     
-        radiationTypes_index <- which (sensitivityInfo(rSet)[, "radiationid"] %in% radiationTypes)
+        radiationTypes_index <- which (sensitivityInfo(rSet)[, "radiation.type"] %in% radiationTypes)
         cell_line_index <- which (sensitivityInfo(rSet)[,"cellid"] %in% cells)
         if (length(radiationTypes_index) !=0 & length(cell_line_index) !=0 ) {
           if (length(intersect(radiationTypes_index, cell_line_index)) == 0) {
@@ -993,10 +993,10 @@ subsetTo <- function(rSet, cells=NULL, radiationTypes=NULL, molecular.data.cells
   
 	if (length(radiationTypes)==0) {
 		if(rSet@datasetType == "sensitivity" | rSet@datasetType == "both"){
-			radiationTypes <- unique(sensitivityInfo(rSet)[["radiationid"]])
+			radiationTypes <- unique(sensitivityInfo(rSet)[["radiation.type"]])
 		}
 		if(rSet@datasetType == "perturbation" | rSet@datasetType == "both"){
-			radiationTypes <- union(radiationTypes, na.omit(unionList(lapply(rSet@molecularProfiles, function(eSet){unique(Biobase::pData(eSet)[["radiationid"]])}))))
+			radiationTypes <- union(radiationTypes, na.omit(unionList(lapply(rSet@molecularProfiles, function(eSet){unique(Biobase::pData(eSet)[["radiation.type"]])}))))
 		}
 	}
 	if (length(cells)==0) {
@@ -1171,15 +1171,15 @@ updateCellId <- function(rSet, new.ids = vector("character")){
 #   }
 
 #   if(rSet@datasetType=="sensitivity"|rSet@datasetType=="both"){
-#     myx <- match(sensitivityInfo(rSet)[,"radiationid"],rownames(radiationInfo(rSet)))
-#     sensitivityInfo(rSet)[,"radiationid"] <- new.ids[myx]
+#     myx <- match(sensitivityInfo(rSet)[,"radiation.type"],rownames(radiationInfo(rSet)))
+#     sensitivityInfo(rSet)[,"radiation.type"] <- new.ids[myx]
 
 #   }
 #   if(rSet@datasetType=="perturbation"|rSet@datasetType=="both"){
 #     rSet@molecularProfiles <- lapply(rSet@molecularProfiles, function(eset){
 
-#       myx <- match(Biobase::pData(eset)[["radiationid"]],rownames(radiationInfo(rSet)))
-#       Biobase::pData(eset)[["radiationid"]]  <- new.ids[myx]
+#       myx <- match(Biobase::pData(eset)[["radiation.type"]],rownames(radiationInfo(rSet)))
+#       Biobase::pData(eset)[["radiation.type"]]  <- new.ids[myx]
 #       return(eset)
 #     })
 #   }
@@ -1259,7 +1259,7 @@ updateCellId <- function(rSet, new.ids = vector("character")){
   }
   
   ## unique radiation identifiers
-  # radiationn <- sort(unique(rSet@sensitivity$info[ , "radiationid"]))
+  # radiationn <- sort(unique(rSet@sensitivity$info[ , "radiation.type"]))
   
   ## consider all radiations
   radiationn <- rownames(rSet@radiation)
@@ -1271,13 +1271,13 @@ updateCellId <- function(rSet, new.ids = vector("character")){
   celln <- rownames(rSet@cell)
   
   sensitivity.info <- matrix(0, nrow=length(celln), ncol=length(radiationn), dimnames=list(celln, radiationn))
-  radiationids <- rSet@sensitivity$info[ , "radiationid"]
+  radiation.types <- rSet@sensitivity$info[ , "radiation.type"]
   cellids <- rSet@sensitivity$info[ , "cellid"]
-  cellids <- cellids[grep("///", radiationids, invert=TRUE)]
-  radiationids <- radiationids[grep("///", radiationids, invert=TRUE)]
+  cellids <- cellids[grep("///", radiation.types, invert=TRUE)]
+  radiation.types <- radiation.types[grep("///", radiation.types, invert=TRUE)]
   
   
-  tt <- table(cellids, radiationids)
+  tt <- table(cellids, radiation.types)
   sensitivity.info[rownames(tt), colnames(tt)] <- tt
   
     return(sensitivity.info)
@@ -1311,8 +1311,8 @@ updateCellId <- function(rSet, new.ids = vector("character")){
   ## unique radiation identifiers
   # radiationn <- sort(unique(unlist(lapply(rSet@molecularProfiles, function (x) {
   #   res <- NULL
-  #   if (nrow(pData(x)) > 0 & "radiationid" %in% colnames(pData(x))) {
-  #     res <- pData(x)[ , "radiationid"]
+  #   if (nrow(pData(x)) > 0 & "radiation.type" %in% colnames(pData(x))) {
+  #     res <- pData(x)[ , "radiation.type"]
   #   }
   #   return (res)
   # }))))
@@ -1335,8 +1335,8 @@ updateCellId <- function(rSet, new.ids = vector("character")){
   perturbation.info <- array(0, dim=c(length(celln), length(radiationn), length(rSet@molecularProfiles)), dimnames=list(celln, radiationn, names((rSet@molecularProfiles))))
 
     for (i in 1:length(rSet@molecularProfiles)) {
-      if (nrow(Biobase::pData(rSet@molecularProfiles[[i]])) > 0 && all(is.element(c("cellid", "radiationid"), colnames(Biobase::pData(rSet@molecularProfiles[[i]]))))) {
-      tt <- table(Biobase::pData(rSet@molecularProfiles[[i]])[ , "cellid"], Biobase::pData(rSet@molecularProfiles[[i]])[ , "radiationid"])
+      if (nrow(Biobase::pData(rSet@molecularProfiles[[i]])) > 0 && all(is.element(c("cellid", "radiation.type"), colnames(Biobase::pData(rSet@molecularProfiles[[i]]))))) {
+      tt <- table(Biobase::pData(rSet@molecularProfiles[[i]])[ , "cellid"], Biobase::pData(rSet@molecularProfiles[[i]])[ , "radiation.type"])
         perturbation.info[rownames(tt), colnames(tt), names(rSet@molecularProfiles)[i]] <- tt
       }
     }
@@ -1367,7 +1367,7 @@ updateCellId <- function(rSet, new.ids = vector("character")){
 checkRSetStructure <-
   function(rSet, plotDist=FALSE, result.dir=".") {
     if(!file.exists(result.dir) & plotDist) { dir.create(result.dir, showWarnings=FALSE, recursive=TRUE) }
-    for( i in 1:length(rSet@molecularProfiles)) {
+    for( i in seq_along(rSet@molecularProfiles)) {
       profile <- rSet@molecularProfiles[[i]]
       nn <- names(rSet@molecularProfiles)[i]
       if((Biobase::annotation(profile) == "rna" | Biobase::annotation(profile) == "rnaseq") & plotDist)
@@ -1432,20 +1432,20 @@ checkRSetStructure <-
       print("rownames of curation cell slot should be the same as cell slot (curated cell ids)")
     }
     
-    if("unique.radiationid" %in% colnames(rSet@curation$radiation)) {
-      if(length(intersect(rSet@curation$radiation$unique.radiationid, rownames(rSet@radiation))) != nrow(rSet@radiation)) {
+    if("unique.radiation.type" %in% colnames(rSet@curation$radiation)) {
+      if(length(intersect(rSet@curation$radiation$unique.radiation.type, rownames(rSet@radiation))) != nrow(rSet@radiation)) {
         print("rownames of radiation slot should be curated radiation ids")
       }
     } else {
-      print("unique.radiationid which is curated radiation id across data set should be a column of radiation curation slot")
+      print("unique.radiation.type which is curated radiation id across data set should be a column of radiation curation slot")
     }
     
-#     if("radiationid" %in% colnames(rSet@radiation)) {
-#       if(length(intersect(rSet@curation$radiation$radiationid, rownames(rSet@radiation))) != nrow(rSet@radiation)) {
-#         print("values of radiationid column should be curated radiation ids")
+#     if("radiation.type" %in% colnames(rSet@radiation)) {
+#       if(length(intersect(rSet@curation$radiation$radiation.type, rownames(rSet@radiation))) != nrow(rSet@radiation)) {
+#         print("values of radiation.type column should be curated radiation ids")
 #       }
 #     } else {
-#       print("radiationid which is curated radiation id across data set should be a column of radiation slot")
+#       print("radiation.type which is curated radiation id across data set should be a column of radiation slot")
 #     }
     
     if(length(intersect(rownames(rSet@curation$cell), rownames(rSet@cell))) != nrow(rSet@cell)) {
@@ -1470,14 +1470,14 @@ checkRSetStructure <-
       }else {
         warning("cellid does not exist in sensitivity info")
       }
-      if("radiationid" %in% colnames(rSet@sensitivity$info)) {
-        radiation.ids <- unique(rSet@sensitivity$info[,"radiationid"])
+      if("radiation.type" %in% colnames(rSet@sensitivity$info)) {
+        radiation.ids <- unique(rSet@sensitivity$info[,"radiation.type"])
         radiation.ids <- radiation.ids[grep("///",radiation.ids, invert=TRUE)]
         if(!all(radiation.ids %in% rownames(rSet@radiation))) {
           print("not all the radiations in sensitivity data are in radiation slot")
         }
       }else {
-        warning("radiationid does not exist in sensitivity info")
+        warning("radiation.type does not exist in sensitivity info")
       }
       
       if(any(!is.na(rSet@sensitivity$raw))) {

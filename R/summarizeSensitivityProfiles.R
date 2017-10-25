@@ -45,7 +45,7 @@ summarizeSensitivityProfiles <- function(rSet, sensitivity.measure="auc_recomput
     {
       drugs <- radiationTypes(rSet)
     }else{
-      drugs <- sensitivityInfo(rSet)[grep("///", sensitivityInfo(rSet)$radiation.types), "radiation.types"]
+      drugs <- sensitivityInfo(rSet)[grep("///", sensitivityInfo(rSet)$radiation.type), "radiation.type"]
     }
   }
   
