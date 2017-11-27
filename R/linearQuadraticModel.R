@@ -74,5 +74,7 @@ linearQuadraticModel <- function (D,
                               gritty_guess = gritty_guess,
                               span = 0.1)
   
-  return(list(alpha = guess[1], beta = guess[2]))
+  names(guess) <- c("alpha", "beta")
+
+  return(guess)
 }
