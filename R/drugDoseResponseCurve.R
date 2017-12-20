@@ -2,17 +2,17 @@
 #' 
 #' Given a list of RadioSets, the function will plot the drug_response curve,
 #' for a given drug/cell pair. The y axis of the plot is the viability percentage
-#' and x axis is the log transformed concentrations. If more than one rSet is 
+#' and x axis is the log transformed Ds. If more than one rSet is 
 #' provided, a light gray area would show the common concentration range between rSets. 
 #' User can ask for type of sensitivity measurment to be shown in the plot legend.
-#' The user can also provide a list of their own concentrations and viability values, 
+#' The user can also provide a list of their own Ds and viability values, 
 #' as in the examples below, and it will be treated as experiments equivalent to values coming 
 #' from a pset. The names of the concentration list determine the legend labels. 
 #' 
 #' @examples
 #' if (interactive()) {
-#' drugDoseResponseCurve(concentrations=list("Experiment 1"=c(.008, .04, .2, 1)),
-#'  viabilities=list(c(100,50,30,1)), plot.type="Both")
+#' drugDoseResponseCurve(Ds=list("Experiment 1" = c(0, 2, 4, 6)),
+#'  SFs=list("Experiment 1" = c(1,.6,.4,.2)), plot.type="Both")
 #' }
 #' 
 #' @param drug [string] A drug name for which the drug response curve should be 
@@ -23,12 +23,8 @@
 #' should be provided.
 #' @param rSets [list] a list of RadioSet objects, for which the function
 #' should plot the curves.
-#' @param concentrations,viabilities [list] A list of concentrations and viabilities to plot, the function assumes that
-#' concentrations[[i]] is plotted against viabilities[[i]]. The names of the concentration list are used to create the legend labels
-#' @param conc_as_log [logical], if true, assumes that log10-concentration data has been given rather than concentration data,
-#' and that log10(ICn) should be returned instead of ICn. Applies only to the concentrations parameter.
-#' @param viability_as_pct [logical], if false, assumes that viability is given as a decimal rather
-#' than a percentage, and that E_inf passed in as decimal. Applies only to the viabilities parameter.
+#' @param Ds,SFs [list] A list of Doses and SFs to plot, the function assumes that
+#' Ds[[i]] is plotted against SFs[[i]]. The names of the D list are used to create the legend labels
 #' @param legends.label [vector] A vector of sensitivity measurment types which could 
 #' be any combination of  ic50_published, auc_published, auc_recomputed and auc_recomputed_star.
 #' A legend will be displayed on the top right of the plot which each line of the legend is 
@@ -73,10 +69,10 @@ doseResponseCurve <-
 function(rad.type = "radiation", 
          cellline,
          rSets=list(),
-         concentrations=list(),
-         viabilities=list(), 
-         conc_as_log = FALSE,
-         viability_as_pct = TRUE,
+         Ds=list(),
+         SFs=list(), 
+         # conc_as_log = FALSE,
+         # viability_as_pct = TRUE,
          trunc=TRUE,
          legends.label = c("ic50_published", "gi50_published","auc_published","auc_recomputed","ic50_recomputed"),
          ylim=c(0,100), 
@@ -110,55 +106,55 @@ function(rad.type = "radiation",
   #   if(missing(cellline))
   #   cellline <- "Cell Line" 
   # }
-  if(!missing(concentrations)){
-    if(missing(viabilities)){
+  if(!missing(Ds)){
+    if(missing(SFs)){
 
-      stop("Please pass in the viabilities to Plot with the concentrations.")
+      stop("Please pass in the Survival Fractions to Plot with the Doses.")
 
     }
-    if (class(concentrations) != "list") {
-      if (mode(concentrations) == "numeric") {
-        if(mode(viabilities)!="numeric"){
-          stop("Passed in 1 vector of concentrations but the viabilities are not numeric!")
+    if (class(Ds) != "list") {
+      if (mode(Ds) == "numeric") {
+        if(mode(SFs)!="numeric"){
+          stop("Passed in 1 vector of Doses but the Survival Fractions are not numeric!")
         }
-        cleanData <- sanitizeInput(concentrations,
-          viabilities,
-          conc_as_log = conc_as_log,
-          viability_as_pct = viability_as_pct,
-          trunc = trunc,
-          verbose = verbose)
-        concentrations <- 10^cleanData[["log_conc"]]
-        concentrations <- list(concentrations)
-        viabilities <- 100*cleanData[["viability"]]
-        viabilities <- list(viabilities)
-        names(concentrations) <- "Exp1"
-        names(viabilities) <- "Exp1"
+        # cleanData <- sanitizeInput(Ds,
+        #   SFs,
+        #   conc_as_log = conc_as_log,
+        #   viability_as_pct = viability_as_pct,
+        #   trunc = trunc,
+        #   verbose = verbose)
+        # Ds <- 10^cleanData[["log_conc"]]
+        Ds <- list(Ds)
+        # SFs <- 100*cleanData[["viability"]]
+        SFs <- list(SFs)
+        names(Ds) <- "Exp1"
+        names(SFs) <- "Exp1"
       } else {
-        stop("Mode of concentrations parameter should be either numeric or a list of numeric vectors")
+        stop("Mode of Doses parameter should be either numeric or a list of numeric vectors")
       }
     } else{
-      if(length(viabilities)!= length(concentrations)){
-        stop("The number of concentration and viability vectors passed in differs")
+      if(length(SFs)!= length(Ds)){
+        stop("The number of D and SF vectors passed in differs")
       }
-      if(is.null(names(concentrations))){
-        names(concentrations) <- paste("Exp", 1:length(concentrations))
+      if(is.null(names(Ds))){
+        names(Ds) <- paste("Exp", 1:length(Ds))
       }
-      for(i in 1:length(concentrations)){
+      for(i in 1:length(Ds)){
 
-        if (mode(concentrations[[i]]) == "numeric") {
-          if(mode(viabilities[[i]])!="numeric"){
-            stop(sprintf("concentrations[[%d]] are numeric but the viabilities[[%d]] are not numeric!",i,i))
+        if (mode(Ds[[i]]) == "numeric") {
+          if(mode(SFs[[i]])!="numeric"){
+            stop(sprintf("Ds[[%d]] are numeric but the SFs[[%d]] are not numeric!",i,i))
           }
-          cleanData <- sanitizeInput(concentrations[[i]],
-            viabilities[[i]],
-            conc_as_log = conc_as_log,
-            viability_as_pct = viability_as_pct,
-            trunc = trunc,
-            verbose = verbose)
-          concentrations[[i]] <- 10^cleanData[["log_conc"]]
-          viabilities[[i]] <- 100*cleanData[["viability"]]
+          # cleanData <- sanitizeInput(Ds[[i]],
+          #   SFs[[i]],
+          #   conc_as_log = conc_as_log,
+          #   viability_as_pct = viability_as_pct,
+          #   trunc = trunc,
+          #   verbose = verbose)
+          # Ds[[i]] <- 10^cleanData[["log_conc"]]
+          # SFs[[i]] <- 100*cleanData[["viability"]]
         } else {
-          stop(sprintf("Mode of concentrations[[%d]] parameter should be numeric",i))
+          stop(sprintf("Mode of Ds[[%d]] parameter should be numeric",i))
         }
 
       }
@@ -237,22 +233,22 @@ function(rad.type = "radiation",
       }
     }
   }
-  if(!missing(concentrations)){
+  if(!missing(Ds)){
     doses2 <- list(); responses2 <- list(); legend.values2 <- list(); j <- 0; rSetNames2 <- list();
-    for (i in 1:length(concentrations)){
-      doses2[[i]] <- concentrations[[i]]
-      responses2[[i]] <- viabilities[[i]]
+    for (i in 1:length(Ds)){
+      doses2[[i]] <- Ds[[i]]
+      responses2[[i]] <- SFs[[i]]
       if(length(legends.label)>0){
         if(any(grepl("AUC", x=toupper(legends.label)))){
-          legend.values2[[i]] <- paste(legend.values2[i][[1]],sprintf("%s = %s", "AUC", round(computeAUC(concentrations[[i]],viabilities[[i]], conc_as_log=FALSE, viability_as_pct=TRUE)/100, digits=2)), sep=", ")
+          legend.values2[[i]] <- paste(legend.values2[i][[1]],sprintf("%s = %s", "AUC", round(computeAUC(Ds[[i]],SFs[[i]], conc_as_log=FALSE, viability_as_pct=TRUE)/100, digits=2)), sep=", ")
         }
         if(any(grepl("IC50", x=toupper(legends.label)))){
-          legend.values2[[i]] <- paste(legend.values2[i][[1]],sprintf("%s = %s", "IC50", round(computeIC50(concentrations[[i]],viabilities[[i]], conc_as_log=FALSE, viability_as_pct=TRUE), digits=2)), sep=", ")
+          legend.values2[[i]] <- paste(legend.values2[i][[1]],sprintf("%s = %s", "IC50", round(computeIC50(Ds[[i]],SFs[[i]], conc_as_log=FALSE, viability_as_pct=TRUE), digits=2)), sep=", ")
         }
 
       } else{ legend.values2[[i]] <- ""}
       
-      rSetNames2[[i]] <- names(concentrations)[[i]]
+      rSetNames2[[i]] <- names(Ds)[[i]]
     }
     doses <- c(doses, doses2)
     responses <- c(responses, responses2)
@@ -314,7 +310,7 @@ function(rad.type = "radiation",
       x_vals <- CoreGx:::.GetSupportVec(doses[[i]])
       lines(x_vals, (.linearQuadratic(x_vals, pars=linQuad_params, SF_as_log=FALSE)),lty=1, lwd=lwd, col=mycol[i])
     },"Both"={
-      lines(doses[[i]],responses[[i]],lty=1,lwd=lwd,col = mycol[i])
+      # lines(doses[[i]],responses[[i]],lty=1,lwd=lwd,col = mycol[i])
       linQuad_params <- linearQuadraticModel(D = doses[[i]], SF = responses[[i]])
       x_vals <- CoreGx:::.GetSupportVec(doses[[i]])
       lines(x_vals, (.linearQuadratic(x_vals, pars=linQuad_params, SF_as_log=FALSE)),lty=1, lwd=lwd, col=mycol[i])
