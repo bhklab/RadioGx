@@ -15,11 +15,11 @@
 #'  SFs=list("Experiment 1" = c(1,.6,.4,.2)), plot.type="Both")
 #' }
 #' 
-#' @param drug [string] A drug name for which the drug response curve should be 
-#' plotted. If the plot is desirable for more than one pharmaco set, A unique drug id
+#' @param rad.type [string] The type(s) of radiation dosage to be 
+#' plotted. If the plot is desirable for more than one radioset, A unique drug id
 #' should be provided.
-#' @param cellline [string] A cell line name for which the drug response curve should be 
-#' plotted. If the plot is desirable for more than one pharmaco set, A unique cell id
+#' @param cellline [string] A cell line name for which the radiation response curve should be 
+#' plotted. If the plot is desirable for more than one radioset, a unique cell id
 #' should be provided.
 #' @param rSets [list] a list of RadioSet objects, for which the function
 #' should plot the curves.
@@ -67,24 +67,24 @@
 
 doseResponseCurve <- 
 function(rad.type = "radiation", 
-         cellline,
-         rSets=list(),
-         Ds=list(),
-         SFs=list(), 
+ cellline,
+ rSets=list(),
+ Ds=list(),
+ SFs=list(), 
          # conc_as_log = FALSE,
          # viability_as_pct = TRUE,
-         trunc=TRUE,
-         legends.label = c("ic50_published", "gi50_published","auc_published","auc_recomputed","ic50_recomputed"),
-         ylim=c(0,100), 
-         xlim, mycol, 
-         title,
-         plot.type=c("Fitted","Actual", "Both"), 
-         summarize.replicates=TRUE,
-         lwd = 0.5,
-         cex = 0.7,
-         cex.main = 0.9, 
-         legend.loc = "topright",
-         verbose=TRUE) {
+ trunc=TRUE,
+ legends.label = c("alpha", "beta","rsquared"),
+ ylim=c(0,100), 
+ xlim, mycol, 
+ title,
+ plot.type=c("Fitted","Actual", "Both"), 
+ summarize.replicates=TRUE,
+ lwd = 1,
+ cex = 0.7,
+ cex.main = 0.9, 
+ legend.loc = "topright",
+ verbose=TRUE) {
   if(!missing(rSets)){
     if (class(rSets) != "list") {
       if (class(rSets) == "RadioSet") {
@@ -96,6 +96,9 @@ function(rad.type = "radiation",
       }
     }
   }
+  if(!all(legends.label %in% c("alpha", "beta","rsquared"))){
+    stop(paste("Only", paste(c("'alpha'", "'beta'","'rsquared'"), collapse = ", "), "implemented for legend labels.", split = " "))
+  }
   # if(!missing(rSets) && (missing(rad.type) || missing(cellline))){
   ## XXX:: HACK
   if(!missing(rSets) && (missing(cellline))){  
@@ -106,17 +109,17 @@ function(rad.type = "radiation",
   #   if(missing(cellline))
   #   cellline <- "Cell Line" 
   # }
-  if(!missing(Ds)){
-    if(missing(SFs)){
+    if(!missing(Ds)){
+      if(missing(SFs)){
 
-      stop("Please pass in the Survival Fractions to Plot with the Doses.")
+        stop("Please pass in the Survival Fractions to Plot with the Doses.")
 
-    }
-    if (class(Ds) != "list") {
-      if (mode(Ds) == "numeric") {
-        if(mode(SFs)!="numeric"){
-          stop("Passed in 1 vector of Doses but the Survival Fractions are not numeric!")
-        }
+      }
+      if (class(Ds) != "list") {
+        if (mode(Ds) == "numeric") {
+          if(mode(SFs)!="numeric"){
+            stop("Passed in 1 vector of Doses but the Survival Fractions are not numeric!")
+          }
         # cleanData <- sanitizeInput(Ds,
         #   SFs,
         #   conc_as_log = conc_as_log,
@@ -124,27 +127,27 @@ function(rad.type = "radiation",
         #   trunc = trunc,
         #   verbose = verbose)
         # Ds <- 10^cleanData[["log_conc"]]
-        Ds <- list(Ds)
+          Ds <- list(Ds)
         # SFs <- 100*cleanData[["viability"]]
-        SFs <- list(SFs)
-        names(Ds) <- "Exp1"
-        names(SFs) <- "Exp1"
-      } else {
-        stop("Mode of Doses parameter should be either numeric or a list of numeric vectors")
-      }
-    } else{
-      if(length(SFs)!= length(Ds)){
-        stop("The number of D and SF vectors passed in differs")
-      }
-      if(is.null(names(Ds))){
-        names(Ds) <- paste("Exp", 1:length(Ds))
-      }
-      for(i in 1:length(Ds)){
+          SFs <- list(SFs)
+          names(Ds) <- "Exp1"
+          names(SFs) <- "Exp1"
+        } else {
+          stop("Mode of Doses parameter should be either numeric or a list of numeric vectors")
+        }
+      } else{
+        if(length(SFs)!= length(Ds)){
+          stop("The number of D and SF vectors passed in differs")
+        }
+        if(is.null(names(Ds))){
+          names(Ds) <- paste("Exp", 1:length(Ds))
+        }
+        for(i in 1:length(Ds)){
 
-        if (mode(Ds[[i]]) == "numeric") {
-          if(mode(SFs[[i]])!="numeric"){
-            stop(sprintf("Ds[[%d]] are numeric but the SFs[[%d]] are not numeric!",i,i))
-          }
+          if (mode(Ds[[i]]) == "numeric") {
+            if(mode(SFs[[i]])!="numeric"){
+              stop(sprintf("Ds[[%d]] are numeric but the SFs[[%d]] are not numeric!",i,i))
+            }
           # cleanData <- sanitizeInput(Ds[[i]],
           #   SFs[[i]],
           #   conc_as_log = conc_as_log,
@@ -153,179 +156,203 @@ function(rad.type = "radiation",
           #   verbose = verbose)
           # Ds[[i]] <- 10^cleanData[["log_conc"]]
           # SFs[[i]] <- 100*cleanData[["viability"]]
-        } else {
-          stop(sprintf("Mode of Ds[[%d]] parameter should be numeric",i))
-        }
-
-      }
-
-    }
-  }
-
-  common.range.star <- FALSE
-
-  if (missing(plot.type)) {
-    plot.type <- "Actual"
-  }
-
-  doses <- list(); responses <- list(); legend.values <- list(); j <- 0; rSetNames <- list()
-  if(!missing(rSets)){
-    for(i in 1:length(rSets)) {
-      exp_i <- which(sensitivityInfo(rSets[[i]])[ ,"cellid"] == cellline & sensitivityInfo(rSets[[i]])[ ,"radiation.type"] == rad.type)
-      if(length(exp_i) > 0) {
-        if (summarize.replicates) {
-          rSetNames[[i]] <- rSetName(rSets[[i]])
-          if (length(exp_i) == 1) {
-            drug.responses <- as.data.frame(cbind("Dose"=as.numeric(as.vector(rSets[[i]]@sensitivity$raw[exp_i, , "Dose"])),
-              "Viability"=as.numeric(as.vector(rSets[[i]]@sensitivity$raw[exp_i, , "Viability"])), stringsAsFactors=FALSE))
-            drug.responses <- drug.responses[complete.cases(drug.responses), ]
-          }else{
-            drug.responses <- as.data.frame(cbind("Dose"=apply(rSets[[i]]@sensitivity$raw[exp_i, , "Dose"], 2, function(x){median(as.numeric(x), na.rm=TRUE)}),
-              "Viability"=apply(rSets[[i]]@sensitivity$raw[exp_i, , "Viability"], 2, function(x){median(as.numeric(x), na.rm=TRUE)}), stringsAsFactors=FALSE))
-            drug.responses <- drug.responses[complete.cases(drug.responses), ]
-          }
-          doses[[i]] <- drug.responses$Dose
-          responses[[i]] <- drug.responses$Viability
-          names(doses[[i]]) <- names(responses[[i]]) <- 1:length(doses[[i]])
-          if (!missing(legends.label)) {
-            if (length(legends.label) > 1) {
-              legend.values[[i]] <- paste(unlist(lapply(legends.label, function(x){
-                sprintf("%s = %s", x, round(as.numeric(rSets[[i]]@sensitivity$profiles[exp_i,x]), digits=2))
-              })), collapse = ", ")
-            } else {
-              legend.values[[i]] <- sprintf("%s = %s", legends.label, round(as.numeric(rSets[[i]]@sensitivity$profiles[exp_i, legends.label]), digits=2))
-            }
           } else {
-            legend.values[[i]] <- ""
+            stop(sprintf("Mode of Ds[[%d]] parameter should be numeric",i))
           }
-        } else {
-          for (exp in exp_i) {
-            j <- j + 1
-            rSetNames[[j]] <- rSetName(rSets[[i]])
 
-            drug.responses <- as.data.frame(cbind("Dose"=as.numeric(as.vector(rSets[[i]]@sensitivity$raw[exp, , "Dose"])),
-              "Viability"=as.numeric(as.vector(rSets[[i]]@sensitivity$raw[exp, , "Viability"])), stringsAsFactors=FALSE))
-            drug.responses <- drug.responses[complete.cases(drug.responses), ]
-            doses[[j]] <- drug.responses$Dose
-            responses[[j]] <- drug.responses$Viability
-            names(doses[[j]]) <- names(responses[[j]]) <- 1:length(doses[[j]])
+        }
+
+      }
+    }
+
+    common.range.star <- FALSE
+
+    if (missing(plot.type)) {
+      plot.type <- "Actual"
+    }
+
+    doses <- list(); responses <- list(); legend.values <- list(); j <- 0; rSetNames <- list()
+    if(!missing(rSets)){
+      for(i in 1:length(rSets)) {
+        exp_i <- which(sensitivityInfo(rSets[[i]])[ ,"cellid"] == cellline & sensitivityInfo(rSets[[i]])[ ,"radiation.type"] == rad.type)
+        if(length(exp_i) > 0) {
+          if (summarize.replicates) {
+            rSetNames[[i]] <- rSetName(rSets[[i]])
+            if (length(exp_i) == 1) {
+              drug.responses <- as.data.frame(cbind("Dose"=as.numeric(as.vector(rSets[[i]]@sensitivity$raw[exp_i, , "Dose"])),
+                "Viability"=as.numeric(as.vector(rSets[[i]]@sensitivity$raw[exp_i, , "Viability"])), stringsAsFactors=FALSE))
+              drug.responses <- drug.responses[complete.cases(drug.responses), ]
+            }else{
+              drug.responses <- as.data.frame(cbind("Dose"=apply(rSets[[i]]@sensitivity$raw[exp_i, , "Dose"], 2, function(x){median(as.numeric(x), na.rm=TRUE)}),
+                "Viability"=apply(rSets[[i]]@sensitivity$raw[exp_i, , "Viability"], 2, function(x){median(as.numeric(x), na.rm=TRUE)}), stringsAsFactors=FALSE))
+              drug.responses <- drug.responses[complete.cases(drug.responses), ]
+            }
+            doses[[i]] <- drug.responses$Dose
+            responses[[i]] <- drug.responses$Viability
+            names(doses[[i]]) <- names(responses[[i]]) <- 1:length(doses[[i]])
             if (!missing(legends.label)) {
-              if (length(legends.label) > 1) {
-                legend.values[[j]] <- paste(unlist(lapply(legends.label, function(x){
-                  sprintf("%s = %s", x, round(as.numeric(rSets[[i]]@sensitivity$profiles[exp, x]), digits=2))
-                })), collapse = ", ")
+              if(length(legends.label)>0) {
+                linQuad_params <- linearQuadraticModel(D = doses[[i]], SF = responses[[i]])
+                if(any(grepl("alpha", x=legends.label))){
+                  legend.values[[i]] <- paste(legend.values[i][[1]],sprintf("%s = %s", "α", round(linQuad_params[1], digits=2)), sep=", ")
+                }
+                if(any(grepl("beta", x=legends.label))){
+                  legend.values[[i]] <- paste(legend.values[i][[1]],sprintf("%s = %s", "ß", round(linQuad_params[2], digits=2)), sep=", ")
+                }
+                if(any(grepl("rsquared", x=legends.label))){
+                  legend.values[[i]] <- paste(legend.values[i][[1]],sprintf("%s = %s", "R^2", round(CoreGx:::examineGOF(linQuad_params)[1], digits=2)), sep=", ")
+                }
               } else {
-                legend.values[[j]] <- sprintf(" Exp %s %s = %s", rownames(rSets[[i]]@sensitivity$info)[exp], legends.label, round(as.numeric(rSets[[i]]@sensitivity$profiles[exp, legends.label]), digits=2))
+                legend.values[[i]] <- ""
               }
-            } else {
-              tt <- unlist(strsplit(rownames(rSets[[i]]@sensitivity$info)[exp], split="_"))
-              if (tt[1] == "radiation.type") {
-                legend.values[[j]] <- tt[2]
-              }else{
-                legend.values[[j]] <- rownames(rSets[[i]]@sensitivity$info)[exp]
+            } 
+          } else {
+            for (exp in exp_i) {
+              j <- j + 1
+              rSetNames[[j]] <- rSetName(rSets[[i]])
+
+              drug.responses <- as.data.frame(cbind("Dose"=as.numeric(as.vector(rSets[[i]]@sensitivity$raw[exp, , "Dose"])),
+                "Viability"=as.numeric(as.vector(rSets[[i]]@sensitivity$raw[exp, , "Viability"])), stringsAsFactors=FALSE))
+              drug.responses <- drug.responses[complete.cases(drug.responses), ]
+              doses[[j]] <- drug.responses$Dose
+              responses[[j]] <- drug.responses$Viability
+              names(doses[[j]]) <- names(responses[[j]]) <- 1:length(doses[[j]])
+              if (!missing(legends.label)) {
+                if(length(legends.label)>0){
+                  linQuad_params <- linearQuadraticModel(D = doses2[[i]], SF = responses2[[i]])
+                  if(any(grepl("alpha", x=legends.label))){
+                    legend.values2[[i]] <- paste(legend.values2[i][[1]],sprintf("%s = %s", "α", round(linQuad_params[1], digits=2)), sep=", ")
+                  }
+                  if(any(grepl("beta", x=legends.label))){
+                    legend.values2[[i]] <- paste(legend.values2[i][[1]],sprintf("%s = %s", "ß", round(linQuad_params[2], digits=2)), sep=", ")
+                  }
+                  if(any(grepl("rsquared", x=legends.label))){
+                    legend.values2[[i]] <- paste(legend.values2[i][[1]],sprintf("%s = %s", "R^2", round(CoreGx:::examineGOF(linQuad_params)[1], digits=2)), sep=", ")
+                  }
+                } 
+              } else {
+                tt <- unlist(strsplit(rownames(rSets[[i]]@sensitivity$info)[exp], split="_"))
+                if (tt[1] == "radiation.type") {
+                  legend.values[[j]] <- tt[2]
+                }else{
+                  legend.values[[j]] <- rownames(rSets[[i]]@sensitivity$info)[exp]
+                }
               }
             }
           }
+        } else {
+          warning("The cell line and drug combo were not tested together. Aborting function.")
+          return()
         }
-      } else {
-        warning("The cell line and drug combo were not tested together. Aborting function.")
-        return()
       }
     }
-  }
-  if(!missing(Ds)){
-    doses2 <- list(); responses2 <- list(); legend.values2 <- list(); j <- 0; rSetNames2 <- list();
-    for (i in 1:length(Ds)){
-      doses2[[i]] <- Ds[[i]]
-      responses2[[i]] <- SFs[[i]]
-      if(length(legends.label)>0){
-        if(any(grepl("AUC", x=toupper(legends.label)))){
-          legend.values2[[i]] <- paste(legend.values2[i][[1]],sprintf("%s = %s", "AUC", round(computeAUC(Ds[[i]],SFs[[i]], conc_as_log=FALSE, viability_as_pct=TRUE)/100, digits=2)), sep=", ")
-        }
-        if(any(grepl("IC50", x=toupper(legends.label)))){
-          legend.values2[[i]] <- paste(legend.values2[i][[1]],sprintf("%s = %s", "IC50", round(computeIC50(Ds[[i]],SFs[[i]], conc_as_log=FALSE, viability_as_pct=TRUE), digits=2)), sep=", ")
-        }
+    if(!missing(Ds)){
+      doses2 <- list(); responses2 <- list(); legend.values2 <- list(); j <- 0; rSetNames2 <- list();
+      for (i in 1:length(Ds)){
+        doses2[[i]] <- Ds[[i]]
+        responses2[[i]] <- SFs[[i]]
+        if(length(legends.label)>0){
+          linQuad_params <- linearQuadraticModel(D = doses2[[i]], SF = responses2[[i]])
+          if(any(grepl("alpha", x=legends.label))){
+            legend.values2[[i]] <- paste(legend.values2[i][[1]],sprintf("%s = %s", "α", round(linQuad_params[1], digits=2)), sep=", ")
+          }
+          if(any(grepl("beta", x=legends.label))){
+            legend.values2[[i]] <- paste(legend.values2[i][[1]],sprintf("%s = %s", "ß", round(linQuad_params[2], digits=2)), sep=", ")
+          }
+          if(any(grepl("rsquared", x=legends.label))){
+            legend.values2[[i]] <- paste(legend.values2[i][[1]],sprintf("%s = %s", "R^2", round(CoreGx:::examineGOF(linQuad_params)[1], digits=2)), sep=", ")
+          }
+        } else{ legend.values2[[i]] <- ""}
 
-      } else{ legend.values2[[i]] <- ""}
-      
-      rSetNames2[[i]] <- names(Ds)[[i]]
+        rSetNames2[[i]] <- names(Ds)[[i]]
+      }
+      doses <- c(doses, doses2)
+      responses <- c(responses, responses2)
+      legend.values <- c(legend.values, legend.values2)
+      rSetNames <- c(rSetNames, rSetNames2)
     }
-    doses <- c(doses, doses2)
-    responses <- c(responses, responses2)
-    legend.values <- c(legend.values, legend.values2)
-    rSetNames <- c(rSetNames, rSetNames2)
-  }
 
-  if (missing(mycol)) {
+    if (missing(mycol)) {
     # require(RColorBrewer) || stop("Library RColorBrewer is not available!")
-    mycol <- RColorBrewer::brewer.pal(n=7, name="Set1")
-  }
-
-  dose.range <- c(10^100 , 0)
-  viability.range <- c(0 , 1)
-  for(i in 1:length(doses)) {
-    dose.range <- c(min(dose.range[1], min(doses[[i]], na.rm=TRUE), na.rm=TRUE), max(dose.range[2], max(doses[[i]], na.rm=TRUE), na.rm=TRUE))
-    viability.range <- c(max(viability.range[1], min(responses[[i]], na.rm=TRUE), na.rm=TRUE), 1)
-  }
-  x1 <- 10 ^ 10; x2 <- 0
-
-  if(length(doses) > 1) {
-    common.ranges <- .getCommonConcentrationRange(doses)
-
-    for(i in 1:length(doses)) {
-      x1 <- min(x1, min(common.ranges[[i]]))
-      x2 <- max(x2, max(common.ranges[[i]]))
+      mycol <- RColorBrewer::brewer.pal(n=7, name="Set1")
     }
-  }
-  if (!missing(xlim)) {
-    dose.range <- xlim
-  }
-  if (!missing(ylim)) {
-    viability.range <- ylim
-  }
-  if(missing(title)){
+
+    dose.range <- c(10^100 , 0)
+    viability.range <- c(1 , 1)
+    for(i in 1:length(doses)) {
+      # dose.range <- c(min(dose.range[1], min(doses[[i]], na.rm=TRUE), na.rm=TRUE), max(dose.range[2], max(doses[[i]], na.rm=TRUE), na.rm=TRUE))
+      dose.range <- c(0, max(dose.range[2], max(doses[[i]], na.rm=TRUE), na.rm=TRUE))      
+      viability.range <- c(min(viability.range[1], min(responses[[i]], na.rm=TRUE), na.rm=TRUE), 1)
+    }
+    x1 <- 10 ^ 10; x2 <- 0
+
+  # if(length(doses) > 1) {
+  #   common.ranges <- PharmacoGx:::.getCommonConcentrationRange(doses)
+
+  #   for(i in 1:length(doses)) {
+  #     x1 <- min(x1, min(common.ranges[[i]]))
+  #     x2 <- max(x2, max(common.ranges[[i]]))
+  #   }
+  # }
+    if (!missing(xlim)) {
+      dose.range <- xlim
+    }
+    if (!missing(ylim)) {
+      viability.range <- ylim
+    }
+    if(missing(title)){
     ## FIXME:: HACK
     # if(!missing(drug)&&!missing(cellline)){
     #   title <- sprintf("%s:%s", drug, cellline)
     # } else {
-      title <- sprintf("Radiation Response Curve for: %s", cellline)
-    # }
-    
-  }
-  plot(NA, xlab="Dose (Gy)", ylab="Survival Fraction", axes =FALSE, main=title, log="y", ylim=viability.range, xlim=dose.range, cex=cex, cex.main=cex.main)
-  magicaxis::magaxis(side=1:2, frame.plot=TRUE, tcl=-.3, majorn=c(5,3), minorn=c(5,2))
-  legends <- NULL
-  legends.col <- NULL
-  if (length(doses) > 1) {
-    rect(xleft=x1, xright=x2, ybottom=viability.range[1] , ytop=viability.range[2] , col=rgb(240, 240, 240, maxColorValue = 255), border=FALSE)
-  }
-
-  for (i in 1:length(doses)) {
-    points(doses[[i]],responses[[i]],pch=20,col = mycol[i], cex=cex)
-
-    switch(plot.type , "Actual"={
-      lines(doses[[i]], responses[[i]], lty=1, lwd=lwd, col=mycol[i])
-    }, "Fitted"={ 
-      linQuad_params <- linearQuadraticModel(D = doses[[i]], SF = responses[[i]])
-      x_vals <- CoreGx:::.GetSupportVec(doses[[i]])
-      lines(x_vals, (.linearQuadratic(x_vals, pars=linQuad_params, SF_as_log=FALSE)),lty=1, lwd=lwd, col=mycol[i])
-    },"Both"={
-      # lines(doses[[i]],responses[[i]],lty=1,lwd=lwd,col = mycol[i])
-      linQuad_params <- linearQuadraticModel(D = doses[[i]], SF = responses[[i]])
-      x_vals <- CoreGx:::.GetSupportVec(doses[[i]])
-      lines(x_vals, (.linearQuadratic(x_vals, pars=linQuad_params, SF_as_log=FALSE)),lty=1, lwd=lwd, col=mycol[i])
-    })
-    legends<- c(legends, sprintf("%s%s", rSetNames[[i]], legend.values[[i]]))
-    legends.col <-  c(legends.col, mycol[i])
-  }
-  if (common.range.star) {
-    if (length(doses) > 1) {
-      for (i in 1:length(doses)) {
-        points(common.ranges[[i]], responses[[i]][names(common.ranges[[i]])], pch=8, col=mycol[i])
+      if (length(rSets)){
+        title <- sprintf("Radiation Response Curve for: %s", cellline)
+      } else {
+        title <- "Radiation Response Curve"
       }
+    # }
     }
+    plot(NA, xlab="Dose (Gy)", ylab="Survival Fraction", axes =FALSE, main=title, log="y", ylim=viability.range, xlim=dose.range, cex=cex, cex.main=cex.main)
+    magicaxis::magaxis(side=1:2, frame.plot=TRUE, tcl=-.3, majorn=c(5,5), minorn=c(5,3), label=c(TRUE,FALSE))
+    if(max(viability.range)/min(viability.range)<50){
+      ticks <- magicaxis::maglab(viability.range, exptext = TRUE)
+    } else {
+      ticks <- magicaxis::maglab(viability.range, exptext = TRUE, log=TRUE)
+    }
+    ticks$exp <- sapply(ticks$exp, function(x) return(as.expression(bquote(10^ .(round(log10(eval(x)), 2))))))
+    axis(2, at=ticks$labat,labels=ticks$exp)
+    legends <- NULL
+    legends.col <- NULL
+  # if (length(doses) > 1) {
+  #   rect(xleft=x1, xright=x2, ybottom=viability.range[1] , ytop=viability.range[2] , col=rgb(240, 240, 240, maxColorValue = 255), border=FALSE)
+  # }
+
+    for (i in 1:length(doses)) {
+      points(doses[[i]],responses[[i]],pch=20,col = mycol[i], cex=cex)
+
+      switch(plot.type , "Actual"={
+        lines(doses[[i]], responses[[i]], lty=1, lwd=lwd, col=mycol[i])
+      }, "Fitted"={ 
+        linQuad_params <- linearQuadraticModel(D = doses[[i]], SF = responses[[i]])
+        x_vals <- CoreGx:::.GetSupportVec(c(0,doses[[i]]))
+        lines(x_vals, (.linearQuadratic(x_vals, pars=linQuad_params, SF_as_log=FALSE)),lty=1, lwd=lwd, col=mycol[i])
+      },"Both"={
+      # lines(doses[[i]],responses[[i]],lty=1,lwd=lwd,col = mycol[i])
+        linQuad_params <- linearQuadraticModel(D = doses[[i]], SF = responses[[i]])
+        x_vals <- CoreGx:::.GetSupportVec(c(0,doses[[i]]))
+        lines(x_vals, (.linearQuadratic(x_vals, pars=linQuad_params, SF_as_log=FALSE)),lty=1, lwd=lwd, col=mycol[i])
+      })
+      legends<- c(legends, sprintf("%s%s", rSetNames[[i]], legend.values[[i]]))
+      legends.col <-  c(legends.col, mycol[i])
+    }
+  # if (common.range.star) {
+  #   if (length(doses) > 1) {
+  #     for (i in 1:length(doses)) {
+  #       points(common.ranges[[i]], responses[[i]][names(common.ranges[[i]])], pch=8, col=mycol[i])
+  #     }
+  #   }
+  # }
+    legend(legend.loc, legend=legends, col=legends.col, bty="n", cex=cex, pch=c(15,15))
+    return(invisible(NULL))
   }
-  legend(legend.loc, legend=legends, col=legends.col, bty="n", cex=cex, pch=c(15,15))
-  return(invisible(NULL))
-}
 

@@ -53,6 +53,11 @@ linearQuadraticModel <- function (D,
     stop ("All lower bounds must be less than the corresponding upper_bounds.")
   }
   
+  if(!(0 %in% D) || SF[D==0] == 0){
+    D <- c(0,D)
+    SF <- c(0,SF)
+  }
+
   gritty_guess <- .makeGrittyGuess(lower_bounds = lower_bounds,
                                    upper_bounds = upper_bounds,
                                    D = D,
