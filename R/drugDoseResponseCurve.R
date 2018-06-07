@@ -342,7 +342,11 @@ function(rad.type = "radiation",
         x_vals <- CoreGx:::.GetSupportVec(c(0,doses[[i]]))
         lines(x_vals, (.linearQuadratic(x_vals, pars=linQuad_params, SF_as_log=FALSE)),lty=1, lwd=lwd, col=mycol[i])
       })
-      legends<- c(legends, sprintf("%s%s", rSetNames[[i]], legend.values[[i]]))
+      if (length(legend.values)){
+              legends<- c(legends, sprintf("%s%s", rSetNames[[i]], legend.values[[i]]))
+      } else {
+                      legends<- c(legends, sprintf("%s", rSetNames[[i]]))
+      }
       legends.col <-  c(legends.col, mycol[i])
     }
   # if (common.range.star) {
