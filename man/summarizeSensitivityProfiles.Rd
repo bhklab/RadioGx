@@ -5,9 +5,10 @@
 \title{Takes the sensitivity data from a RadioSet, and summarises them into a
 drug vs cell line table}
 \usage{
-summarizeSensitivityProfiles(rSet, sensitivity.measure = "auc_recomputed",
-  cell.lines, radiation.types, summary.stat = c("mean", "median", "first",
-  "last", "max", "min"), fill.missing = TRUE, verbose = TRUE)
+summarizeSensitivityProfiles(rSet,
+  sensitivity.measure = "auc_recomputed", cell.lines, radiation.types,
+  summary.stat = c("mean", "median", "first", "last", "max", "min"),
+  fill.missing = TRUE, verbose = TRUE)
 }
 \arguments{
 \item{rSet}{[RadioSet] The RadioSet from which to extract the data}

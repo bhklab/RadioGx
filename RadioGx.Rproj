@@ -16,8 +16,6 @@ AutoAppendNewline: Yes
 StripTrailingWhitespace: Yes
 
 BuildType: Package
-PackageInstallArgs: --no-multiarch --with-keep.source
-PackageBuildArgs: --no-staged-install
-PackageBuildBinaryArgs: --no-staged-install
+PackageInstallArgs: --no-multiarch --with-keep.source --no-staged-install
 PackageCheckArgs: --as-cran
 PackageRoxygenize: rd,collate,namespace

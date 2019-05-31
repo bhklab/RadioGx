@@ -7,12 +7,12 @@ other molecular profile) and drug dose response, for use in drug sensitivity
 analysis.}
 \usage{
 radSensitivitySig(rSet, mDataType, radiation.types, features,
-  sensitivity.measure = "auc_recomputed", molecular.summary.stat = c("mean",
-  "median", "first", "last", "or", "and"),
-  sensitivity.summary.stat = c("mean", "median", "first", "last"),
-  returnValues = c("estimate", "pvalue", "fdr"), sensitivity.cutoff,
-  standardize = c("SD", "rescale", "none"), nthread = 1, verbose = TRUE,
-  ...)
+  sensitivity.measure = "auc_recomputed",
+  molecular.summary.stat = c("mean", "median", "first", "last", "or",
+  "and"), sensitivity.summary.stat = c("mean", "median", "first",
+  "last"), returnValues = c("estimate", "pvalue", "fdr"),
+  sensitivity.cutoff, standardize = c("SD", "rescale", "none"),
+  nthread = 1, verbose = TRUE, ...)
 }
 \arguments{
 \item{rSet}{[PharmacoSet] a PharmacoSet of the perturbation experiment type}

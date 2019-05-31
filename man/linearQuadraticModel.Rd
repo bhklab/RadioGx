@@ -4,8 +4,8 @@
 \alias{linearQuadraticModel}
 \title{Fit linear-quadratic curves to dose-response data}
 \usage{
-linearQuadraticModel(D, SF, lower_bounds = c(0, 0), upper_bounds = c(1, 1),
-  scale = 5, family = c("normal", "Cauchy"), median_n = 1,
+linearQuadraticModel(D, SF, lower_bounds = c(0, 0), upper_bounds = c(1,
+  1), scale = 5, family = c("normal", "Cauchy"), median_n = 1,
   trunc = FALSE, verbose = FALSE)
 }
 \arguments{
