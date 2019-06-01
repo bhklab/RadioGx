@@ -1,0 +1,146 @@
+# RadioGx Package
+
+This is a record of development on the RadioGx package while it is being prepared for CRAN.
+
+## 31.05.19 
+
+### Build 1
+
+**Errors**
+
+```R [RESOLVED]
+** testing if installed package keeps a record of temporary installation path
+ERROR: hard-coded installation path: please report to the package maintainer and use '--no-staged-install'
+```
+- R 3.6.0 Staged Install causes problem
+  - `--no-staged-install` doesn't work
+  - See: 
+    1. [R Community - hard-coded installation path](https://community.rstudio.com/t/error-installing-r-package-from-local-file-hard-coded-installation-path/31197/3)
+    2. [Stack Overflow - hard-coded installation path?](https://stackoverflow.com/questions/56365021/hisafer-installation-how-do-i-solve-hard-coded-installation-path)
+    3. [R-Project Blog - staged instal feature](https://developer.r-project.org/Blog/public/2019/02/14/staged-install/index.html)
+  - Workaround: `Tools > Project Options > Build-tools` add `--no-staged-install` to `Install and Restart` options
+    - This issue will likely be patched by R
+    - Will investigate further once CRAN check is completed
+    - Solution was to change `sessionInfo()` to `sessionInfo` in conversion of S3 to S4 object
+        - sessionInfo() returns a path which the staged-installl feature considers 'hard-coded'
+
+```R
+* checking CRAN incoming feasibility ... WARNING
+Maintainer: 'Benjamin Haibe-Kains <benjamin.haibe.kains@utoronto.ca>'
+
+New submission
+
+Version contains large components (0.0.0.0.9000)
+
+Non-FOSS package license (GNU GPL-3.0)
+
+Strong dependencies not in mainstream repositories:
+  CoreGx
+
+The Title field should be in title case. Current version is:
+'What the Package Does (one line, title case)'
+In title case that is:
+'What the Package Does (One Line, Title Case)'
+* checking package namespace information ... OK
+* checking package dependencies ... ERROR
+Namespace dependencies not required:
+  'Biobase', 'RColorBrewer', 'caTools', 'magicaxis', 'methods',
+  'reshape2'
+```
+- Changed title to `Analysis of Large-Scale Radiogenomic Data`; same format as PharmacoGx
+- Added `Author` and `Maintainer` fields for BHK
+- Added `Imports: Biobase, RColorBrewer, caTolls, magicaxis, methods, reshape2`
+- Added `Date: 2019-05-31`
+
+**Warnings**
+
+```R [RESOLVED]
+* looking to see if a 'data/datalist' file should be added
+  NB: this package now depends on R (>= 3.5.0)
+  WARNING: Added dependency on R >= 3.5.0 because serialized objects in  serialize/load version 3 cannot be read in older versions of R.  File(s) containing such objects: 'RadioGx/data/Cleveland_small.RData'
+* building 'RadioGx_0.0.0.0.9000.tar.gz'
+```
+- Changed to `Depends: R (>=3.5.0)`
+
+### Build 2
+
+**Errors**
+
+```R
+* checking whether package 'RadioGx' can be installed ... ERROR
+Installation failed.
+See 'C:/Users/ChrisEeles/OneDrive - UHN/R_Packages/RadioGx.Rcheck/00install.out' for details.
+* DONE
+Status: 1 ERROR, 1 WARNING
+
+See
+  'C:/Users/ChrisEeles/OneDrive - UHN/R_Packages/RadioGx.Rcheck/00check.log'
+for details.
+```
+- Log has no additional details
+- I believe this is due to the staged installation
+    - Can we force --no-staged-install in a released package?
+    - Can we resolve what ever is causing the staged install issue?
+        - May need to wait for R patch?
+- Solution was to change `sessionInfo()` to `sessionInfo` in conversion of S3 to S4 object
+  - sessionInfo() returns a path which the staged-installl feature considers 'hard-coded'
+
+**Warnings**
+
+```R
+* checking CRAN incoming feasibility ... WARNING
+Maintainer: 'Benjamin Haibe-Kains <benjamin.haibe.kains@utoronto.ca>'
+
+New submission
+
+Version contains large components (0.0.0.0.9000)
+
+Non-FOSS package license (GNU GPL-3.0)
+
+Strong dependencies not in mainstream repositories:
+  CoreGx
+```
+- This likely can't be resolved until CoreGx is on CRAN
+- Work around: add `zzz.R` with `.onAttach <- function(libname=NULL, pkgname){ devtools::install_github("BHKLab/CoreGx,ref="CRAN_Debug") }`
+
+
+```R
+Warning messages:
+1: For function ‘cellInfo’, signature ‘RadioSet’: argument in method definition changed from (rSet) to (cSet) 
+2: For function ‘sensitivityInfo’, signature ‘RadioSet’: argument in method definition changed from (rSet) to (cSet) 
+3: For function ‘sensitivityProfiles’, signature ‘RadioSet’: argument in method definition changed from (rSet) to (cSet) 
+4: For function ‘sensitivityMeasures’, signature ‘RadioSet’: argument in method definition changed from (rSet) to (cSet) 
+5: For function ‘cellNames’, signature ‘RadioSet’: argument in method definition changed from (rSet) to (cSet) 
+6: For function ‘dateCreated’, signature ‘RadioSet’: argument in method definition changed from (rSet) to (cSet) 
+7: For function ‘pertNumber’, signature ‘RadioSet’: argument in method definition changed from (rSet) to (cSet) 
+8: For function ‘sensNumber’, signature ‘RadioSet’: argument in method definition changed from (rSet) to (cSet) 
+```
+- Tried changing `"RadioSet"` to `signature(rSet = '"RadioSet"`)
+    - This resolves the warning but causes an error
+
+### Build 2 
+
+**Errors**
+
+```R
+* checking examples ... ERROR
+Running examples in 'RadioGx-Ex.R' failed
+The error most likely occurred in:
+
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: computeAUC
+> ### Title: computeAUC: computes AUC
+> ### Aliases: computeAUC
+> 
+> ### ** Examples
+> 
+> computeAUC(pars = c(0.2, 0.1), lower = 0, upper = 4)
+Error in CoreGx:::.reformatData(x = D, pars = pars, x_to_log = FALSE,  : 
+  argument "D" is missing, with no default
+Calls: computeAUC -> <Anonymous> -> is.unsorted
+Execution halted
+```
+
+**Warnings**
+
+```R
