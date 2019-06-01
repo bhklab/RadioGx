@@ -31,7 +31,7 @@ sensitivity experiments}
 \item{sensitivityRaw}{A 3 Dimensional \code{array} contaning the raw radiation
 dose – response data for the sensitivity experiments}
 
-\item{sensitivityProfiles}{\code{data.frame} containing radiation sensitivity profile 
+\item{sensitivityProfiles}{\code{data.frame} containing radiation sensitivity profile
 statistics such as IC50 and AUC}
 
 \item{sensitivityN, perturbationN}{A \code{data.frame} summarizing the
@@ -52,14 +52,13 @@ print out any errors it finds after construction?}
 An object of class RadioSet
 }
 \description{
-A constructor that simplifies the process of creating RadioSets, as well 
+A constructor that simplifies the process of creating RadioSets, as well
 as creates empty objects for data not provided to the constructor. Only
 objects returned by this constructor are expected to work with the RadioSet
 methods. For a much more detailed instruction on creating RadioSets, please
 see the "CreatingRadioSet" vignette.
 }
 \examples{
- 
 ## For help creating a RadioSet object, please see the following vignette:
 browseVignettes("PharmacoGx")
 

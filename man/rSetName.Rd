@@ -16,7 +16,7 @@ The name of the RadioSet
 A generic for the rSetName method
 }
 \examples{
-data(CCLEsmall)
-rSetName(CCLEsmall)
+data(Cleveland_small)
+rSetName(Cleveland_small)
 
 }

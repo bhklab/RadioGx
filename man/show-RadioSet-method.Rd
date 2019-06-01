@@ -17,7 +17,7 @@ Prints the RadioSet object to the output stream, and returns invisible NULL.
 Show a PharamcoSet
 }
 \examples{
-data(CCLEsmall)
-CCLEsmall
+data(Cleveland_small)
+Cleveland_small
 
 }

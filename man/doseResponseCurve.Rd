@@ -12,11 +12,11 @@ doseResponseCurve(rad.type = "radiation", cellline, rSets = list(),
   legend.loc = "topright", verbose = TRUE)
 }
 \arguments{
-\item{rad.type}{[string] The type(s) of radiation dosage to be 
+\item{rad.type}{[string] The type(s) of radiation dosage to be
 plotted. If the plot is desirable for more than one radioset, A unique drug id
 should be provided.}
 
-\item{cellline}{[string] A cell line name for which the radiation response curve should be 
+\item{cellline}{[string] A cell line name for which the radiation response curve should be
 plotted. If the plot is desirable for more than one radioset, a unique cell id
 should be provided.}
 
@@ -28,9 +28,9 @@ Ds[[i]] is plotted against SFs[[i]]. The names of the D list are used to create 
 
 \item{trunc}{[bool] Should the viability values be truncated to lie in [0-100] before doing the fitting}
 
-\item{legends.label}{[vector] A vector of sensitivity measurment types which could 
+\item{legends.label}{[vector] A vector of sensitivity measurment types which could
 be any combination of  ic50_published, auc_published, auc_recomputed and auc_recomputed_star.
-A legend will be displayed on the top right of the plot which each line of the legend is 
+A legend will be displayed on the top right of the plot which each line of the legend is
 the values of requested sensitivity measerments for one of the requested rSets.
 If this parameter is missed no legend would be provided for the plot.}
 
@@ -38,21 +38,21 @@ If this parameter is missed no legend would be provided for the plot.}
 If this parameter would be missed c(0,100) would be used as the ylim of the plot.}
 
 \item{xlim}{[vector] A vector of two numerical values to be used as xlim of the plot.
-If this parameter would be missed the minimum and maximum comncentrations between all 
+If this parameter would be missed the minimum and maximum comncentrations between all
 the rSets would be used as plot xlim.}
 
-\item{mycol}{[vector] A vector with the same lenght of the rSets parameter which 
-will determine the color of the curve for the pharmaco sets. If this parameter is 
+\item{mycol}{[vector] A vector with the same lenght of the rSets parameter which
+will determine the color of the curve for the pharmaco sets. If this parameter is
 missed default colors from Rcolorbrewer package will be used as curves color.}
 
 \item{title}{[character] The title of the graph. If no title is provided, then it defaults to
 'Drug':'Cell Line'.}
 
-\item{plot.type}{[character] Plot type which can be the actual one ("Actual") or 
+\item{plot.type}{[character] Plot type which can be the actual one ("Actual") or
 the one fitted by logl logistic regression ("Fitted") or both of them ("Both").
 If this parameter is missed by default actual curve is plotted.}
 
-\item{summarize.replicates}{[character] If this parameter is set to true replicates 
+\item{summarize.replicates}{[character] If this parameter is set to true replicates
 are summarized and replicates are plotted individually otherwise}
 
 \item{lwd}{[numeric] The line width to plot with}
@@ -71,11 +71,11 @@ Plots to the active graphics device and returns and invisible NULL.
 \description{
 Given a list of RadioSets, the function will plot the drug_response curve,
 for a given drug/cell pair. The y axis of the plot is the viability percentage
-and x axis is the log transformed Ds. If more than one rSet is 
-provided, a light gray area would show the common concentration range between rSets. 
+and x axis is the log transformed Ds. If more than one rSet is
+provided, a light gray area would show the common concentration range between rSets.
 User can ask for type of sensitivity measurment to be shown in the plot legend.
-The user can also provide a list of their own Ds and viability values, 
-as in the examples below, and it will be treated as experiments equivalent to values coming 
+The user can also provide a list of their own Ds and viability values,
+as in the examples below, and it will be treated as experiments equivalent to values coming
 from a pset. The names of the concentration list determine the legend labels.
 }
 \examples{

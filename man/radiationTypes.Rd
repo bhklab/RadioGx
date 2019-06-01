@@ -16,7 +16,7 @@ A vector of the radiation names used in the RadioSet
 A generic for the radiationTypes method
 }
 \examples{
-data(CCLEsmall)
-radiationTypes(CCLEsmall)
+data(Cleveland_small)
+radiationTypes(Cleveland_small)
 
 }

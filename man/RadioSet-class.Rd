@@ -209,15 +209,15 @@ The updated \code{RadioSet}
 The updated \code{RadioSet}
 }
 \description{
-The RadioSet (RSet) class was developed to contain and organise large 
-RadioGenomic datasets, and aid in their metanalysis. It was designed 
-primarily to allow bioinformaticians and biologists to work with data at the 
-level of genes and cell lines, providing a more naturally intuitive 
-interface and simplifying analyses between several datasets. As such, it was 
-designed to be flexible enough to hold datasets of two different natures 
-while providing a common interface. The class can accomidate datasets 
-containing both radiation dose response data, as well as datasets contaning 
-genetic profiles of cell lines pre and post treatement with compounds, known 
+The RadioSet (RSet) class was developed to contain and organise large
+RadioGenomic datasets, and aid in their metanalysis. It was designed
+primarily to allow bioinformaticians and biologists to work with data at the
+level of genes and cell lines, providing a more naturally intuitive
+interface and simplifying analyses between several datasets. As such, it was
+designed to be flexible enough to hold datasets of two different natures
+while providing a common interface. The class can accomidate datasets
+containing both radiation dose response data, as well as datasets contaning
+genetic profiles of cell lines pre and post treatement with compounds, known
 respecitively as sensitivity and perturbation datasets.
 
 Generic for phenoInfo method
@@ -329,93 +329,93 @@ experiments
 including the \code{$name} and the session information for how the object
 was creating, detailing the exact versions of R and all the packages used}
 
-\item{\code{molecularProfiles}}{A \code{list} containing 4 \code{Biobase::ExpressionSet} 
-type object for holding data for RNA, DNA, SNP and Copy Number Variation 
-measurements respectively, with associated \code{fData} and \code{pData} 
+\item{\code{molecularProfiles}}{A \code{list} containing 4 \code{Biobase::ExpressionSet}
+type object for holding data for RNA, DNA, SNP and Copy Number Variation
+measurements respectively, with associated \code{fData} and \code{pData}
 containing the row and column metadata}
 
-\item{\code{cell}}{A \code{data.frame} containg the annotations for all the cell 
+\item{\code{cell}}{A \code{data.frame} containg the annotations for all the cell
 lines profiled in the data set, across all data types}
 
-\item{\code{radiation}}{A \code{data.frame} containg the annotations for all the radiation treatment types 
+\item{\code{radiation}}{A \code{data.frame} containg the annotations for all the radiation treatment types
 used in the in the dataset, across all data types}
 
-\item{\code{sensitivity}}{A \code{list} containing all the data for the sensitivity 
-experiments, including \code{$info}, a \code{data.frame} containing the 
-experimental info,\code{$raw} a 3D \code{array} containing raw data, 
-\code{$profiles}, a \code{data.frame} containing sensitivity profiles 
-statistics, and \code{$n}, a \code{data.frame} detailing the number of 
+\item{\code{sensitivity}}{A \code{list} containing all the data for the sensitivity
+experiments, including \code{$info}, a \code{data.frame} containing the
+experimental info,\code{$raw} a 3D \code{array} containing raw data,
+\code{$profiles}, a \code{data.frame} containing sensitivity profiles
+statistics, and \code{$n}, a \code{data.frame} detailing the number of
 experiments for each cell-radiation type pair}
 
-\item{\code{perturbation}}{A \code{list} containting \code{$n}, a \code{data.frame} 
+\item{\code{perturbation}}{A \code{list} containting \code{$n}, a \code{data.frame}
 summarizing the available perturbation data,}
 
-\item{\code{curation}}{A \code{list} containing mappings for 
-\code{cell} and \code{tissue} names used in the data set to universal 
+\item{\code{curation}}{A \code{list} containing mappings for
+\code{cell} and \code{tissue} names used in the data set to universal
 identifiers used between different RadioSet objects}
 
-\item{\code{datasetType}}{A \code{character} string of 'sensitivity', 
-'perturbation', or both detailing what type of data can be found in the 
+\item{\code{datasetType}}{A \code{character} string of 'sensitivity',
+'perturbation', or both detailing what type of data can be found in the
 RadioSet, for proper processing of the data}
 }}
 
 \examples{
-data(CCLEsmall)
-phenoInfo(CCLEsmall, mDataType="rna")
+data(Cleveland_small)
+phenoInfo(Cleveland_small, mDataType="rna")
 
 
-data(CCLEsmall)
-phenoInfo(CCLEsmall, mDataType="rna") <- phenoInfo(CCLEsmall, mDataType="rna")
+data(Cleveland_small)
+phenoInfo(Cleveland_small, mDataType="rna") <- phenoInfo(Cleveland_small, mDataType="rna")
 
-data(CCLEsmall)
-molecularProfiles(CCLEsmall, "rna")
+data(Cleveland_small)
+molecularProfiles(Cleveland_small, "rna")
 
-data(CCLEsmall)
-molecularProfiles(CCLEsmall, "rna") <- molecularProfiles(CCLEsmall, "rna")
+data(Cleveland_small)
+molecularProfiles(Cleveland_small, "rna") <- molecularProfiles(Cleveland_small, "rna")
 
-data(CCLEsmall)
-featureInfo(CCLEsmall, "rna")
+data(Cleveland_small)
+featureInfo(Cleveland_small, "rna")
 
-data(CCLEsmall)
-featureInfo(CCLEsmall, "rna") <- featureInfo(CCLEsmall, "rna")
+data(Cleveland_small)
+featureInfo(Cleveland_small, "rna") <- featureInfo(Cleveland_small, "rna")
 
-data(CCLEsmall)
-sensitivityInfo(CCLEsmall)
+data(Cleveland_small)
+sensitivityInfo(Cleveland_small)
 
-data(CCLEsmall)
-sensitivityInfo(CCLEsmall) <- sensitivityInfo(CCLEsmall)
+data(Cleveland_small)
+sensitivityInfo(Cleveland_small) <- sensitivityInfo(Cleveland_small)
 
-data(CCLEsmall)
-sensitivityProfiles(CCLEsmall)
+data(Cleveland_small)
+sensitivityProfiles(Cleveland_small)
 
-data(CCLEsmall)
-sensitivityProfiles(CCLEsmall) <- sensitivityProfiles(CCLEsmall)
+data(Cleveland_small)
+sensitivityProfiles(Cleveland_small) <- sensitivityProfiles(Cleveland_small)
 
-data(CCLEsmall)
-sensitivityMeasures(CCLEsmall)
+data(Cleveland_small)
+sensitivityMeasures(Cleveland_small)
 
-data(CCLEsmall)
-cellNames(CCLEsmall)
+data(Cleveland_small)
+cellNames(Cleveland_small)
 
-data(CCLEsmall)
-cellNames(CCLEsmall) <- cellNames(CCLEsmall)
+data(Cleveland_small)
+cellNames(Cleveland_small) <- cellNames(Cleveland_small)
 
-data(CCLEsmall)
-fNames(CCLEsmall, "rna")
+data(Cleveland_small)
+fNames(Cleveland_small, "rna")
 
-data(CCLEsmall)
-dateCreated(CCLEsmall)
+data(Cleveland_small)
+dateCreated(Cleveland_small)
 
-data(CCLEsmall)
-pertNumber(CCLEsmall)
+data(Cleveland_small)
+pertNumber(Cleveland_small)
 
-data(CCLEsmall)
-sensNumber(CCLEsmall)
+data(Cleveland_small)
+sensNumber(Cleveland_small)
 
-data(CCLEsmall)
-pertNumber(CCLEsmall) <- pertNumber(CCLEsmall)
+data(Cleveland_small)
+pertNumber(Cleveland_small) <- pertNumber(Cleveland_small)
 
-data(CCLEsmall)
-sensNumber(CCLEsmall) <- sensNumber(CCLEsmall)
+data(Cleveland_small)
+sensNumber(Cleveland_small) <- sensNumber(Cleveland_small)
 
 }

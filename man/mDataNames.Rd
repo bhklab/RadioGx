@@ -16,7 +16,7 @@ Vector of names of the molecular data types
 Returns the molecular data names for the RadioSet.
 }
 \examples{
-data(CCLEsmall)
-mDataNames(CCLEsmall)
+data(Cleveland_small)
+mDataNames(Cleveland_small)
 
 }

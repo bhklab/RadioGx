@@ -39,10 +39,10 @@ all the experiments for a radiation or cell of interest, as well removes the nee
 to keep track of all the metadata conventions between different datasets.
 }
 \examples{
-data(CCLEsmall)
-CCLEradiationTypes  <- radiationNames(CCLEsmall)
-CCLEcells <- cellNames(CCLEsmall)
-RSet <- subsetTo(CCLEsmall,radiationTypes = CCLEradiationTypes[1], cells = CCLEcells[1])
+data(Cleveland_small)
+CCLEradiationTypes  <- radiationNames(Cleveland_small)
+CCLEcells <- cellNames(Cleveland_small)
+RSet <- subsetTo(Cleveland_small,radiationTypes = CCLEradiationTypes[1], cells = CCLEcells[1])
 RSet
 
 }

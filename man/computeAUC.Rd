@@ -31,6 +31,6 @@ This function computes the area under a dose-response curve of the form survival
 If lower and/or upper are missing, the function assumes their values to be the minimum and maximum D-values, respectively. For all warnings to be silent, set trunc = FALSE. For warnings to be output, set trunc = TRUE. For warnings to be output along with the arguments that triggered them, set trunc = 2.
 }
 \examples{
-computeAUC(pars = c(0.2, 0.1), lower = 0, upper = 4)
+computeAUC(D=c(0.1, 0.5, 0.7, 0.9), pars = c(0.2, 0.1), lower = 0, upper = 4)
 
 }

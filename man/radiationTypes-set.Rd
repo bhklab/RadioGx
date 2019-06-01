@@ -18,7 +18,7 @@ Updated \code{RadioSet}
 A generic for the radiationTypes replacement method
 }
 \examples{
-data(CCLEsmall)
-radiationTypes(CCLEsmall) <- radiationTypes(CCLEsmall)
+data(Cleveland_small)
+radiationTypes(Cleveland_small) <- radiationTypes(Cleveland_small)
 
 }

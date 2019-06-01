@@ -23,8 +23,8 @@ that matching of cells and radiations can be properly done across different type
 of data and with other studies.
 }
 \examples{
-data(CCLEsmall)
+data(Cleveland_small)
 
-checkRSetStructure(CCLEsmall)
+checkRSetStructure(Cleveland_small)
 
 }
