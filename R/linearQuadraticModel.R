@@ -25,16 +25,16 @@ linearQuadraticModel <- function (D,
                                   trunc = FALSE,
                                   verbose = FALSE) {
   match.arg(family)
-  
-  CoreGx:::.sanitizeInput(x = D,
+
+  CoreGx::.sanitizeInput(x = D,
                           y = SF,
                           x_as_log = FALSE,
                           y_as_log = FALSE,
                           y_as_pct = FALSE,
                           trunc = trunc,
                           verbose = verbose)
-  
-  DSF <- CoreGx:::.reformatData(x = D,
+
+  DSF <- CoreGx::.reformatData(x = D,
                                y = SF,
                                x_to_log = FALSE,
                                y_to_log = TRUE,
@@ -42,7 +42,7 @@ linearQuadraticModel <- function (D,
                                trunc = trunc)
   D <- DSF[["x"]]
   SF <- DSF[["y"]]
-  
+
   if (!(all(lower_bounds < upper_bounds))) {
     if (verbose == 2) {
       print("lower_bounds:")
@@ -52,7 +52,7 @@ linearQuadraticModel <- function (D,
     }
     stop ("All lower bounds must be less than the corresponding upper_bounds.")
   }
-  
+
   if(!((0 %in% D) || SF[D==0] == 0)){
     D <- c(0,D)
     SF <- c(0,SF)
@@ -62,10 +62,10 @@ linearQuadraticModel <- function (D,
                                    upper_bounds = upper_bounds,
                                    D = D,
                                    SF = SF)
-  
-  guess <- CoreGx:::.fitCurve(x = D,
+
+  guess <- CoreGx::.fitCurve(x = D,
                               y = SF,
-                              f = RadioGx:::.linearQuadratic,
+                              f = RadioGx::.linearQuadratic,
                               density = c(100, 100),
                               step = c(0.005, 0.005),
                               precision = 0.005,
@@ -78,7 +78,7 @@ linearQuadraticModel <- function (D,
                               verbose = verbose,
                               gritty_guess = gritty_guess,
                               span = 0.1)
-  
+
   names(guess) <- c("alpha", "beta")
 
   return(guess)

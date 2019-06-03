@@ -13,7 +13,7 @@ computeD10 <- function(pars) {
                           y_as_pct = FALSE,
                           trunc = FALSE,
                           verbose = FALSE)
-  
+
   return(.linearQuadraticInv(SF = 0.1,
                              pars = pars,
                              SF_as_log = FALSE))

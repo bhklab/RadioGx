@@ -2,7 +2,7 @@
 #'
 #' @description This function computes the area under a dose-response curve of the form survival fraction SF = exp(-alpha * D - beta * D ^ 2).
 #'
-#' @examples computeAUC(D=c(0.1, 0.5, 0.7, 0.9), pars = c(0.2, 0.1), lower = 0, upper = 4)
+#' @examples computeAUC(D=c(0.1, 0.5, 0.7, 0.9), pars=c(0.2, 0.1), lower = 0, upper = 4) # Returns 0.7039296
 #'
 #' @param D vector of dosages
 #' @param SF vector of survival fractions
@@ -18,10 +18,12 @@
 #' @importFrom stats pnorm
 #' @importFrom caTools trapz
 
-computeAUC <- function(D, SF, pars, lower, upper, trunc = TRUE, area.type = c("Fitted", "Actual"), verbose = TRUE) {
+# Added SF_as_log arguement with default as false to match condition on line 93
+computeAUC <- function(D, SF, pars, lower, upper, trunc = TRUE, SF_as_log = FALSE, area.type = c("Fitted", "Actual"), verbose = TRUE) {
   area.type <- match.arg(area.type)
 
   if (!missing(SF)) {
+    print("SF")
     CoreGx:::.sanitizeInput(x = D,
                             y = SF,
                             x_as_log = FALSE,
@@ -39,6 +41,7 @@ computeAUC <- function(D, SF, pars, lower, upper, trunc = TRUE, area.type = c("F
     D <- DSF[["x"]]
     SF <- DSF[["y"]]
   } else if (!missing(pars)) {
+    print("pars")
     CoreGx:::.sanitizeInput(pars = pars,
                             x_as_log = FALSE,
                             y_as_log = FALSE,
@@ -58,7 +61,10 @@ computeAUC <- function(D, SF, pars, lower, upper, trunc = TRUE, area.type = c("F
   }
 
   if (!missing(lower) && !missing(upper)) {
-    CoreGx:::.sanitizeInput(lower = lower,
+    print("lower & upper")
+    ###TODO:: Check if this function still works correctly
+    CoreGx:::.sanitizeInput(pars = pars, # Added this line to resolve error returrom CoreGx
+                            lower = lower,
                             upper = upper,
                             x_as_log = FALSE,
                             y_as_log = FALSE,
@@ -68,6 +74,7 @@ computeAUC <- function(D, SF, pars, lower, upper, trunc = TRUE, area.type = c("F
   }
 
   if (area.type == "Fitted") {
+    print("fitted")
     if (missing(pars)) {
       pars <- unlist(linearQuadraticModel(D = D,
                                           SF = SF,
@@ -75,16 +82,19 @@ computeAUC <- function(D, SF, pars, lower, upper, trunc = TRUE, area.type = c("F
                                           verbose = verbose))
     }
     if (missing(lower)) {
+      print("missing lower")
       lower <- min(D)
     }
     if (missing(upper)) {
+      print("missing")
       upper <- max(D)
     }
 
-    # if (SF_as_log) {
-    if (FALSE) {
+    if (SF_as_log == TRUE) { # Modified condition to correct error
+      print("SF_as_log")
       return(pars[[1]] / 2 * (lower ^ 2 - upper ^ 2) + pars[[2]] / 3 * (lower ^ 3 - upper ^ 3))
     } else {
+      print("!SF_as_log")
       if (pars[[2]] == 0) {
         if (pars[[1]] == 0) {
           return(upper - lower)
@@ -108,10 +118,11 @@ computeAUC <- function(D, SF, pars, lower, upper, trunc = TRUE, area.type = c("F
     }
 
   } else if (area.type == "Actual") {
+    print("Actual")
     if (missing(SF)) {
       stop("Please pass in SF-values.")
     } else {
-      return(trapz(x = D, y = SF))
+      return(caTools::trapz(x = D, y = SF))
     }
   }
 }
