@@ -140,8 +140,62 @@ Error in CoreGx:::.reformatData(x = D, pars = pars, x_to_log = FALSE,  :
 Calls: computeAUC -> <Anonymous> -> is.unsorted
 Execution halted
 ```
+- Added `pars = pars` to `CoreGx:::.sanitizeInput()` call line 66
+- Added `SF_as_log` to `computeAUC()` definition and modified `if(SF_as_log)` to `if(SF_as_log == TRUE)`
+- Check function for correct output
 
 **Warnings**
 
 ```R
+* checking Rd \usage sections ... WARNING
+Undocumented arguments in documentation object 'RadioSet-class'
+  'cSet'
+Duplicated \argument entries in documentation object 'RadioSet-class':
+  'rSet' 'mDataType' 'object' 'mDataType' 'value' 'rSet' 'mDataType'
+  'object' 'mDataType' 'value' 'rSet' 'mDataType' 'object' 'mDataType'
+  'value' 'rSet' 'object' 'value' 'rSet' 'object' 'value' 'rSet' 'rSet'
+  'object' 'value' 'rSet' 'mDataType' 'rSet' 'rSet' 'rSet' 'object'
+  'value' 'object' 'value'
+
+Undocumented arguments in documentation object 'computeAUC'
+  'SF_as_log'
+
+Documented arguments not in \usage in documentation object 'plotCurve':
+  'SF_as_log'
+
+Undocumented arguments in documentation object 'summarizeSensitivityProfiles'
+  'radiation.types'
+Documented arguments not in \usage in documentation object 'summarizeSensitivityProfiles':
+  'drugs'
+
+Functions with \usage entries need to have the appropriate \alias
+entries, and all their arguments documented.
+The \usage entries must correspond to syntactically valid R code.
+See chapter 'Writing R documentation files' in the 'Writing R
+```
+****
+- Need to update documentation
+
+### Build 3
+
+**Errors**
+```R
+ Error in callNextMethod(rSet) : 
+  a call to callNextMethod() appears in a call to ‘callNextMethod’, but the call does not seem to come from either a generic function or another 'callNextMethod' 
+3.
+stop(gettextf("a call to callNextMethod() appears in a call to %s, but the call does not seem to come from either a generic function or another 'callNextMethod'", 
+    sQuote(f)), domain = NA) 
+2.
+callNextMethod(rSet) at RadioSet.R#790
+1.
+mDataNames(Cleveland_small) 
+```
+- Requirements to import functions from another class
+  1. Import generic with `@importFrom package method`
+  2. Import method with `@importMethodsFrom package method`
+  3. Export the method in the new package with `@export`
+  4. Define the new method with `setMethod()` and `callNextMethods`
+
+
+**Warnings**
 
