@@ -227,6 +227,7 @@ setReplaceMethod("radiationInfo", signature = signature(object="RadioSet",value=
   object
 })
 
+### cSet to rSet
 #' phenoInfo Generic
 #'
 #' Generic for phenoInfo method
@@ -239,10 +240,12 @@ setReplaceMethod("radiationInfo", signature = signature(object="RadioSet",value=
 #' @param mDataType the type of molecular data
 #' @return a \code{data.frame} with the experiment info
 # setGeneric("phenoInfo", function(rSet, mDataType) standardGeneric("phenoInfo"))
-#' @importMethodsFrom CoreGx phenoInfo
+#' @importFrom CoreGx phenoInfo
 #' @describeIn RadioSet Return the experiment info from the given type of molecular data in RadioSet
 #' @export
-setMethod(phenoInfo, c("RadioSet", "character"), function(cSet, mDataType){
+setMethod("phenoInfo",
+          signature = c("RadioSet", "character"),
+          function(cSet, mDataType){
 
   # if(mDataType %in% names(rSet@molecularProfiles)){
   #   return(Biobase::pData(rSet@molecularProfiles[[mDataType]]))}else{
@@ -414,7 +417,6 @@ setMethod(sensitivityInfo, "RadioSet", function(rSet){
 #' @describeIn RadioSet Update the sensitivity experiment info
 #' @export
 setReplaceMethod("sensitivityInfo", signature = signature(object="RadioSet",value="data.frame"), function(object, value){
-
     # object@sensitivity$info <- value
     object <- callNextMethod(object, value)
     object
@@ -623,9 +625,10 @@ setMethod(fNames, signature(cSet="RadioSet", mDataType="character"), function(cS
 #' @return The date the RadioSet was created
 # setGeneric("dateCreated", function(rSet) standardGeneric("dateCreated"))
 #' @describeIn RadioSet Return the date the RadioSet was created
+#' @importFrom CoreGx dateCreated
 #' @importMethodsFrom CoreGx dateCreated
 #' @export
-setMethod(dateCreated, "RadioSet", function(rSet) {
+setMethod("dateCreated", "RadioSet", function(rSet) {
   # rSet@annotation$dateCreated
   callNextMethod(rSet)
 })
@@ -640,14 +643,15 @@ setMethod(dateCreated, "RadioSet", function(rSet) {
 #'
 #' @param rSet A \code{RadioSet}
 #' @return The name of the RadioSet
-setGeneric("rSetName", function(rSet) standardGeneric("rSetName"))
+#setGeneric("rSetName", function(rSet) standardGeneric("rSetName"))
 #' @describeIn RadioSet Return the name of the RadioSet
 #' @importFrom CoreGx cSetName
 #' @export
-setMethod(rSetName, "RadioSet", function(rSet){
-
+setMethod(rSetName,
+          signature = c("RadioSet"),
+          function(rSet){
     # return(rSet@annotation$name)
-  cSetName(rSet)
+  callNextMethod(rSet)
 
 })
 
@@ -771,7 +775,6 @@ setMethod("show", signature=signature(object="RadioSet"),
         cat("\tPlease look at sensNumber(rSet) to determine number of experiments for each radiation-cell combination.\n")
     })
 
-
 #' mDataNames
 #'
 #' Returns the molecular data names for the RadioSet.
@@ -780,14 +783,20 @@ setMethod("show", signature=signature(object="RadioSet"),
 #' data(Cleveland_small)
 #' mDataNames(Cleveland_small)
 #'
-#' @param rSet PharamcoSet object
+#' @param rSet RadioSet object
 #' @return Vector of names of the molecular data types
+# Imports generic
+#' @importFrom CoreGx mDataNames
+# Imports method
+#' @importMethodsFrom CoreGx mDataNames
 #' @export
-mDataNames <- function(rSet){
-
-  # return(names(rSet@molecularProfiles))
-  callNextMethod(rSet)
-}
+setMethod(
+  "mDataNames",
+  signature = c("RadioSet"),
+  definition = function(rSet){
+    callNextMethod(rSet)
+  }
+)
 
 #'`[`
 #'
