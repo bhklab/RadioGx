@@ -26,7 +26,7 @@ linearQuadraticModel <- function (D,
                                   verbose = FALSE) {
   match.arg(family)
 
-  CoreGx::.sanitizeInput(x = D,
+  CoreGx:::.sanitizeInput(x = D,
                           y = SF,
                           x_as_log = FALSE,
                           y_as_log = FALSE,
@@ -34,7 +34,7 @@ linearQuadraticModel <- function (D,
                           trunc = trunc,
                           verbose = verbose)
 
-  DSF <- CoreGx::.reformatData(x = D,
+  DSF <- CoreGx:::.reformatData(x = D,
                                y = SF,
                                x_to_log = FALSE,
                                y_to_log = TRUE,
@@ -63,9 +63,9 @@ linearQuadraticModel <- function (D,
                                    D = D,
                                    SF = SF)
 
-  guess <- CoreGx::.fitCurve(x = D,
+  guess <- CoreGx:::.fitCurve(x = D,
                               y = SF,
-                              f = RadioGx::.linearQuadratic,
+                              f = RadioGx:::.linearQuadratic,
                               density = c(100, 100),
                               step = c(0.005, 0.005),
                               precision = 0.005,

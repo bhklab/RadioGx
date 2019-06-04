@@ -334,12 +334,12 @@ function(rad.type = "radiation",
         lines(doses[[i]], responses[[i]], lty=1, lwd=lwd, col=mycol[i])
       }, "Fitted"={
         linQuad_params <- linearQuadraticModel(D = doses[[i]], SF = responses[[i]])
-        x_vals <- CoreGx::.GetSupportVec(c(0,doses[[i]]))
+        x_vals <- CoreGx:::.GetSupportVec(c(0,doses[[i]]))
         lines(x_vals, (.linearQuadratic(x_vals, pars=linQuad_params, SF_as_log=FALSE)),lty=1, lwd=lwd, col=mycol[i])
       },"Both"={
       # lines(doses[[i]],responses[[i]],lty=1,lwd=lwd,col = mycol[i])
         linQuad_params <- linearQuadraticModel(D = doses[[i]], SF = responses[[i]])
-        x_vals <- CoreGx::.GetSupportVec(c(0,doses[[i]]))
+        x_vals <- CoreGx:::.GetSupportVec(c(0,doses[[i]]))
         lines(x_vals, (.linearQuadratic(x_vals, pars=linQuad_params, SF_as_log=FALSE)),lty=1, lwd=lwd, col=mycol[i])
       })
       if (length(legend.values)){
