@@ -19,9 +19,9 @@ return(.RadioSig(Data, PSetName=PSetName, DateCreated=DateCreated, SigType=SigTy
 #' Show RadioGx Signatures
 #'
 #' @examples
-#' data(GDSCsmall)
-#' drug.sensitivity <- drugSensitivitySig(GDSCsmall, mDataType="rna",
-#'              nthread=1, features = fNames(GDSCsmall, "rna")[1])
+#' data(Cleveland_small)
+#' drug.sensitivity <- drugSensitivitySig(Cleveland_small, mDataType="rna",
+#'              nthread=1, features = fNames(Cleveland_small, "rna")[1])
 #' drug.sensitivity
 #'
 #' @param object \code{RadioSig}
@@ -42,9 +42,9 @@ setMethod("show", signature=signature(object='RadioSig'),
 #' for the session in which the computation was done. Useful for determining the exact conditions used to generate signatures.
 #'
 #' @examples
-#' data(GDSCsmall)
-#' drug.sensitivity <- drugSensitivitySig(GDSCsmall, mDataType="rna",
-#'              nthread=1, features = fNames(GDSCsmall, "rna")[1])
+#' data(Cleveland_small)
+#' drug.sensitivity <- drugSensitivitySig(Cleveland_small, mDataType="rna",
+#'              nthread=1, features = fNames(Cleveland_small, "rna")[1])
 #' showSigAnnot(drug.sensitivity)
 #'
 #' @param Sigs An object of the \code{RadioSig} Class, as

@@ -6,8 +6,8 @@
 #' pairs
 #' 
 #' @examples 
-#' data(GDSCsmall)
-#' GDSCauc <- summarizeSensitivityProfiles(GDSCsmall, sensitivity.measure='auc_published')
+#' data(Cleveland_small)
+#' GDSCauc <- summarizeSensitivityProfiles(Cleveland_small, sensitivity.measure='auc_published')
 #'
 #' @param rSet [RadioSet] The RadioSet from which to extract the data
 #' @param sensitivity.measure [character] which sensitivity sensitivity.measure to use? Use the 
