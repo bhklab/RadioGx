@@ -17,6 +17,7 @@ A generic for the radiationTypes method
 }
 \examples{
 data(Cleveland_small)
-radiationTypes(Cleveland_small)
+radType <- radiationTypes(Cleveland_small)
+radType[1:10]
 
 }

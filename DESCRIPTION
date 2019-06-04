@@ -6,14 +6,13 @@ Date: 2019-05-31
 Author: BHKLab
 Maintainer: Benjamin Haibe-Kains <benjamin.haibe.kains@utoronto.ca>
 Description: Contains a set of functions to perform large-scale analysis of radiogenomic data.
-License: Artistic-2.0
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Depends: R (>= 3.5.0)
-Imports: 
-    CoreGx,
+Imports:
     PharmacoGx,
-    methods,
+    CoreGx,
     Biobase, 
     RColorBrewer, 
     caTools, 

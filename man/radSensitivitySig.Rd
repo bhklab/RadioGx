@@ -69,7 +69,8 @@ drugs in the second, and the selected return values in the third.
 \examples{
 data(Cleveland_small)
 rad.sensitivity <- radSensitivitySig(Cleveland_small, mDataType="rna",
-             nthread=1, features = fNames(Cleveland_small, "rna")[1])
+             nthread=1, features = fNames(Cleveland_small, "rna")[1],
+             radiation.types=radiationTypes(Cleveland_small))
 print(rad.sensitivity)
 
 }

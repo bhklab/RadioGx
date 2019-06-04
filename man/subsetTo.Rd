@@ -40,8 +40,8 @@ to keep track of all the metadata conventions between different datasets.
 }
 \examples{
 data(Cleveland_small)
-CCLEradiationTypes  <- radiationNames(Cleveland_small)
-CCLEcells <- cellNames(Cleveland_small)
+clevelandRadiationTypes  <- radiationNames(Cleveland_small)
+clevelandCells <- cellNames(Cleveland_small)
 RSet <- subsetTo(Cleveland_small,radiationTypes = CCLEradiationTypes[1], cells = CCLEcells[1])
 RSet
 

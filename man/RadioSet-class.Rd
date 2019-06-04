@@ -26,14 +26,14 @@
 \alias{cellNames<-,RadioSet,character-method}
 \alias{fNames,RadioSet,character-method}
 \alias{dateCreated,RadioSet-method}
-\alias{rSetName,RadioSet-method}
+\alias{cSetName,RadioSet-method}
 \alias{pertNumber,RadioSet-method}
 \alias{sensNumber,RadioSet-method}
 \alias{pertNumber<-,RadioSet,array-method}
 \alias{sensNumber<-,RadioSet,matrix-method}
 \title{A Class to Contain RadioGenomic datasets together with their curations}
 \usage{
-\S4method{cellInfo}{RadioSet}(cSet)
+\S4method{cellInfo}{RadioSet}(cSet = rSet)
 
 \S4method{cellInfo}{RadioSet,data.frame}(object) <- value
 
@@ -41,56 +41,58 @@
 
 \S4method{radiationInfo}{RadioSet,data.frame}(object) <- value
 
-\S4method{phenoInfo}{RadioSet,character}(cSet, mDataType)
+\S4method{phenoInfo}{RadioSet,character}(cSet = rSet, mDataType)
 
 \S4method{phenoInfo}{RadioSet,character,data.frame}(object,
   mDataType) <- value
 
-\S4method{molecularProfiles}{RadioSet,character}(cSet, mDataType)
+\S4method{molecularProfiles}{RadioSet,character}(cSet = rSet, mDataType)
 
 \S4method{molecularProfiles}{RadioSet,character,matrix}(object,
   mDataType) <- value
 
-\S4method{featureInfo}{RadioSet,character}(cSet, mDataType)
+\S4method{featureInfo}{RadioSet,character}(cSet = rSet, mDataType)
 
 \S4method{featureInfo}{RadioSet,character,data.frame}(object,
   mDataType) <- value
 
-\S4method{sensitivityInfo}{RadioSet}(cSet)
+\S4method{sensitivityInfo}{RadioSet}(cSet = rSet)
 
 \S4method{sensitivityInfo}{RadioSet,data.frame}(object) <- value
 
-\S4method{sensitivityProfiles}{RadioSet}(cSet)
+\S4method{sensitivityProfiles}{RadioSet}(cSet = rSet)
 
 \S4method{sensitivityProfiles}{RadioSet,data.frame}(object) <- value
 
 \S4method{sensitivityProfiles}{RadioSet,matrix}(object) <- value
 
-\S4method{sensitivityMeasures}{RadioSet}(cSet)
+\S4method{sensitivityMeasures}{RadioSet}(cSet = rSet)
 
 \S4method{radiationTypes}{RadioSet}(rSet)
 
 \S4method{radiationTypes}{RadioSet,character}(object) <- value
 
-\S4method{cellNames}{RadioSet}(cSet)
+\S4method{cellNames}{RadioSet}(cSet = rSet)
 
 \S4method{cellNames}{RadioSet,character}(object) <- value
 
-\S4method{fNames}{RadioSet,character}(cSet, mDataType)
+\S4method{fNames}{RadioSet,character}(cSet = rSet, mDataType)
 
-\S4method{dateCreated}{RadioSet}(cSet)
+\S4method{dateCreated}{RadioSet}(cSet = rSet)
 
-\S4method{rSetName}{RadioSet}(rSet)
+\S4method{cSetName}{RadioSet}(cSet = rSet)
 
-\S4method{pertNumber}{RadioSet}(cSet)
+\S4method{pertNumber}{RadioSet}(cSet = rSet)
 
-\S4method{sensNumber}{RadioSet}(cSet)
+\S4method{sensNumber}{RadioSet}(cSet = rSet)
 
 \S4method{pertNumber}{RadioSet,array}(object) <- value
 
 \S4method{sensNumber}{RadioSet,matrix}(object) <- value
 }
 \arguments{
+\item{cSet}{The parameter name of the parent class' method}
+
 \item{object}{A \code{RadioSet} object}
 
 \item{value}{A replacement value}
@@ -151,9 +153,15 @@
 
 \item{rSet}{The \code{RadioSet}}
 
+\item{cSet}{The parameter name of the parent class' inherited method}
+
 \item{mDataType}{The molecular data type to return feature names for}
 
 \item{rSet}{A \code{RadioSet}}
+
+\item{rSet}{A \code{RadioSet}}
+
+\item{cSet}{Parameter name of parent method}
 
 \item{rSet}{A \code{RadioSet}}
 
@@ -199,6 +207,8 @@ Updated \code{RadioSet}
 A \code{character} vector of the feature names
 
 The date the RadioSet was created
+
+The name of the RadioSet
 
 A 3D \code{array} with the number of perturbation experiments per radiation type and cell line, and data type
 
@@ -249,6 +259,8 @@ A generic for the cellNames replacement method
 A generic for the fNames method
 
 A generic for the dateCreated method
+
+A generic for the rSetName method
 
 A generic for the pertNumber method
 
@@ -307,7 +319,7 @@ summaries, for example, whether there are IC50 values available
 
 \item \code{dateCreated}: Return the date the RadioSet was created
 
-\item \code{rSetName}: Return the name of the RadioSet
+\item \code{cSetName}: Return the name of the RadioSet
 
 \item \code{pertNumber}: Return the summary of available perturbation
 experiments
@@ -368,19 +380,21 @@ data(Cleveland_small)
 phenoInfo(Cleveland_small, mDataType="rna") <- phenoInfo(Cleveland_small, mDataType="rna")
 
 data(Cleveland_small)
-molecularProfiles(Cleveland_small, "rna")
+Cleveland_mProf <- molecularProfiles(Cleveland_small, "rna")
+Cleveland_mProf[1:10,]
 
 data(Cleveland_small)
 molecularProfiles(Cleveland_small, "rna") <- molecularProfiles(Cleveland_small, "rna")
 
 data(Cleveland_small)
-featureInfo(Cleveland_small, "rna")
+featureInfo(Cleveland_small, "rna")[1:10,]
 
 data(Cleveland_small)
 featureInfo(Cleveland_small, "rna") <- featureInfo(Cleveland_small, "rna")
 
 data(Cleveland_small)
-sensitivityInfo(Cleveland_small)
+sensInf<- sensitivityInfo(Cleveland_small)
+sensInf[1:10,]
 
 data(Cleveland_small)
 sensitivityInfo(Cleveland_small) <- sensitivityInfo(Cleveland_small)
@@ -388,11 +402,13 @@ sensitivityInfo(Cleveland_small) <- sensitivityInfo(Cleveland_small)
 data(Cleveland_small)
 sensitivityProfiles(Cleveland_small)
 
+
 data(Cleveland_small)
 sensitivityProfiles(Cleveland_small) <- sensitivityProfiles(Cleveland_small)
 
 data(Cleveland_small)
 sensitivityMeasures(Cleveland_small)
+
 
 data(Cleveland_small)
 cellNames(Cleveland_small)
@@ -401,10 +417,14 @@ data(Cleveland_small)
 cellNames(Cleveland_small) <- cellNames(Cleveland_small)
 
 data(Cleveland_small)
-fNames(Cleveland_small, "rna")
+fNames(Cleveland_small, "rna")[1:10]
 
 data(Cleveland_small)
 dateCreated(Cleveland_small)
+
+data(Cleveland_small)
+rSetName <- cSetName
+rSetName(Cleveland_small)
 
 data(Cleveland_small)
 pertNumber(Cleveland_small)
