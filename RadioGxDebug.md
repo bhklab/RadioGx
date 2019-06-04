@@ -201,3 +201,45 @@ mDataNames(Cleveland_small)
 
 **Warnings**
 
+```R
+Loading RadioGx
+Warning message:
+For function ‘sensNumber’, signature ‘RadioSet’: argument in method definition changed from (rSet) to (cSet) 
+```
+- Occurs because parameter name in CoreGx is `cSet` and `callNextMethod(rSet)` passes the wrong parameter name
+- Need to figure out if/how we can rename parameters in extended methods
+- Similar problem RE: generic names
+  - Work around is to use CoreGx generic name and use `rMethodName <- cMethodName` after the method is extended in RadioGx
+
+### Build 4
+
+**Errors**
+```R
+* checking examples ... ERROR
+Running examples in 'RadioGx-Ex.R' failed
+The error most likely occurred in:
+
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: radSensitivitySig
+> ### Title: Creates a signature representing the association between gene
+> ###   expression (or other molecular profile) and radiation dose response,
+> ###   for use in radiation sensitivity analysis.
+> ### Aliases: radSensitivitySig
+> 
+> ### ** Examples
+> 
+> data(Cleveland_small)
+> rad.sensitivity <- radSensitivitySig(Cleveland_small, mDataType="rna",
++              nthread=1, features = fNames(Cleveland_small, "rna")[1])
+Error in dim(ordered) <- ns : 
+  dims [product 1] do not match the length of object [0]
+Calls: radSensitivitySig ... summarizeSensitivityProfiles -> <Anonymous> -> cast
+Execution **halted**
+```
+- `Cleveland_small@radiation` was empty, added with `Cleveland_small@radiation <- Cleveland_mut@radiation`
+- Also returned error for `radiation.types` missing, fixed by adding `radiation.types = as.character(Cleveland_small@radiation)`
+- Changed to `radiationTypes(Cleveland_small`
+
+**Warnings**
+
+
