@@ -3,11 +3,11 @@
 \name{radSensitivitySig}
 \alias{radSensitivitySig}
 \title{Creates a signature representing the association between gene expression (or
-other molecular profile) and drug dose response, for use in drug sensitivity
+other molecular profile) and radiation dose response, for use in radiation sensitivity
 analysis.}
 \usage{
 radSensitivitySig(rSet, mDataType, radiation.types, features,
-  sensitivity.measure = "auc_recomputed",
+  sensitivity.measure = "AUC_recomputed",
   molecular.summary.stat = c("mean", "median", "first", "last", "or",
   "and"), sensitivity.summary.stat = c("mean", "median", "first",
   "last"), returnValues = c("estimate", "pvalue", "fdr"),
@@ -26,8 +26,8 @@ signatures. Should match the names used in the PharmacoSet.}
 \item{features}{[character] a vector of features for which to compute the
 signatures. Should match the names used in correspondant molecular data in PharmacoSet.}
 
-\item{sensitivity.measure}{[character] which measure of the radiation 
-sensitivity should the function use for its computations? Use the 
+\item{sensitivity.measure}{[character] which measure of the radiation
+sensitivity should the function use for its computations? Use the
 sensitivityMeasures function to find out what measures are available for each PSet.}
 
 \item{molecular.summary.stat}{What summary statistic should be used to
@@ -59,17 +59,17 @@ should the computation be parallelized over?}
   second, and return values in the third.
 }
 \description{
-Given a RadioSet of the sensitivity experiment type, and a list of drugs, 
+Given a RadioSet of the sensitivity experiment type, and a list of drugs,
 the function will compute a signature for the effect gene expression on the
-molecular profile of a cell. The function returns the estimated coefficient, 
-the t-stat, the p-value and the false discovery rate associated with that 
-coefficient, in a 3 dimensional array, with genes in the first direction, 
+molecular profile of a cell. The function returns the estimated coefficient,
+the t-stat, the p-value and the false discovery rate associated with that
+coefficient, in a 3 dimensional array, with genes in the first direction,
 drugs in the second, and the selected return values in the third.
 }
 \examples{
-data(GDSCsmall)
-drug.sensitivity <- drugSensitivitySig(GDSCsmall, mDataType="rna", 
-             nthread=1, features = fNames(GDSCsmall, "rna")[1])
-print(drug.sensitivity)
+data(Cleveland_small)
+rad.sensitivity <- radSensitivitySig(Cleveland_small, mDataType="rna",
+             nthread=1, features = fNames(Cleveland_small, "rna")[1])
+print(rad.sensitivity)
 
 }

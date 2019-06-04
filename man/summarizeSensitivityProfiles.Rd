@@ -42,7 +42,7 @@ summarising the drug senstitivity data of a RadioSet into drug-cell line
 pairs
 }
 \examples{
-data(GDSCsmall)
-GDSCauc <- summarizeSensitivityProfiles(GDSCsmall, sensitivity.measure='auc_published')
+data(Cleveland_small)
+GDSCauc <- summarizeSensitivityProfiles(Cleveland_small, sensitivity.measure='auc_published')
 
 }
