@@ -195,6 +195,8 @@ mDataNames(Cleveland_small)
   2. Import method with `@importMethodsFrom package method`
   3. Export the method in the new package with `@export`
   4. Define the new method with `setMethod()` and `callNextMethods`
+    - Didn't work
+    - Syntax for importing generic function from another package?
 
 
 **Warnings**
