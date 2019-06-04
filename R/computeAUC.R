@@ -10,6 +10,7 @@
 #' @param lower lower bound of dose region to compute AUC over
 #' @param upper upper bound of dose region to compute AUC over
 #' @param trunc should survival fractions be truncated downward to 1 if they exceed 1?
+#' @param SF_as_log A boolean indicating whether survival fraction is logged. Defaults to FALSE.
 #' @param area.type should the AUC of the raw (D, SF) points be returned, or should the AUC of a curve fit to said points be returned instead?
 #' @param verbose how detailed should error and warning messages be? See details.
 #'

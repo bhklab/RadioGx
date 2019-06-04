@@ -65,7 +65,7 @@ linearQuadraticModel <- function (D,
 
   guess <- CoreGx:::.fitCurve(x = D,
                               y = SF,
-                              f = RadioGx:::.linearQuadratic,
+                              f = .linearQuadratic,
                               density = c(100, 100),
                               step = c(0.005, 0.005),
                               precision = 0.005,

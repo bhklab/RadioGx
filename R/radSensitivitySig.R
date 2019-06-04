@@ -12,7 +12,8 @@
 #' @examples
 #' data(Cleveland_small)
 #' rad.sensitivity <- radSensitivitySig(Cleveland_small, mDataType="rna",
-#'              nthread=1, features = fNames(Cleveland_small, "rna")[1])
+#'              nthread=1, features = fNames(Cleveland_small, "rna")[1],
+#'              radiation.types=radiationTypes(Cleveland_small))
 #' print(rad.sensitivity)
 #'
 #' @param rSet [PharmacoSet] a PharmacoSet of the perturbation experiment type
@@ -119,7 +120,7 @@ radSensitivitySig <- function(rSet,
   if (missing(radiation.types)){
     drugn <- radiationTypes(rSet)
   } else {
-    drugn <- drugs
+    drugn <- radiation.types
   }
   availcore <- parallel::detectCores()
   if ( nthread > availcore) {
