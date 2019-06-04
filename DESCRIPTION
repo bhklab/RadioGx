@@ -5,12 +5,15 @@ Version: 0.0.0.1
 Date: 2019-05-31
 Author: BHKLab
 Maintainer: Benjamin Haibe-Kains <benjamin.haibe.kains@utoronto.ca>
-Description: What the package does (one paragraph).
+Description: Contains a set of functions to perform large-scale analysis of radiogenomic data.
+License: Artistic-2.0
 Encoding: UTF-8
 LazyData: true
 Depends: R (>= 3.5.0)
 Imports: 
-    CoreGx, 
+    CoreGx,
+    PharmacoGx,
+    methods,
     Biobase, 
     RColorBrewer, 
     caTools, 
@@ -20,5 +23,4 @@ Imports:
     KernSmooth,
     cluster,
     Matrix
-License: Artistic-2.0
 RoxygenNote: 6.1.1
