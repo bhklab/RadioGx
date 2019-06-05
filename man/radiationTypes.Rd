@@ -6,9 +6,6 @@
 \usage{
 radiationTypes(rSet)
 }
-\arguments{
-\item{rSet}{The \code{RadioSet} to return radiation names from}
-}
 \value{
 A vector of the radiation names used in the RadioSet
 }

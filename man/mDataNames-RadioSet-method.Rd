@@ -7,11 +7,6 @@
 \usage{
 \S4method{mDataNames}{RadioSet}(cSet = rSet)
 }
-\arguments{
-\item{cSet}{Parameter name for method inherited from parent CoreSet class}
-
-\item{rSet}{RadioSet object}
-}
 \value{
 Vector of names of the molecular data types
 }

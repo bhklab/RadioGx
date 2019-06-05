@@ -3,18 +3,15 @@
 \docType{methods}
 \name{show,RadioSet-method}
 \alias{show,RadioSet-method}
-\title{Show a PharamcoSet}
+\title{Show a RadioSet}
 \usage{
 \S4method{show}{RadioSet}(object)
-}
-\arguments{
-\item{object}{\code{RadioSet}}
 }
 \value{
 Prints the RadioSet object to the output stream, and returns invisible NULL.
 }
 \description{
-Show a PharamcoSet
+Show a RadioSet
 }
 \examples{
 data(Cleveland_small)

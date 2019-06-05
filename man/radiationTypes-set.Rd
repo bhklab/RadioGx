@@ -6,11 +6,6 @@
 \usage{
 radiationTypes(object) <- value
 }
-\arguments{
-\item{object}{The \code{RadioSet} to update}
-
-\item{value}{A \code{character} vector of the new radiation names}
-}
 \value{
 Updated \code{RadioSet}
 }

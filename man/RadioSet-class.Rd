@@ -91,7 +91,7 @@
 \S4method{sensNumber}{RadioSet,matrix}(object) <- value
 }
 \arguments{
-\item{cSet}{The parameter name of the parent class' method}
+\item{cSet}{Parameter name for rSet inherited from CoreGx}
 
 \item{object}{A \code{RadioSet} object}
 
@@ -101,77 +101,15 @@
 
 \item{mDataType}{A \code{character} with the type of molecular data to return/update}
 
-\item{rSet}{The \code{RadioSet} to retrieve rna annotations from}
-
-\item{mDataType}{the type of molecular data}
-
-\item{object}{The \code{RadioSet} to retrieve molecular experiment annotations from}
-
-\item{mDataType}{the type of molecular data}
-
-\item{value}{a \code{data.frame} with the new experiment annotations}
-
-\item{rSet}{The \code{RadioSet} to retrieve molecular profiles from}
-
-\item{mDataType}{the type of molecular data}
-
-\item{object}{The \code{RadioSet} to replace molecular profiles in}
-
-\item{mDataType}{The type of molecular data to be updated}
-
-\item{value}{A \code{matrix} with the new profiles}
-
-\item{rSet}{The \code{RadioSet} to retrieve feature annotations from}
-
-\item{mDataType}{the type of molecular data}
-
-\item{object}{The \code{RadioSet} to replace gene annotations in}
-
-\item{mDataType}{The type of molecular data to be updated}
-
 \item{value}{A \code{data.frame} with the new feature annotations}
-
-\item{rSet}{The \code{RadioSet} to retrieve sensitivity experiment annotations from}
-
-\item{object}{The \code{RadioSet} to update}
 
 \item{value}{A \code{data.frame} with the new sensitivity annotations}
 
-\item{rSet}{The \code{RadioSet} to retrieve sensitivity experiment data from}
-
-\item{object}{The \code{RadioSet} to update}
-
 \item{value}{A \code{data.frame} with the new sensitivity profiles. If a matrix object is passed in, converted to data.frame before assignment}
-
-\item{rSet}{The \code{RadioSet}}
-
-\item{rSet}{The \code{RadioSet} to return cell names from}
-
-\item{object}{The \code{RadioSet} to update}
 
 \item{value}{A \code{character} vector of the new cell names}
 
-\item{rSet}{The \code{RadioSet}}
-
-\item{cSet}{The parameter name of the parent class' inherited method}
-
-\item{mDataType}{The molecular data type to return feature names for}
-
-\item{rSet}{A \code{RadioSet}}
-
-\item{rSet}{A \code{RadioSet}}
-
-\item{cSet}{Parameter name of parent method}
-
-\item{rSet}{A \code{RadioSet}}
-
-\item{rSet}{A \code{RadioSet}}
-
-\item{object}{A \code{RadioSet}}
-
 \item{value}{A new 3D \code{array} with the number of perturbation experiments per radiation type and cell line, and data type}
-
-\item{object}{A \code{RadioSet}}
 
 \item{value}{A new \code{data.frame} with the number of sensitivity experiments per radiation and cell line}
 }
@@ -185,8 +123,6 @@ The updated \code{RadioSet}
 a \code{data.frame} with the experiment info
 
 Updated \code{RadioSet}
-
-a \code{data.frame} with the experiment info
 
 Updated \code{RadioSet}
 
