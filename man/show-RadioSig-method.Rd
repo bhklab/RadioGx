@@ -18,8 +18,8 @@ Show RadioGx Signatures
 }
 \examples{
 data(Cleveland_small)
-drug.sensitivity <- drugSensitivitySig(Cleveland_small, mDataType="rna",
+rad.sensitivity <- radSensitivitySig(Cleveland_small, mDataType="rna",
              nthread=1, features = fNames(Cleveland_small, "rna")[1])
-drug.sensitivity
+rad.sensitivity
 
 }
