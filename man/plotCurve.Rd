@@ -5,7 +5,7 @@
 \title{Plot radiation dose-response curve}
 \usage{
 plotCurve(D, SF, pars, filename = "dose_response_plot.pdf",
-  fit_curve = TRUE)
+  fit_curve = TRUE, SF_as_log = TRUE)
 }
 \arguments{
 \item{D}{vector of radiation doses}
@@ -16,13 +16,14 @@ plotCurve(D, SF, pars, filename = "dose_response_plot.pdf",
 
 \item{filename}{name of PDF which will be created by the function}
 
-\item{fit_curve}{should the graph include a linear-quadratic curve of best fit? Defaults to TRUE.}
+\item{fit_curve}{should the graph include a linear-quadratic curve of best fit? Defaults to TRUE}
 
-\item{SF_as_log}{should SF be expressed in log10 on the graph? Defaults to TRUE.}
+\item{SF_as_log}{should SF be expressed in log10 on the graph? Defaults to TRUE}
 }
 \description{
 This function plots doses of radiation against the cancer cell survival fractions thereby observed.
 }
 \examples{
-plotCurve(c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10), c(1.1, 0.8, 0.7, 0.45, 0.15, -0.1, -0.1, -0.4, -0.65, -0.75, -1.1))
+plotCurve(c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+    c(1.1, 0.8, 0.7, 0.45, 0.15, -0.1, -0.1, -0.4, -0.65, -0.75, -1.1))
 }

@@ -21,5 +21,6 @@ Imports:
     reshape2, 
     KernSmooth,
     cluster,
-    Matrix
+    Matrix,
+    scales
 RoxygenNote: 6.1.1

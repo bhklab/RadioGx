@@ -7,7 +7,7 @@
 
 computeSF2 <- function(pars) {
 
-  CoreGx:::.sanitizeInput(pars = pars,
+  CoreGx::.sanitizeInput(pars = pars,
                           x_as_log = FALSE,
                           y_as_log = FALSE,
                           y_as_pct = FALSE,

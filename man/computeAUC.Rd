@@ -4,7 +4,7 @@
 \alias{computeAUC}
 \title{computeAUC: computes AUC}
 \usage{
-computeAUC(D, SF, pars, lower, upper, trunc = TRUE, SF_as_log = FALSE,
+computeAUC(D, SF, pars, lower, upper, trunc = TRUE, SF_as_log = TRUE,
   area.type = c("Fitted", "Actual"), verbose = TRUE)
 }
 \arguments{
@@ -20,7 +20,7 @@ computeAUC(D, SF, pars, lower, upper, trunc = TRUE, SF_as_log = FALSE,
 
 \item{trunc}{should survival fractions be truncated downward to 1 if they exceed 1?}
 
-\item{SF_as_log}{A boolean indicating whether survival fraction is logged. Defaults to FALSE.}
+\item{SF_as_log}{A boolean indicating whether survival fraction is displayed on a log axis. Defaults to TRUE}
 
 \item{area.type}{should the AUC of the raw (D, SF) points be returned, or should the AUC of a curve fit to said points be returned instead?}
 

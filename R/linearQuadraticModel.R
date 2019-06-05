@@ -11,7 +11,8 @@
 #' @param trunc should survival fractions be truncated downward to 1? Defaults to FALSE.
 #' @param verbose see details
 #' @details 'verbose' outputs warnings that are otherwised suppressed when the function sanity-checks user inputs. 'median_n' denotes the number of distributions from family 'family' that are medianned. (Note that setting n = 1 (the default) is equivalent to using a simple normal or cauchy distribution without taking any medians.)
-#' @examples linearQuadraticModel(c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10), c(1.1, 0.8, 0.7, 0.45, 0.15, -0.1, -0.1, -0.4, -0.65, -0.75, -1.1))
+#' @examples linearQuadraticModel(c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10), 
+#'  c(1.1, 0.8, 0.7, 0.45, 0.15, -0.1, -0.1, -0.4, -0.65, -0.75, -1.1))
 #' @export
 
 linearQuadraticModel <- function (D,
@@ -26,7 +27,7 @@ linearQuadraticModel <- function (D,
                                   verbose = FALSE) {
   match.arg(family)
 
-  CoreGx:::.sanitizeInput(x = D,
+  CoreGx::.sanitizeInput(x = D,
                           y = SF,
                           x_as_log = FALSE,
                           y_as_log = FALSE,
@@ -34,7 +35,7 @@ linearQuadraticModel <- function (D,
                           trunc = trunc,
                           verbose = verbose)
 
-  DSF <- CoreGx:::.reformatData(x = D,
+  DSF <- CoreGx::.reformatData(x = D,
                                y = SF,
                                x_to_log = FALSE,
                                y_to_log = TRUE,
@@ -63,7 +64,7 @@ linearQuadraticModel <- function (D,
                                    D = D,
                                    SF = SF)
 
-  guess <- CoreGx:::.fitCurve(x = D,
+  guess <- CoreGx::.fitCurve(x = D,
                               y = SF,
                               f = .linearQuadratic,
                               density = c(100, 100),

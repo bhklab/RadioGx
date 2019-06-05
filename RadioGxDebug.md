@@ -240,6 +240,11 @@ Execution **halted**
 - Also returned error for `radiation.types` missing, fixed by adding `radiation.types = as.character(Cleveland_small@radiation)`
 - Changed to `radiationTypes(Cleveland_small`
 
+**Errors**
+```R
+
+```
+
 **Warnings**
 
 

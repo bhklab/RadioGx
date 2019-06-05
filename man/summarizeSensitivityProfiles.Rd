@@ -6,18 +6,22 @@
 drug vs cell line table}
 \usage{
 summarizeSensitivityProfiles(rSet,
-  sensitivity.measure = "auc_recomputed", cell.lines, radiation.types,
+  sensitivity.measure = "AUC_recomputed", cell.lines, radiation.types,
   summary.stat = c("mean", "median", "first", "last", "max", "min"),
   fill.missing = TRUE, verbose = TRUE)
 }
 \arguments{
 \item{rSet}{[RadioSet] The RadioSet from which to extract the data}
 
-\item{sensitivity.measure}{[character] which sensitivity sensitivity.measure to use? Use the 
+\item{sensitivity.measure}{[character] which sensitivity sensitivity.measure to use? Use the
 sensitivityMeasures function to find out what measures are available for each PSet.}
 
-\item{cell.lines}{\code{character} The cell lines to be summarized. 
+\item{cell.lines}{\code{character} The cell lines to be summarized.
  If any cell lines has no data, it will be filled with
+missing values}
+
+\item{radiation.types}{\code{character} The radiation types to be summarized.
+If any radiation type has no data, it will be filled with
 missing values}
 
 \item{summary.stat}{\code{character} which summary method to use if there are repeated
@@ -27,22 +31,18 @@ cell line-drug experiments? Choices are "mean", "median", "first", or "last"}
 molecular data object be filled in with missing values?}
 
 \item{verbose}{Should the function print progress messages?}
-
-\item{drugs}{\code{character} The drugs to be summarized.
-If any drugs has no data, it will be filled with
-missing values}
 }
 \value{
-[matrix] A matrix with cell lines going down the rows, drugs across
+[matrix] A matrix with cell lines going down the rows, radiation types across
   the columns, with the selected sensitivity statistic for each pair.
 }
 \description{
-This function creates a table with cell lines as rows and drugs as columns,
+This function creates a table with cell lines as rows and radiation types as columns,
 summarising the drug senstitivity data of a RadioSet into drug-cell line
 pairs
 }
 \examples{
 data(Cleveland_small)
-GDSCauc <- summarizeSensitivityProfiles(Cleveland_small, sensitivity.measure='auc_published')
+GDSCauc <- summarizeSensitivityProfiles(Cleveland_small, sensitivity.measure='AUC_published')
 
 }

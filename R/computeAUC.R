@@ -10,7 +10,7 @@
 #' @param lower lower bound of dose region to compute AUC over
 #' @param upper upper bound of dose region to compute AUC over
 #' @param trunc should survival fractions be truncated downward to 1 if they exceed 1?
-#' @param SF_as_log A boolean indicating whether survival fraction is logged. Defaults to FALSE.
+#' @param SF_as_log A boolean indicating whether survival fraction is displayed on a log axis. Defaults to TRUE
 #' @param area.type should the AUC of the raw (D, SF) points be returned, or should the AUC of a curve fit to said points be returned instead?
 #' @param verbose how detailed should error and warning messages be? See details.
 #'
@@ -20,12 +20,12 @@
 #' @importFrom caTools trapz
 
 # Added SF_as_log arguement with default as false to match condition on line 93
-computeAUC <- function(D, SF, pars, lower, upper, trunc = TRUE, SF_as_log = FALSE, area.type = c("Fitted", "Actual"), verbose = TRUE) {
+computeAUC <- function(D, SF, pars, lower, upper, trunc = TRUE, SF_as_log = TRUE, area.type = c("Fitted", "Actual"), verbose = TRUE) {
   area.type <- match.arg(area.type)
 
   if (!missing(SF)) {
     print("SF")
-    CoreGx:::.sanitizeInput(x = D,
+    CoreGx::.sanitizeInput(x = D,
                             y = SF,
                             x_as_log = FALSE,
                             y_as_log = FALSE,
@@ -33,7 +33,7 @@ computeAUC <- function(D, SF, pars, lower, upper, trunc = TRUE, SF_as_log = FALS
                             trunc = trunc,
                             verbose = FALSE)
 
-    DSF <- CoreGx:::.reformatData(x = D,
+    DSF <- CoreGx::.reformatData(x = D,
                                  y = SF,
                                  x_to_log = FALSE,
                                  y_to_log = FALSE,
@@ -43,13 +43,13 @@ computeAUC <- function(D, SF, pars, lower, upper, trunc = TRUE, SF_as_log = FALS
     SF <- DSF[["y"]]
   } else if (!missing(pars)) {
     print("pars")
-    CoreGx:::.sanitizeInput(pars = pars,
+    CoreGx::.sanitizeInput(pars = pars,
                             x_as_log = FALSE,
                             y_as_log = FALSE,
                             y_as_pct = FALSE,
                             trunc = trunc,
                             verbose = FALSE)
-    Dpars <- CoreGx:::.reformatData(x = D,
+    Dpars <- CoreGx::.reformatData(x = D,
                                     pars = pars,
                                     x_to_log = FALSE,
                                     y_to_log = FALSE,
@@ -64,7 +64,7 @@ computeAUC <- function(D, SF, pars, lower, upper, trunc = TRUE, SF_as_log = FALS
   if (!missing(lower) && !missing(upper)) {
     print("lower & upper")
     ###TODO:: Check if this function still works correctly
-    CoreGx:::.sanitizeInput(pars = pars, # Added this line to resolve error returrom CoreGx
+    CoreGx::.sanitizeInput(pars = pars, # Added this line to resolve error returned from CoreGx
                             lower = lower,
                             upper = upper,
                             x_as_log = FALSE,
@@ -111,7 +111,7 @@ computeAUC <- function(D, SF, pars, lower, upper, trunc = TRUE, SF_as_log = FALS
         #       (exp(pars[[1]] ^ 2 / 4 / pars[[2]] + pnorm(sqrt(2 * pars[[2]]) * (upper + pars[[1]] / 2 / pars[[2]]), log.p = TRUE))
         #        -
         #        exp(pars[[1]] ^ 2 / 4 / pars[[2]] + pnorm(sqrt(2 * pars[[2]]) * (lower + pars[[1]] / 2 / pars[[2]]), log.p = TRUE))))
-        x <- CoreGx:::.GetSupportVec(x=D, output_length = 1000)
+        x <- CoreGx::.GetSupportVec(x=D, output_length = 1000)
         y <- .linearQuadratic(D=x, pars=pars, SF_as_log=FALSE)
         return(caTools::trapz(x, y))
 

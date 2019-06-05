@@ -340,9 +340,9 @@
 #   return(beta1)
 # }
 
-# updateMaxConc <- function(pSet){
+updateMaxConc <- function(rSet){
   
-#   pSet@sensitivity$info$max.conc <- apply(pSet@sensitivity$raw[,,"Dose"], 1, max, na.rm=TRUE)
-#   return(pSet)
-# }
+   rSet@sensitivity$info$max.conc <- apply(rSet@sensitivity$raw[,,"Dose"], 1, max, na.rm=TRUE)
+   return(rSet)
+ }
 

@@ -173,6 +173,9 @@ RadioSet <-  function(name,
   return(rSet)
 }
 
+# Initialize global variable
+rSet <- NULL
+
 #' @describeIn RadioSet Returns the annotations for all the cell lines tested on in the RadioSet
 #' @importFrom CoreGx cellInfo
 #' @export
@@ -831,9 +834,10 @@ setMethod("dim", signature=signature(x="RadioSet"), function(x){
 #'
 #' @examples
 #' data(Cleveland_small)
-#' clevelandRadiationTypes  <- radiationNames(Cleveland_small)
+#' clevelandRadiationTypes  <- radiationTypes(Cleveland_small)
 #' clevelandCells <- cellNames(Cleveland_small)
-#' RSet <- subsetTo(Cleveland_small,radiationTypes = CCLEradiationTypes[1], cells = CCLEcells[1])
+#' RSet <- subsetTo(Cleveland_small,radiationTypes = clevelandRadiationTypes[1],
+#'   cells = clevelandCells[1])
 #' RSet
 #'
 #' @param rSet A \code{RadioSet} to be subsetted
@@ -912,8 +916,8 @@ subsetTo <- function(rSet, cells=NULL, radiationTypes=NULL, molecular.data.cells
       radiationTypes_index <- NULL
       if(rSet@datasetType=="perturbation" || rSet@datasetType=="both"){
         if(length(radiationTypes) != 0) {
-            if (!all(radiationTypes %in% radiationNames(rSet))){
-                  stop("Some of the radiation names passed to function did not match to names in the RadioSet. Please ensure you are using radiation names as returned by the radiationNames function")
+            if (!all(radiationTypes %in% radiationTypes(rSet))){
+                  stop("Some of the radiation names passed to function did not match to names in the RadioSet. Please ensure you are using radiation names as returned by the radiationTypes function")
             }
           radiationTypes_index <- which(Biobase::pData(eset)[["radiation.type"]] %in% radiationTypes)
           # if (length(radiationTypes_index)==0){
