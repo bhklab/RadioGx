@@ -135,12 +135,12 @@ The error most likely occurred in:
 > ### ** Examples
 > 
 > computeAUC(pars = c(0.2, 0.1), lower = 0, upper = 4)
-Error in CoreGx:::.reformatData(x = D, pars = pars, x_to_log = FALSE,  : 
+Error in CoreGx::.reformatData(x = D, pars = pars, x_to_log = FALSE,  : 
   argument "D" is missing, with no default
 Calls: computeAUC -> <Anonymous> -> is.unsorted
 Execution halted
 ```
-- Added `pars = pars` to `CoreGx:::.sanitizeInput()` call line 66
+- Added `pars = pars` to `CoreGx::.sanitizeInput()` call line 66
 - Added `SF_as_log` to `computeAUC()` definition and modified `if(SF_as_log)` to `if(SF_as_log == TRUE)`
 - Check function for correct output
 
