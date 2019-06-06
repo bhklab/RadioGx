@@ -278,6 +278,7 @@ setMethod("phenoInfo",
 #'
 #' @inheritParams cellInfo<-
 #' @inheritParams phenoInfo
+#'
 #' @return The updated \code{RadioSet}
 # setGeneric("phenoInfo<-", function(object, mDataType, value) standardGeneric("phenoInfo<-"))
 #' @importMethodsFrom CoreGx phenoInfo<-
@@ -299,6 +300,7 @@ setReplaceMethod("phenoInfo", signature = signature(object="RadioSet", mDataType
 #' Cleveland_mProf[1:10,]
 #'
 #' @inheritParams phenoInfo
+#'
 #' @return a \code{data.frame} with the experiment info
 # setGeneric("molecularProfiles", function(rSet, mDataType) standardGeneric("molecularProfiles"))
 #' @describeIn RadioSet Return the given type of molecular data from the RadioSet
@@ -357,9 +359,10 @@ setMethod("featureInfo",
 #' featureInfo(Cleveland_small, "rna") <- featureInfo(Cleveland_small, "rna")
 #'
 #' @inheritParams phenoInfo<-
-#' @param object The \code{RadioSet} to replace gene annotations in
-#' @param mDataType The type of molecular data to be updated
-#' @param value A \code{data.frame} with the new feature annotations
+#'
+# @param object The \code{RadioSet} to replace gene annotations in
+# @param mDataType The type of molecular data to be updated
+# @param value A \code{data.frame} with the new feature annotations
 #'
 #' @return Updated \code{RadioSet}
 #' @describeIn RadioSet Replace the gene info for the molecular data
@@ -383,6 +386,7 @@ setReplaceMethod("featureInfo", signature = signature(object="RadioSet", mDataTy
 #' sensInf[1:10,]
 #'
 #' @inheritParams cellInfo
+#'
 #' @return a \code{data.frame} with the experiment info
 #' @describeIn RadioSet Return the radiation dose sensitivity experiment info
 #' @importMethodsFrom CoreGx sensitivityInfo
@@ -403,8 +407,8 @@ setMethod(sensitivityInfo,
 #' sensitivityInfo(Cleveland_small) <- sensitivityInfo(Cleveland_small)
 #'
 #' @inheritParams cellInfo<-
-#' @param object The \code{RadioSet} to update
-#' @param value A \code{data.frame} with the new sensitivity annotations
+# @param object The \code{RadioSet} to update
+# @param value A \code{data.frame} with the new sensitivity annotations
 #'
 #'
 #' @return Updated \code{RadioSet}
@@ -428,6 +432,7 @@ setReplaceMethod("sensitivityInfo", signature = signature(object="RadioSet",valu
 #' sensitivityProfiles(Cleveland_small)
 #'
 #' @inheritParams cellInfo
+#'
 #' @return a \code{data.frame} with the experiment info
 # setGeneric("sensitivityProfiles", function(rSet) standardGeneric("sensitivityProfiles"))
 #' @describeIn RadioSet Return the phenotypic data for the radiation dose sensitivity
@@ -450,8 +455,9 @@ setMethod(sensitivityProfiles,
 #' sensitivityProfiles(Cleveland_small) <- sensitivityProfiles(Cleveland_small)
 #'
 #' @inheritParams cellInfo<-
-#' @param object The \code{RadioSet} to update
-#' @param value A \code{data.frame} with the new sensitivity profiles. If a matrix object is passed in, converted to data.frame before assignment
+#'
+# @param object The \code{RadioSet} to update
+# @param value A \code{data.frame} with the new sensitivity profiles. If a matrix object is passed in, converted to data.frame before assignment
 #'
 #' @return Updated \code{RadioSet}
 # setGeneric("sensitivityProfiles<-", function(object, value) standardGeneric("sensitivityProfiles<-"))
@@ -506,7 +512,6 @@ setMethod(sensitivityMeasures,
 #'
 #' @inheritParams cellInfo
 #' @param rSet A \code{RadioSet}
-#' @param cSet Parameter name from inherited CoreGx method
 #'
 #' @return A vector of the radiation names used in the RadioSet
 setGeneric("radiationTypes", function(rSet) standardGeneric("radiationTypes"))
@@ -552,6 +557,7 @@ setReplaceMethod("radiationTypes", signature = signature(object="RadioSet",value
 #' cellNames(Cleveland_small)
 #'
 #' @inheritParams cellInfo
+#'
 #' @return A vector of the cell names used in the RadioSet
 # setGeneric("cellNames", function(rSet) standardGeneric("cellNames"))
 #' @describeIn RadioSet Return the cell names used in the dataset
@@ -572,8 +578,8 @@ setMethod("cellNames",
 #' cellNames(Cleveland_small) <- cellNames(Cleveland_small)
 #'
 #' @inheritParams cellInfo<-
-#' @param object The \code{RadioSet} to update
-#' @param value A \code{character} vector of the new cell names
+# @param object The \code{RadioSet} to update
+# @param value A \code{character} vector of the new cell names
 #'
 #'
 #' @return Updated \code{RadioSet}
@@ -594,6 +600,7 @@ setReplaceMethod("cellNames", signature = signature(object="RadioSet",value="cha
 #' fNames(Cleveland_small, "rna")[1:10]
 #'
 #' @inheritParams cellInfo
+#'
 #' @return A \code{character} vector of the feature names
 #' @describeIn RadioSet Return the feature names used in the dataset
 #' @importFrom CoreGx fNames
@@ -631,6 +638,7 @@ setMethod("fNames",
 #' dateCreated(Cleveland_small)
 #'
 #' @inheritParams cellInfo
+#'
 #' @return The date the RadioSet was created
 #' @describeIn RadioSet Return the date the RadioSet was created
 #' @importFrom CoreGx dateCreated
@@ -652,6 +660,7 @@ setMethod(dateCreated,
 #' rSetName(Cleveland_small)
 #'
 #' @inheritParams cellInfo
+#'
 #' @return The name of the RadioSet
 #' @describeIn RadioSet Return the name of the RadioSet
 #' @importFrom CoreGx cSetName
@@ -673,6 +682,7 @@ rSetName <- cSetName
 #' pertNumber(Cleveland_small)
 #'
 #' @inheritParams cellInfo
+#'
 #' @return A 3D \code{array} with the number of perturbation experiments per radiation type and cell line, and data type
 # setGeneric("pertNumber", function(rSet) standardGeneric("pertNumber"))
 #' @describeIn RadioSet Return the summary of available perturbation
@@ -695,6 +705,7 @@ setMethod(pertNumber,
 #' sensNumber(Cleveland_small)
 #'
 #' @inheritParams cellInfo
+#'
 #' @return A \code{data.frame} with the number of sensitivity experiments per radiation type and cell line
 #' @describeIn RadioSet Return the summary of available sensitivity
 #'   experiments
@@ -715,8 +726,8 @@ setMethod(sensNumber,
 #' pertNumber(Cleveland_small) <- pertNumber(Cleveland_small)
 #'
 #' @inheritParams cellInfo<-
-#' @param object A \code{RadioSet}
-#' @param value A new 3D \code{array} with the number of perturbation experiments per radiation type and cell line, and data type
+# @param object A \code{RadioSet}
+# @param value A new 3D \code{array} with the number of perturbation experiments per radiation type and cell line, and data type
 #'
 #'
 #' @return The updated \code{RadioSet}
@@ -742,8 +753,8 @@ setReplaceMethod('pertNumber', signature = signature(object="RadioSet",value="ar
 #' sensNumber(Cleveland_small) <- sensNumber(Cleveland_small)
 #'
 #' @inheritParams cellInfo<-
-#' @param value A new \code{data.frame} with the number of sensitivity experiments per radiation and cell line
-#' @param object A \code{RadioSet}
+# @param value A new \code{data.frame} with the number of sensitivity experiments per radiation and cell line
+# @param object A \code{RadioSet}
 #'
 #' @return The updated \code{RadioSet}
 # setGeneric("sensNumber<-", function(object, value) standardGeneric("sensNumber<-"))
@@ -795,7 +806,9 @@ setMethod("show", signature=signature(object="RadioSet"),
 #' mDataNames(Cleveland_small)
 #'
 #' @inheritParams cellInfo
-#' @param cSet Function parameter name from CoreSet parent class
+#' @param cSet The parameter
+#'
+# @param cSet Function parameter name from CoreSet parent class
 #' @return Vector of names of the molecular data types
 # Imports generic
 #' @importFrom CoreGx mDataNames

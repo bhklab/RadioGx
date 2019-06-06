@@ -8,8 +8,6 @@ radiationTypes(rSet)
 }
 \arguments{
 \item{rSet}{A \code{RadioSet}}
-
-\item{cSet}{Parameter name from inherited CoreGx method}
 }
 \value{
 A vector of the radiation names used in the RadioSet
