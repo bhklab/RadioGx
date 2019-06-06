@@ -17,7 +17,6 @@ Prints the RadioSet object to the output stream, and returns invisible NULL.
 Show a RadioSet
 }
 \examples{
-data(Cleveland_small)
 Cleveland_small
 
 }

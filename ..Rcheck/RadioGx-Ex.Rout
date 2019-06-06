@@ -1,0 +1,1163 @@
+
+R version 3.6.0 (2019-04-26) -- "Planting of a Tree"
+Copyright (C) 2019 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "RadioGx"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> options(pager = "console")
+> base::assign(".ExTimings", "RadioGx-Ex.timings", pos = 'CheckExEnv')
+> base::cat("name\tuser\tsystem\telapsed\n", file=base::get(".ExTimings", pos = 'CheckExEnv'))
+> base::assign(".format_ptime",
++ function(x) {
++   if(!is.na(x[4L])) x[1L] <- x[1L] + x[4L]
++   if(!is.na(x[5L])) x[2L] <- x[2L] + x[5L]
++   options(OutDec = '.')
++   format(x[1L:3L], digits = 7L)
++ },
++ pos = 'CheckExEnv')
+> 
+> ### * </HEADER>
+> library('RadioGx')
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("RadioSet-class")
+> ### * RadioSet-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: RadioSet-class
+> ### Title: A Class to Contain RadioGenomic datasets together with their
+> ###   curations
+> ### Aliases: RadioSet-class .RadioSet cellInfo,RadioSet-method
+> ###   cellInfo<-,RadioSet,data.frame-method radiationInfo,RadioSet-method
+> ###   radiationInfo<-,RadioSet,data.frame-method
+> ###   phenoInfo,RadioSet,character-method
+> ###   phenoInfo<-,RadioSet,character,data.frame-method
+> ###   molecularProfiles,RadioSet,character-method
+> ###   molecularProfiles<-,RadioSet,character,matrix-method
+> ###   featureInfo,RadioSet,character-method
+> ###   featureInfo<-,RadioSet,character,data.frame-method
+> ###   sensitivityInfo,RadioSet-method
+> ###   sensitivityInfo<-,RadioSet,data.frame-method
+> ###   sensitivityProfiles,RadioSet-method
+> ###   sensitivityProfiles<-,RadioSet,data.frame-method
+> ###   sensitivityProfiles<-,RadioSet,matrix-method
+> ###   sensitivityMeasures,RadioSet-method radiationTypes,RadioSet-method
+> ###   radiationTypes<-,RadioSet,character-method cellNames,RadioSet-method
+> ###   cellNames<-,RadioSet,character-method
+> ###   fNames,RadioSet,character-method dateCreated,RadioSet-method
+> ###   cSetName,RadioSet-method pertNumber,RadioSet-method
+> ###   sensNumber,RadioSet-method pertNumber<-,RadioSet,array-method
+> ###   sensNumber<-,RadioSet,matrix-method
+> 
+> ### ** Examples
+> 
+> data(Cleveland_small)
+> phenoInfo(Cleveland_small, mDataType="rna")
+                                                                                         samplename
+NIECE_P_NCLE_RNA3_HG-U133_PLUS_2_G10_296152             NIECE_p_NCLE_RNA3_HG-U133_Plus_2_G10_296152
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_G02_587654 GILDS_p_NCLE_RNA11_Redo_HG-U133_Plus_2_G02_587654
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_B11_419860             BUNDS_p_NCLE_RNA5_HG-U133_Plus_2_B11_419860
+SILOS_P_NCLE_RNA9_HG-U133_PLUS_2_A04_523474             SILOS_p_NCLE_RNA9_HG-U133_Plus_2_A04_523474
+WATCH_P_NCLE_RNA8_HG-U133_PLUS_2_B04_474582             WATCH_p_NCLE_RNA8_HG-U133_Plus_2_B04_474582
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G03_383634             CASED_p_NCLE_RNA4_HG-U133_Plus_2_G03_383634
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G02_383638             CASED_p_NCLE_RNA4_HG-U133_Plus_2_G02_383638
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_F07_419790             BUNDS_p_NCLE_RNA5_HG-U133_Plus_2_F07_419790
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_C05_587588 GILDS_p_NCLE_RNA11_Redo_HG-U133_Plus_2_C05_587588
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_D10_587722 GILDS_p_NCLE_RNA11_Redo_HG-U133_Plus_2_D10_587722
+                                                                                                  filename
+NIECE_P_NCLE_RNA3_HG-U133_PLUS_2_G10_296152             NIECE_p_NCLE_RNA3_HG-U133_Plus_2_G10_296152.CEL.gz
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_G02_587654 GILDS_p_NCLE_RNA11_Redo_HG-U133_Plus_2_G02_587654.CEL.gz
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_B11_419860             BUNDS_p_NCLE_RNA5_HG-U133_Plus_2_B11_419860.CEL.gz
+SILOS_P_NCLE_RNA9_HG-U133_PLUS_2_A04_523474             SILOS_p_NCLE_RNA9_HG-U133_Plus_2_A04_523474.CEL.gz
+WATCH_P_NCLE_RNA8_HG-U133_PLUS_2_B04_474582             WATCH_p_NCLE_RNA8_HG-U133_Plus_2_B04_474582.CEL.gz
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G03_383634             CASED_p_NCLE_RNA4_HG-U133_Plus_2_G03_383634.CEL.gz
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G02_383638             CASED_p_NCLE_RNA4_HG-U133_Plus_2_G02_383638.CEL.gz
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_F07_419790             BUNDS_p_NCLE_RNA5_HG-U133_Plus_2_F07_419790.CEL.gz
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_C05_587588 GILDS_p_NCLE_RNA11_Redo_HG-U133_Plus_2_C05_587588.CEL.gz
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_D10_587722 GILDS_p_NCLE_RNA11_Redo_HG-U133_Plus_2_D10_587722.CEL.gz
+                                                        chiptype
+NIECE_P_NCLE_RNA3_HG-U133_PLUS_2_G10_296152       HG-U133_Plus_2
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_G02_587654 HG-U133_Plus_2
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_B11_419860       HG-U133_Plus_2
+SILOS_P_NCLE_RNA9_HG-U133_PLUS_2_A04_523474       HG-U133_Plus_2
+WATCH_P_NCLE_RNA8_HG-U133_PLUS_2_B04_474582       HG-U133_Plus_2
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G03_383634       HG-U133_Plus_2
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G02_383638       HG-U133_Plus_2
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_F07_419790       HG-U133_Plus_2
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_C05_587588 HG-U133_Plus_2
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_D10_587722 HG-U133_Plus_2
+                                                  hybridization.date
+NIECE_P_NCLE_RNA3_HG-U133_PLUS_2_G10_296152                 07/15/08
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_G02_587654         2010-05-21
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_B11_419860                 12/19/08
+SILOS_P_NCLE_RNA9_HG-U133_PLUS_2_A04_523474               2009-12-08
+WATCH_P_NCLE_RNA8_HG-U133_PLUS_2_B04_474582               2009-08-14
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G03_383634                 10/29/08
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G02_383638                 10/29/08
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_F07_419790                 12/19/08
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_C05_587588         2010-05-21
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_D10_587722         2010-05-21
+                                                  hybridization.hour   file.day
+NIECE_P_NCLE_RNA3_HG-U133_PLUS_2_G10_296152                 12:54:10 2008-07-24
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_G02_587654          16:45:06Z 2010-05-26
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_B11_419860                 11:43:19 2009-01-07
+SILOS_P_NCLE_RNA9_HG-U133_PLUS_2_A04_523474                20:44:59Z 2009-12-11
+WATCH_P_NCLE_RNA8_HG-U133_PLUS_2_B04_474582                17:15:45Z 2009-08-19
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G03_383634                 07:52:47 2008-11-04
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G02_383638                 08:04:03 2008-11-04
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_F07_419790                 11:30:25 2009-01-07
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_C05_587588          17:07:46Z 2010-05-26
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_D10_587722          16:13:23Z 2010-05-26
+                                                  file.hour batch    cellid
+NIECE_P_NCLE_RNA3_HG-U133_PLUS_2_G10_296152        14:23:47    NA   CHP-212
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_G02_587654  16:35:21    NA    IMR-32
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_B11_419860        13:06:03    NA KP-N-S19s
+SILOS_P_NCLE_RNA9_HG-U133_PLUS_2_A04_523474        14:20:50    NA MHH-NB-11
+WATCH_P_NCLE_RNA8_HG-U133_PLUS_2_B04_474582        16:16:45    NA       NB1
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G03_383634        14:19:49    NA   SK-N-AS
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G02_383638        14:19:49    NA   SK-N-FI
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_F07_419790        13:05:45    NA   SK-N-SH
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_C05_587588  16:35:08    NA   SNU-245
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_D10_587722  16:35:13    NA   SNU-869
+                                                                  CCLE.name
+NIECE_P_NCLE_RNA3_HG-U133_PLUS_2_G10_296152        CHP212_AUTONOMIC_GANGLIA
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_G02_587654   IMR32_AUTONOMIC_GANGLIA
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_B11_419860       KPNSI9S_AUTONOMIC_GANGLIA
+SILOS_P_NCLE_RNA9_HG-U133_PLUS_2_A04_523474       MHHNB11_AUTONOMIC_GANGLIA
+WATCH_P_NCLE_RNA8_HG-U133_PLUS_2_B04_474582           NB1_AUTONOMIC_GANGLIA
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G03_383634         SKNAS_AUTONOMIC_GANGLIA
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G02_383638         SKNFI_AUTONOMIC_GANGLIA
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_F07_419790         SKNSH_AUTONOMIC_GANGLIA
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_C05_587588      SNU245_BILIARY_TRACT
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_D10_587722      SNU869_BILIARY_TRACT
+                                                  Cell.line.primary.name
+NIECE_P_NCLE_RNA3_HG-U133_PLUS_2_G10_296152                      CHP-212
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_G02_587654                 IMR-32
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_B11_419860                    KP-N-SI9s
+SILOS_P_NCLE_RNA9_HG-U133_PLUS_2_A04_523474                    MHH-NB-11
+WATCH_P_NCLE_RNA8_HG-U133_PLUS_2_B04_474582                         NB-1
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G03_383634                      SK-N-AS
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G02_383638                      SK-N-FI
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_F07_419790                      SK-N-SH
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_C05_587588                SNU-245
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_D10_587722                SNU-869
+                                                  Cell.line.aliases Gender
+NIECE_P_NCLE_RNA3_HG-U133_PLUS_2_G10_296152                    <NA>   <NA>
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_G02_587654              <NA>      M
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_B11_419860               KP-N-S19s      M
+SILOS_P_NCLE_RNA9_HG-U133_PLUS_2_A04_523474                    <NA>      M
+WATCH_P_NCLE_RNA8_HG-U133_PLUS_2_B04_474582                    <NA>      M
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G03_383634                    <NA>      F
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G02_383638                 SK-N-F1      M
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_F07_419790                    <NA>      F
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_C05_587588       NCI-SNU-245   <NA>
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_D10_587722       NCI-SNU-869   <NA>
+                                                       Site.Primary
+NIECE_P_NCLE_RNA3_HG-U133_PLUS_2_G10_296152       autonomic_ganglia
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_G02_587654 autonomic_ganglia
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_B11_419860       autonomic_ganglia
+SILOS_P_NCLE_RNA9_HG-U133_PLUS_2_A04_523474       autonomic_ganglia
+WATCH_P_NCLE_RNA8_HG-U133_PLUS_2_B04_474582       autonomic_ganglia
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G03_383634       autonomic_ganglia
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G02_383638       autonomic_ganglia
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_F07_419790       autonomic_ganglia
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_C05_587588     biliary_tract
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_D10_587722     biliary_tract
+                                                      Histology Hist.Subtype1
+NIECE_P_NCLE_RNA3_HG-U133_PLUS_2_G10_296152       neuroblastoma            NS
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_G02_587654 neuroblastoma            NS
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_B11_419860       neuroblastoma            NS
+SILOS_P_NCLE_RNA9_HG-U133_PLUS_2_A04_523474       neuroblastoma            NS
+WATCH_P_NCLE_RNA8_HG-U133_PLUS_2_B04_474582       neuroblastoma            NS
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G03_383634       neuroblastoma            NS
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G02_383638       neuroblastoma            NS
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_F07_419790       neuroblastoma            NS
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_C05_587588     carcinoma            NS
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_D10_587722     carcinoma            NS
+                                                                                                                                  Notes
+NIECE_P_NCLE_RNA3_HG-U133_PLUS_2_G10_296152                                                                                        <NA>
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_G02_587654                                                                                  <NA>
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_B11_419860                                                                                        <NA>
+SILOS_P_NCLE_RNA9_HG-U133_PLUS_2_A04_523474                                                                                        <NA>
+WATCH_P_NCLE_RNA8_HG-U133_PLUS_2_B04_474582                                                                                        <NA>
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G03_383634                                                                                        <NA>
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G02_383638                                                                                        <NA>
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_F07_419790       Identical lines: SH-SY5Y is a subclone derived from SK-N-SH and is identical to LAN-5
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_C05_587588                                                                                  <NA>
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_D10_587722                                                                                  <NA>
+                                                  Source
+NIECE_P_NCLE_RNA3_HG-U133_PLUS_2_G10_296152         ATCC
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_G02_587654   ATCC
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_B11_419860        HSRRB
+SILOS_P_NCLE_RNA9_HG-U133_PLUS_2_A04_523474         DSMZ
+WATCH_P_NCLE_RNA8_HG-U133_PLUS_2_B04_474582        HSRRB
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G03_383634         ATCC
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G02_383638         ATCC
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_F07_419790         ATCC
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_C05_587588   KCLB
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_D10_587722   KCLB
+                                                                                  Expression.arrays
+NIECE_P_NCLE_RNA3_HG-U133_PLUS_2_G10_296152             NIECE_p_NCLE_RNA3_HG-U133_Plus_2_G10_296152
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_G02_587654 GILDS_p_NCLE_RNA11_Redo_HG-U133_Plus_2_G02_587654
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_B11_419860             BUNDS_p_NCLE_RNA5_HG-U133_Plus_2_B11_419860
+SILOS_P_NCLE_RNA9_HG-U133_PLUS_2_A04_523474             SILOS_p_NCLE_RNA9_HG-U133_Plus_2_A04_523474
+WATCH_P_NCLE_RNA8_HG-U133_PLUS_2_B04_474582             WATCH_p_NCLE_RNA8_HG-U133_Plus_2_B04_474582
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G03_383634             CASED_p_NCLE_RNA4_HG-U133_Plus_2_G03_383634
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G02_383638             CASED_p_NCLE_RNA4_HG-U133_Plus_2_G02_383638
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_F07_419790             BUNDS_p_NCLE_RNA5_HG-U133_Plus_2_F07_419790
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_C05_587588 GILDS_p_NCLE_RNA11_Redo_HG-U133_Plus_2_C05_587588
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_D10_587722 GILDS_p_NCLE_RNA11_Redo_HG-U133_Plus_2_D10_587722
+                                                                                          SNP.arrays
+NIECE_P_NCLE_RNA3_HG-U133_PLUS_2_G10_296152       FASTS_p_NCLE_DNAAffy4_S_GenomeWideSNP_6_D02_335262
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_G02_587654   LOBBY_p_NCLE_DNAAffy6_GenomeWideSNP_6_C01_437320
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_B11_419860        FIEFS_p_NCLE_DNA_Affy5_GenomeWideSNP_6_H05_410924
+SILOS_P_NCLE_RNA9_HG-U133_PLUS_2_A04_523474        AWASH_p_NCLE_DNAAffy10_GenomeWideSNP_6_H08_542886
+WATCH_P_NCLE_RNA8_HG-U133_PLUS_2_B04_474582        AWASH_p_NCLE_DNAAffy10_GenomeWideSNP_6_F10_542910
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G03_383634        FIEFS_p_NCLE_DNA_Affy5_GenomeWideSNP_6_C08_411042
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G02_383638        FIEFS_p_NCLE_DNA_Affy5_GenomeWideSNP_6_F10_410970
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_F07_419790         BOWER_p_NCLE_DNAAffy8_GenomeWideSNP_6_B02_464602
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_C05_587588  QUAFF_p_NCLE_DNAAffy12_GenomeWideSNP_6_C12_592634
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_D10_587722                                               <NA>
+                                                  Oncomap
+NIECE_P_NCLE_RNA3_HG-U133_PLUS_2_G10_296152           yes
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_G02_587654     yes
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_B11_419860           yes
+SILOS_P_NCLE_RNA9_HG-U133_PLUS_2_A04_523474           yes
+WATCH_P_NCLE_RNA8_HG-U133_PLUS_2_B04_474582           yes
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G03_383634           yes
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G02_383638           yes
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_F07_419790           yes
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_C05_587588     yes
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_D10_587722     yes
+                                                  Hybrid.Capture.Sequencing
+NIECE_P_NCLE_RNA3_HG-U133_PLUS_2_G10_296152                             yes
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_G02_587654                       yes
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_B11_419860                             yes
+SILOS_P_NCLE_RNA9_HG-U133_PLUS_2_A04_523474                             yes
+WATCH_P_NCLE_RNA8_HG-U133_PLUS_2_B04_474582                             yes
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G03_383634                             yes
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G02_383638                             yes
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_F07_419790                             yes
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_C05_587588                       yes
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_D10_587722                       yes
+                                                  batchid
+NIECE_P_NCLE_RNA3_HG-U133_PLUS_2_G10_296152            NA
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_G02_587654      NA
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_B11_419860            NA
+SILOS_P_NCLE_RNA9_HG-U133_PLUS_2_A04_523474            NA
+WATCH_P_NCLE_RNA8_HG-U133_PLUS_2_B04_474582            NA
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G03_383634            NA
+CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G02_383638            NA
+BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_F07_419790            NA
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_C05_587588      NA
+GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_D10_587722      NA
+> 
+> 
+> data(Cleveland_small)
+> phenoInfo(Cleveland_small, mDataType="rna") <- phenoInfo(Cleveland_small, mDataType="rna")
+> 
+> data(Cleveland_small)
+> Cleveland_mProf <- molecularProfiles(Cleveland_small, "rna")
+> Cleveland_mProf[1:10,]
+                   NIECE_P_NCLE_RNA3_HG-U133_PLUS_2_G10_296152
+ENSG00000000003_at                                   10.280970
+ENSG00000000005_at                                    3.647436
+ENSG00000000419_at                                   11.883769
+ENSG00000000457_at                                    7.515721
+ENSG00000000460_at                                    7.808139
+ENSG00000000938_at                                    4.352408
+ENSG00000000971_at                                    6.875593
+ENSG00000001036_at                                    8.501189
+ENSG00000001084_at                                    7.185790
+ENSG00000001167_at                                    7.936911
+                   GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_G02_587654
+ENSG00000000003_at                                         10.304971
+ENSG00000000005_at                                          4.895494
+ENSG00000000419_at                                         11.865191
+ENSG00000000457_at                                          7.187144
+ENSG00000000460_at                                          7.789921
+ENSG00000000938_at                                          4.531529
+ENSG00000000971_at                                          3.651762
+ENSG00000001036_at                                          3.570290
+ENSG00000001084_at                                          8.190605
+ENSG00000001167_at                                          8.115022
+                   BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_B11_419860
+ENSG00000000003_at                                    9.596987
+ENSG00000000005_at                                    3.793174
+ENSG00000000419_at                                   12.498285
+ENSG00000000457_at                                    8.076655
+ENSG00000000460_at                                    8.456691
+ENSG00000000938_at                                    4.596423
+ENSG00000000971_at                                    9.410805
+ENSG00000001036_at                                    9.200029
+ENSG00000001084_at                                    6.506899
+ENSG00000001167_at                                    7.213285
+                   SILOS_P_NCLE_RNA9_HG-U133_PLUS_2_A04_523474
+ENSG00000000003_at                                    8.620860
+ENSG00000000005_at                                    3.674918
+ENSG00000000419_at                                   11.674671
+ENSG00000000457_at                                    6.790332
+ENSG00000000460_at                                    6.663846
+ENSG00000000938_at                                    4.636622
+ENSG00000000971_at                                    4.101288
+ENSG00000001036_at                                    7.586844
+ENSG00000001084_at                                    7.391132
+ENSG00000001167_at                                    8.108516
+                   WATCH_P_NCLE_RNA8_HG-U133_PLUS_2_B04_474582
+ENSG00000000003_at                                    9.866551
+ENSG00000000005_at                                    3.748959
+ENSG00000000419_at                                   12.228260
+ENSG00000000457_at                                    7.292420
+ENSG00000000460_at                                    8.869378
+ENSG00000000938_at                                    4.670053
+ENSG00000000971_at                                    3.929856
+ENSG00000001036_at                                    8.609513
+ENSG00000001084_at                                    7.162761
+ENSG00000001167_at                                    7.392261
+                   CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G03_383634
+ENSG00000000003_at                                    4.865308
+ENSG00000000005_at                                    3.754055
+ENSG00000000419_at                                   12.134696
+ENSG00000000457_at                                    7.578891
+ENSG00000000460_at                                    7.616158
+ENSG00000000938_at                                    4.534382
+ENSG00000000971_at                                    4.685435
+ENSG00000001036_at                                    8.400120
+ENSG00000001084_at                                    6.596610
+ENSG00000001167_at                                    8.187989
+                   CASED_P_NCLE_RNA4_HG-U133_PLUS_2_G02_383638
+ENSG00000000003_at                                    4.878338
+ENSG00000000005_at                                    3.672175
+ENSG00000000419_at                                   12.217683
+ENSG00000000457_at                                    6.718572
+ENSG00000000460_at                                    7.253163
+ENSG00000000938_at                                    4.870753
+ENSG00000000971_at                                    4.861379
+ENSG00000001036_at                                    8.394187
+ENSG00000001084_at                                    6.633894
+ENSG00000001167_at                                    7.265407
+                   BUNDS_P_NCLE_RNA5_HG-U133_PLUS_2_F07_419790
+ENSG00000000003_at                                    9.924551
+ENSG00000000005_at                                    3.856960
+ENSG00000000419_at                                   12.273916
+ENSG00000000457_at                                    6.993666
+ENSG00000000460_at                                    7.379934
+ENSG00000000938_at                                    4.524289
+ENSG00000000971_at                                    4.764260
+ENSG00000001036_at                                    9.858975
+ENSG00000001084_at                                    6.384650
+ENSG00000001167_at                                    7.272792
+                   GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_C05_587588
+ENSG00000000003_at                                         11.459240
+ENSG00000000005_at                                          3.738819
+ENSG00000000419_at                                         11.906285
+ENSG00000000457_at                                          7.786223
+ENSG00000000460_at                                          7.690515
+ENSG00000000938_at                                          4.819757
+ENSG00000000971_at                                          4.095694
+ENSG00000001036_at                                          9.499551
+ENSG00000001084_at                                          9.708943
+ENSG00000001167_at                                          6.930621
+                   GILDS_P_NCLE_RNA11_REDO_HG-U133_PLUS_2_D10_587722
+ENSG00000000003_at                                         10.165046
+ENSG00000000005_at                                          3.683983
+ENSG00000000419_at                                         11.950542
+ENSG00000000457_at                                          6.819087
+ENSG00000000460_at                                          5.519544
+ENSG00000000938_at                                          4.739741
+ENSG00000000971_at                                          4.051258
+ENSG00000001036_at                                          9.977409
+ENSG00000001084_at                                          8.537745
+ENSG00000001167_at                                          7.060583
+> 
+> data(Cleveland_small)
+> molecularProfiles(Cleveland_small, "rna") <- molecularProfiles(Cleveland_small, "rna")
+> 
+> data(Cleveland_small)
+> featureInfo(Cleveland_small, "rna")[1:10,]
+                                Probe   EnsemblGeneId EntrezGeneId   Symbol
+ENSG00000000003_at ENSG00000000003_at ENSG00000000003         7105   TSPAN6
+ENSG00000000005_at ENSG00000000005_at ENSG00000000005        64102     TNMD
+ENSG00000000419_at ENSG00000000419_at ENSG00000000419         8813     DPM1
+ENSG00000000457_at ENSG00000000457_at ENSG00000000457        57147    SCYL3
+ENSG00000000460_at ENSG00000000460_at ENSG00000000460        55732 C1orf112
+ENSG00000000938_at ENSG00000000938_at ENSG00000000938         2268      FGR
+ENSG00000000971_at ENSG00000000971_at ENSG00000000971         3075      CFH
+ENSG00000001036_at ENSG00000001036_at ENSG00000001036         2519    FUCA2
+ENSG00000001084_at ENSG00000001084_at ENSG00000001084         2729     GCLC
+ENSG00000001167_at ENSG00000001167_at ENSG00000001167         4800     NFYA
+                      GeneBioType BEST
+ENSG00000000003_at protein_coding TRUE
+ENSG00000000005_at protein_coding TRUE
+ENSG00000000419_at protein_coding TRUE
+ENSG00000000457_at protein_coding TRUE
+ENSG00000000460_at protein_coding TRUE
+ENSG00000000938_at protein_coding TRUE
+ENSG00000000971_at protein_coding TRUE
+ENSG00000001036_at protein_coding TRUE
+ENSG00000001084_at protein_coding TRUE
+ENSG00000001167_at protein_coding TRUE
+> 
+> data(Cleveland_small)
+> featureInfo(Cleveland_small, "rna") <- featureInfo(Cleveland_small, "rna")
+> 
+> data(Cleveland_small)
+> sensInf<- sensitivityInfo(Cleveland_small)
+> sensInf[1:10,]
+                         cellid radiation.type Dose1-1Gy-rep1 Dose1-1Gy-rep2
+SK-N-FI_radiation_1     SK-N-FI      radiation              1              1
+IMR-32_radiation_2       IMR-32      radiation              1              1
+SK-N-AS_radiation_3     SK-N-AS      radiation              1              1
+CHP-212_radiation_4     CHP-212      radiation              1              1
+KP-N-S19s_radiation_5 KP-N-S19s      radiation              1              1
+MHH-NB-11_radiation_6 MHH-NB-11      radiation              1              1
+SK-N-SH_radiation_7     SK-N-SH      radiation              1              1
+NB1_radiation_8             NB1      radiation              1              1
+SNU-245_radiation_9     SNU-245      radiation              1              1
+SNU-869_radiation_10    SNU-869      radiation              1              1
+                      Dose2-2Gy Dose3-3Gy Dose4-4Gy Dose5-5Gy Dose6-6Gy
+SK-N-FI_radiation_1           2         3         4         5         6
+IMR-32_radiation_2            2         3         4         5         6
+SK-N-AS_radiation_3           2         3         4         5         6
+CHP-212_radiation_4           2         3         4         5         6
+KP-N-S19s_radiation_5         2         3         4         5         6
+MHH-NB-11_radiation_6         2         3         4         5         6
+SK-N-SH_radiation_7           2         3         4         5         6
+NB1_radiation_8               2         3         4         5         6
+SNU-245_radiation_9           2         3         4         5         6
+SNU-869_radiation_10          2         3         4         5         6
+                      Dose8-8Gy Dose10-10Gy
+SK-N-FI_radiation_1           8          10
+IMR-32_radiation_2            8          10
+SK-N-AS_radiation_3           8          10
+CHP-212_radiation_4           8          10
+KP-N-S19s_radiation_5         8          10
+MHH-NB-11_radiation_6         8          10
+SK-N-SH_radiation_7           8          10
+NB1_radiation_8               8          10
+SNU-245_radiation_9           8          10
+SNU-869_radiation_10          8          10
+> 
+> data(Cleveland_small)
+> sensitivityInfo(Cleveland_small) <- sensitivityInfo(Cleveland_small)
+> 
+> data(Cleveland_small)
+> sensitivityProfiles(Cleveland_small)
+                      AUC_published AUC_recomputed     alpha       beta
+SK-N-FI_radiation_1           3.410      2.8616423 0.1521972 0.01783452
+IMR-32_radiation_2            0.634      0.5490508 0.8098218          0
+SK-N-AS_radiation_3           3.789      3.2589305 0.1245542 0.01650291
+CHP-212_radiation_4           1.833      1.3440925 0.4615728          0
+KP-N-S19s_radiation_5         1.477      2.3251731 0.2974555          0
+MHH-NB-11_radiation_6         0.545      0.6260366 0.7520926          0
+SK-N-SH_radiation_7           1.661      1.8720963 0.3584304          0
+NB1_radiation_8               0.774      0.7906043 0.6551282          0
+SNU-245_radiation_9           4.145      4.5066456 0.1371595          0
+SNU-869_radiation_10          4.113      4.3476552 0.1450146          0
+                            SF2
+SK-N-FI_radiation_1   0.6181713
+IMR-32_radiation_2    0.0824000
+SK-N-AS_radiation_3   0.7827120
+CHP-212_radiation_4   0.4160333
+KP-N-S19s_radiation_5 0.2469118
+MHH-NB-11_radiation_6 0.0652000
+SK-N-SH_radiation_7   0.3086860
+NB1_radiation_8       0.2169389
+SNU-245_radiation_9   0.7885541
+SNU-869_radiation_10  0.7346687
+> 
+> data(Cleveland_small)
+> sensitivityProfiles(Cleveland_small) <- sensitivityProfiles(Cleveland_small)
+> 
+> data(Cleveland_small)
+> sensitivityMeasures(Cleveland_small)
+[1] "AUC_published"  "AUC_recomputed" "alpha"          "beta"          
+[5] "SF2"           
+> 
+> 
+> data(Cleveland_small)
+> cellNames(Cleveland_small)
+ [1] "SK-N-FI"   "IMR-32"    "SK-N-AS"   "CHP-212"   "KP-N-S19s" "MHH-NB-11"
+ [7] "SK-N-SH"   "NB1"       "SNU-245"   "SNU-869"  
+> 
+> data(Cleveland_small)
+> cellNames(Cleveland_small) <- cellNames(Cleveland_small)
+> 
+> data(Cleveland_small)
+> fNames(Cleveland_small, "rna")[1:10]
+ [1] "ENSG00000000003_at" "ENSG00000000005_at" "ENSG00000000419_at"
+ [4] "ENSG00000000457_at" "ENSG00000000460_at" "ENSG00000000938_at"
+ [7] "ENSG00000000971_at" "ENSG00000001036_at" "ENSG00000001084_at"
+[10] "ENSG00000001167_at"
+> 
+> data(Cleveland_small)
+> dateCreated(Cleveland_small)
+[1] "Wed Oct 25 17:38:42 2017"
+> 
+> data(Cleveland_small)
+> rSetName <- cSetName
+> rSetName(Cleveland_small)
+[1] "Cleveland"
+> 
+> data(Cleveland_small)
+> pertNumber(Cleveland_small)
+<0 x 0 x 0 array of logical>
+    
+
+> 
+> data(Cleveland_small)
+> sensNumber(Cleveland_small)
+          radiation
+SK-N-FI           1
+IMR-32            1
+SK-N-AS           1
+CHP-212           1
+KP-N-S19s         1
+MHH-NB-11         1
+SK-N-SH           1
+NB1               1
+SNU-245           1
+SNU-869           1
+> 
+> data(Cleveland_small)
+> pertNumber(Cleveland_small) <- pertNumber(Cleveland_small)
+> 
+> data(Cleveland_small)
+> sensNumber(Cleveland_small) <- sensNumber(Cleveland_small)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("RadioSet-class", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("RadioSet")
+> ### * RadioSet
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: RadioSet
+> ### Title: RadioSet constructor
+> ### Aliases: RadioSet
+> 
+> ### ** Examples
+> 
+> ## For help creating a RadioSet object, please see the following vignette:
+> browseVignettes("PharmacoGx")
+starting httpd help server ... done
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("RadioSet", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("checkRSetStructure")
+> ### * checkRSetStructure
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: checkRSetStructure
+> ### Title: A function to verify the structure of a RadioSet
+> ### Aliases: checkRSetStructure
+> 
+> ### ** Examples
+> 
+> data(Cleveland_small)
+> 
+> checkRSetStructure(Cleveland_small)
+Warning in checkRSetStructure(Cleveland_small) :
+  rna: fData dimension is OK
+Warning in checkRSetStructure(Cleveland_small) :
+  rna: pData dimension is OK
+Warning in checkRSetStructure(Cleveland_small) : 
+Warning in checkRSetStructure(Cleveland_small) : 
+Warning in checkRSetStructure(Cleveland_small) : BEST is OK
+Warning in checkRSetStructure(Cleveland_small) : Symbol is OK
+Warning in checkRSetStructure(Cleveland_small) :
+  rnaseq: fData dimension is OK
+Warning in checkRSetStructure(Cleveland_small) :
+  rnaseq: pData dimension is OK
+Warning in checkRSetStructure(Cleveland_small) : 
+Warning in checkRSetStructure(Cleveland_small) : 
+Warning in checkRSetStructure(Cleveland_small) : BEST is OK
+Warning in checkRSetStructure(Cleveland_small) : Symbol is OK
+Warning in checkRSetStructure(Cleveland_small) :
+  mutation: fData dimension is OK
+Warning in checkRSetStructure(Cleveland_small) :
+  mutation: pData dimension is OK
+Warning in checkRSetStructure(Cleveland_small) :
+  mutation: cellid does not exist in pData columns
+Warning in checkRSetStructure(Cleveland_small) :
+  mutation: batchid does not exist in pData columns
+Warning in checkRSetStructure(Cleveland_small) :
+  mutation: cellid does not exist in pData
+Warning in checkRSetStructure(Cleveland_small) :
+  cnv: fData dimension is OK
+Warning in checkRSetStructure(Cleveland_small) :
+  cnv: pData dimension is OK
+Warning in checkRSetStructure(Cleveland_small) : 
+Warning in checkRSetStructure(Cleveland_small) : 
+[1] "unique.radiation.type which is curated radiation id across data set should be a column of radiation curation slot"
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("checkRSetStructure", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("computeAUC")
+> ### * computeAUC
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: computeAUC
+> ### Title: computeAUC: computes AUC
+> ### Aliases: computeAUC
+> 
+> ### ** Examples
+> 
+> computeAUC(D=c(0.1, 0.5, 0.7, 0.9), pars=c(0.2, 0.1), lower = 0, upper = 4) # Returns 0.7039296
+[1] "pars"
+[1] "lower & upper"
+[1] "fitted"
+[1] "SF_as_log"
+[1] -3.733333
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("computeAUC", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("computeD10")
+> ### * computeD10
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: computeD10
+> ### Title: Compute D10
+> ### Aliases: computeD10
+> 
+> ### ** Examples
+> 
+> computeD10(c(0.2, 0.1))
+[1] 3.901617
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("computeD10", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("computeSF2")
+> ### * computeSF2
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: computeSF2
+> ### Title: Compute SF2
+> ### Aliases: computeSF2
+> 
+> ### ** Examples
+> 
+> computeSF2(c(0.2, 0.1))
+[1] 0.449329
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("computeSF2", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("doseResponseCurve")
+> ### * doseResponseCurve
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: doseResponseCurve
+> ### Title: Plot drug response curve of a given drug and a given cell for a
+> ###   list of rSets (objects of the RadioSet class).
+> ### Aliases: doseResponseCurve
+> 
+> ### ** Examples
+> 
+> if (interactive()) {
++ drugDoseResponseCurve(Ds=list("Experiment 1" = c(0, 2, 4, 6)),
++  SFs=list("Experiment 1" = c(1,.6,.4,.2)), plot.type="Both")
++ }
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("doseResponseCurve", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("linearQuadraticModel")
+> ### * linearQuadraticModel
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: linearQuadraticModel
+> ### Title: Fit linear-quadratic curves to dose-response data
+> ### Aliases: linearQuadraticModel
+> 
+> ### ** Examples
+> 
+> linearQuadraticModel(c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10), 
++  c(1.1, 0.8, 0.7, 0.45, 0.15, -0.1, -0.1, -0.4, -0.65, -0.75, -1.1))
+Warning in CoreGx::.reformatData(x = D, y = SF, x_to_log = FALSE, y_to_log = TRUE,  :
+  Transforming y to log with non-positive y values present, therefore removing.
+    alpha      beta 
+0.0000000 0.1107072 
+attr(,"Rsquare")
+[1] 0.9666091
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("linearQuadraticModel", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("mDataNames-RadioSet-method")
+> ### * mDataNames-RadioSet-method
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: mDataNames,RadioSet-method
+> ### Title: mDataNames
+> ### Aliases: mDataNames,RadioSet-method
+> 
+> ### ** Examples
+> 
+> data(Cleveland_small)
+> mDataNames(Cleveland_small)
+[1] "rna"      "rnaseq"   "mutation" "cnv"     
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("mDataNames-RadioSet-method", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("plotCurve")
+> ### * plotCurve
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: plotCurve
+> ### Title: Plot radiation dose-response curve
+> ### Aliases: plotCurve
+> 
+> ### ** Examples
+> 
+> plotCurve(c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
++     c(1.1, 0.8, 0.7, 0.45, 0.15, -0.1, -0.1, -0.4, -0.65, -0.75, -1.1))
+Warning in CoreGx::.reformatData(x = D, y = SF, x_to_log = FALSE, y_to_log = TRUE,  :
+  Transforming y to log with non-positive y values present, therefore removing.
+[1] "A linear-quadratic curve was fit to the data with parameters alpha = 0 and beta = 0.110707153534472."
+Warning in CoreGx::.reformatData(x = D, y = SF, x_to_log = FALSE, y_to_log = TRUE,  :
+  Transforming y to log with non-positive y values present, therefore removing.
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("plotCurve", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("radSensitivitySig")
+> ### * radSensitivitySig
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: radSensitivitySig
+> ### Title: Creates a signature representing the association between gene
+> ###   expression (or other molecular profile) and radiation dose response,
+> ###   for use in radiation sensitivity analysis.
+> ### Aliases: radSensitivitySig
+> 
+> ### ** Examples
+> 
+> data(Cleveland_small)
+> rad.sensitivity <- radSensitivitySig(Cleveland_small, mDataType="rna",
++              nthread=1, features = fNames(Cleveland_small, "rna")[1],
++              radiation.types=radiationTypes(Cleveland_small))
+Computing radiation sensitivity signatures...
+> print(rad.sensitivity)
+RadioSet Name:   
+Signature Type:  Sensitivity 
+Date Created:  Thu Jun 06 16:09:05 2019 
+Number of Radiation Types:  1 
+Number of Genes/Probes:  1 
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("radSensitivitySig", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("radiationInfo-set")
+> ### * radiationInfo-set
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: radiationInfo<-
+> ### Title: radiationInfo<- Generic
+> ### Aliases: radiationInfo<-
+> 
+> ### ** Examples
+> 
+> data(Cleveland_small)
+> radiationInfo(Cleveland_small) <- radiationInfo(Cleveland_small)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("radiationInfo-set", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("radiationInfo")
+> ### * radiationInfo
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: radiationInfo
+> ### Title: radiationInfo Generic
+> ### Aliases: radiationInfo
+> 
+> ### ** Examples
+> 
+> data(Cleveland_small)
+> radiationInfo(Cleveland_small)
+          X.radiation.
+radiation    radiation
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("radiationInfo", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("radiationTypes-set")
+> ### * radiationTypes-set
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: radiationTypes<-
+> ### Title: radiationTypes<- Generic
+> ### Aliases: radiationTypes<-
+> 
+> ### ** Examples
+> 
+> data(Cleveland_small)
+> radiationTypes(Cleveland_small) <- radiationTypes(Cleveland_small)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("radiationTypes-set", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("radiationTypes")
+> ### * radiationTypes
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: radiationTypes
+> ### Title: radiationTypes Generic
+> ### Aliases: radiationTypes
+> 
+> ### ** Examples
+> 
+> data(Cleveland_small)
+> radType <- radiationTypes(Cleveland_small)
+> radType[1:10]
+ [1] "radiation" NA          NA          NA          NA          NA         
+ [7] NA          NA          NA          NA         
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("radiationTypes", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("show-RadioSet-method")
+> ### * show-RadioSet-method
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: show,RadioSet-method
+> ### Title: Show a RadioSet
+> ### Aliases: show,RadioSet-method
+> 
+> ### ** Examples
+> 
+> data(Cleveland_small)
+> Cleveland_small
+Name:  Cleveland 
+Date Created:  Wed Oct 25 17:38:42 2017 
+Number of cell lines:  10 
+Number of radiation types:  1 
+RNA: 
+	Dim:  20049 10 
+RNASeq: 
+	Dim:  61958 9 
+CNV: 
+	Dim:  24960 6 
+Drug pertubation: 
+	Please look at pertNumber(rSet) to determine number of experiments for each radiation-cell combination.
+Drug sensitivity: 
+	Number of Experiments:  10 
+	Please look at sensNumber(rSet) to determine number of experiments for each radiation-cell combination.
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("show-RadioSet-method", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("show-RadioSig-method")
+> ### * show-RadioSig-method
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: show,RadioSig-method
+> ### Title: Show RadioGx Signatures
+> ### Aliases: show,RadioSig-method
+> 
+> ### ** Examples
+> 
+> data(Cleveland_small)
+> rad.sensitivity <- radSensitivitySig(Cleveland_small, mDataType="rna",
++              nthread=1, features = fNames(Cleveland_small, "rna")[1])
+Computing radiation sensitivity signatures...
+> rad.sensitivity
+RadioSet Name:   
+Signature Type:  Sensitivity 
+Date Created:  Thu Jun 06 16:09:07 2019 
+Number of Radiation Types:  1 
+Number of Genes/Probes:  1 
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("show-RadioSig-method", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("showSigAnnot")
+> ### * showSigAnnot
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: showSigAnnot
+> ### Title: Show the Annotations of a signature object
+> ### Aliases: showSigAnnot
+> 
+> ### ** Examples
+> 
+> data(Cleveland_small)
+> rad.sensitivity <- radSensitivitySig(Cleveland_small, mDataType="rna",
++              nthread=1, features = fNames(Cleveland_small, "rna")[1])
+Computing radiation sensitivity signatures...
+> showSigAnnot(rad.sensitivity)
+[1] "as.character(match.call())"
+R version 3.6.0 (2019-04-26)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 17763)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=C                    LC_CTYPE=English_Canada.1252   
+[3] LC_MONETARY=English_Canada.1252 LC_NUMERIC=C                   
+[5] LC_TIME=English_Canada.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] RadioGx_0.0.0.1
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.1           lattice_0.20-38      relations_0.6-8     
+ [4] visNetwork_2.0.7     piano_2.0.2          gtools_3.8.1        
+ [7] digest_0.6.19        mime_0.6             slam_0.1-45         
+[10] lsa_0.73.1           R6_2.4.0             plyr_1.8.4          
+[13] NISTunits_1.0.1      pracma_2.2.5         ggplot2_3.1.1       
+[16] pillar_1.4.1         gplots_3.0.1.1       rlang_0.3.4         
+[19] lazyeval_0.2.2       celestial_1.4.6      CoreGx_0.1.0        
+[22] data.table_1.12.2    gdata_2.18.0         Matrix_1.2-17       
+[25] DT_0.6               magicaxis_2.0.7      sets_1.0-18         
+[28] shinyjs_1.0          BiocParallel_1.18.0  stringr_1.4.0       
+[31] htmlwidgets_1.3      igraph_1.2.4.1       munsell_0.5.0       
+[34] shiny_1.3.2          fgsea_1.10.0         compiler_3.6.0      
+[37] httpuv_1.5.1         pkgconfig_2.0.2      BiocGenerics_0.30.0 
+[40] marray_1.62.0        htmltools_0.3.6      tcltk_3.6.0         
+[43] tibble_2.1.3         gridExtra_2.3        RANN_2.6.1          
+[46] crayon_1.3.4         later_0.8.0          MASS_7.3-51.4       
+[49] bitops_1.0-6         SnowballC_0.6.0      grid_3.6.0          
+[52] jsonlite_1.6         xtable_1.8-4         gtable_0.3.0        
+[55] magrittr_1.5         scales_1.0.0         KernSmooth_2.23-15  
+[58] stringi_1.4.3        sm_2.2-5.6           reshape2_1.4.3      
+[61] mapproj_1.2.6        promises_1.0.1       limma_3.40.2        
+[64] fastmatch_1.1-0      RColorBrewer_1.1-2   tools_3.6.0         
+[67] Biobase_2.44.0       maps_3.3.0           plotrix_3.7-5       
+[70] parallel_3.6.0       colorspace_1.4-1     cluster_2.0.9       
+[73] caTools_1.17.1.2     shinydashboard_0.7.1
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("showSigAnnot", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("subsetTo")
+> ### * subsetTo
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: subsetTo
+> ### Title: A function to subset a RadioSet to data containing only
+> ###   specified radiations, cells and genes
+> ### Aliases: subsetTo
+> 
+> ### ** Examples
+> 
+> data(Cleveland_small)
+> clevelandRadiationTypes  <- radiationTypes(Cleveland_small)
+> clevelandCells <- cellNames(Cleveland_small)
+> RSet <- subsetTo(Cleveland_small,radiationTypes = clevelandRadiationTypes[1],
++   cells = clevelandCells[1])
+> RSet
+Name:  Cleveland 
+Date Created:  Wed Oct 25 17:38:42 2017 
+Number of cell lines:  1 
+Number of radiation types:  1 
+RNA: 
+	Dim:  20049 1 
+RNASeq: 
+	Dim:  61958 1 
+CNV: 
+	Dim:  24960 1 
+Drug pertubation: 
+	Please look at pertNumber(rSet) to determine number of experiments for each radiation-cell combination.
+Drug sensitivity: 
+	Number of Experiments:  1 
+	Please look at sensNumber(rSet) to determine number of experiments for each radiation-cell combination.
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("subsetTo", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("summarizeMolecularProfiles")
+> ### * summarizeMolecularProfiles
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: summarizeMolecularProfiles
+> ### Title: Takes molecular data from a PharmacoSet, and summarises them
+> ###   into one entry per drug
+> ### Aliases: summarizeMolecularProfiles
+> 
+> ### ** Examples
+> 
+> data(Cleveland_small)
+> Cleveland_small <- summarizeMolecularProfiles(Cleveland_small,
++                     mDataType = "rna", cell.lines=cellNames(Cleveland_small),
++                     summary.stat = 'median', fill.missing = TRUE, verbose=TRUE)
+> Cleveland_small
+ExpressionSet (storageMode: lockedEnvironment)
+assayData: 20049 features, 10 samples 
+  element names: exprs 
+protocolData: none
+phenoData
+  sampleNames: SK-N-FI IMR-32 ... SNU-869 (10 total)
+  varLabels: samplename filename ... tissueid (24 total)
+  varMetadata: labelDescription
+featureData
+  featureNames: ENSG00000000003_at ENSG00000000005_at ...
+    ENSG00000280448_at (20049 total)
+  fvarLabels: Probe EnsemblGeneId ... BEST (6 total)
+  fvarMetadata: labelDescription
+experimentData: use 'experimentData(object)'
+Annotation:  
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("summarizeMolecularProfiles", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("summarizeSensitivityProfiles")
+> ### * summarizeSensitivityProfiles
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: summarizeSensitivityProfiles
+> ### Title: Takes the sensitivity data from a RadioSet, and summarises them
+> ###   into a drug vs cell line table
+> ### Aliases: summarizeSensitivityProfiles
+> 
+> ### ** Examples
+> 
+> data(Cleveland_small)
+> GDSCauc <- summarizeSensitivityProfiles(Cleveland_small, sensitivity.measure='AUC_published')
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("summarizeSensitivityProfiles", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> ### * <FOOTER>
+> ###
+> cleanEx()
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  10.12 0.58 10.91 NA NA 
+> grDevices::dev.off()
+null device 
+          1 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')

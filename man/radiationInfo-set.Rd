@@ -18,7 +18,6 @@ Updated \code{RadioSet}
 Generic for radiationInfo replace method
 }
 \examples{
-data(Cleveland_small)
 radiationInfo(Cleveland_small) <- radiationInfo(Cleveland_small)
 
 }

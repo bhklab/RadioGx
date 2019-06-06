@@ -209,7 +209,7 @@ setReplaceMethod("cellInfo", signature = signature(object="RadioSet",value="data
 #' Generic for radiationInfo method
 #'
 #' @examples
-#' data(Cleveland_small)
+
 #' radiationInfo(Cleveland_small)
 #'
 #' @inheritParams cellInfo
@@ -228,7 +228,7 @@ setMethod(radiationInfo, "RadioSet", function(rSet){
 #' Generic for radiationInfo replace method
 #'
 #' @examples
-#' data(Cleveland_small)
+
 #' radiationInfo(Cleveland_small) <- radiationInfo(Cleveland_small)
 #'
 #' @inheritParams cellInfo
@@ -251,7 +251,7 @@ setReplaceMethod("radiationInfo", signature = signature(object="RadioSet",value=
 #' Generic for phenoInfo method
 #'
 #' @examples
-#' data(Cleveland_small)
+
 #' phenoInfo(Cleveland_small, mDataType="rna")
 #'
 #' @inheritParams cellInfo
@@ -273,7 +273,7 @@ setMethod("phenoInfo",
 #'
 #' @examples
 #'
-#' data(Cleveland_small)
+
 #' phenoInfo(Cleveland_small, mDataType="rna") <- phenoInfo(Cleveland_small, mDataType="rna")
 #'
 #' @inheritParams cellInfo<-
@@ -295,7 +295,7 @@ setReplaceMethod("phenoInfo", signature = signature(object="RadioSet", mDataType
 #' Generic for molecularProfiles method
 #'
 #' @examples
-#' data(Cleveland_small)
+
 #' Cleveland_mProf <- molecularProfiles(Cleveland_small, "rna")
 #' Cleveland_mProf[1:10,]
 #'
@@ -317,7 +317,7 @@ setMethod(molecularProfiles,
 #' Generic for molecularProfiles replace method
 #'
 #' @examples
-#' data(Cleveland_small)
+
 #' molecularProfiles(Cleveland_small, "rna") <- molecularProfiles(Cleveland_small, "rna")
 #'
 #' @inheritParams phenoInfo<-
@@ -335,7 +335,7 @@ setReplaceMethod("molecularProfiles", signature = signature(object="RadioSet", m
 #' Generic for featureInfo method
 #'
 #' @examples
-#' data(Cleveland_small)
+
 #' featureInfo(Cleveland_small, "rna")[1:10,]
 #'
 #' @inheritParams phenoInfo
@@ -355,7 +355,7 @@ setMethod("featureInfo",
 #' Generic for featureInfo replace method
 #'
 #' @examples
-#' data(Cleveland_small)
+
 #' featureInfo(Cleveland_small, "rna") <- featureInfo(Cleveland_small, "rna")
 #'
 #' @inheritParams phenoInfo<-
@@ -381,7 +381,7 @@ setReplaceMethod("featureInfo", signature = signature(object="RadioSet", mDataTy
 #' Generic for sensitivityInfo method
 #'
 #' @examples
-#' data(Cleveland_small)
+
 #' sensInf<- sensitivityInfo(Cleveland_small)
 #' sensInf[1:10,]
 #'
@@ -403,7 +403,7 @@ setMethod(sensitivityInfo,
 #'
 #'
 #' @examples
-#' data(Cleveland_small)
+
 #' sensitivityInfo(Cleveland_small) <- sensitivityInfo(Cleveland_small)
 #'
 #' @inheritParams cellInfo<-
@@ -428,7 +428,7 @@ setReplaceMethod("sensitivityInfo", signature = signature(object="RadioSet",valu
 #' Generic for sensitivityProfiles method
 #'
 #' @examples
-#' data(Cleveland_small)
+
 #' sensitivityProfiles(Cleveland_small)
 #'
 #' @inheritParams cellInfo
@@ -451,7 +451,7 @@ setMethod(sensitivityProfiles,
 #' A generic for the sensitivityProfiles replacement method
 #'
 #' @examples
-#' data(Cleveland_small)
+
 #' sensitivityProfiles(Cleveland_small) <- sensitivityProfiles(Cleveland_small)
 #'
 #' @inheritParams cellInfo<-
@@ -484,7 +484,7 @@ setReplaceMethod("sensitivityProfiles", signature = signature(object="RadioSet",
 #' A generic for the sensitivityMeasures  method
 #'
 #' @examples
-#' data(Cleveland_small)
+
 #' sensitivityMeasures(Cleveland_small)
 #'
 #'
@@ -506,7 +506,7 @@ setMethod(sensitivityMeasures,
 #' A generic for the radiationTypes method
 #'
 #' @examples
-#' data(Cleveland_small)
+
 #' radType <- radiationTypes(Cleveland_small)
 #' radType[1:10]
 #'
@@ -531,7 +531,7 @@ setMethod(radiationTypes,
 #'
 #'
 #' @examples
-#' data(Cleveland_small)
+
 #' radiationTypes(Cleveland_small) <- radiationTypes(Cleveland_small)
 #'
 #' @inheritParams cellInfo<-
@@ -553,7 +553,7 @@ setReplaceMethod("radiationTypes", signature = signature(object="RadioSet",value
 #' A generic for the cellNames method
 #'
 #' @examples
-#' data(Cleveland_small)
+
 #' cellNames(Cleveland_small)
 #'
 #' @inheritParams cellInfo
@@ -574,7 +574,7 @@ setMethod("cellNames",
 #' A generic for the cellNames replacement method
 #'
 #' @examples
-#' data(Cleveland_small)
+
 #' cellNames(Cleveland_small) <- cellNames(Cleveland_small)
 #'
 #' @inheritParams cellInfo<-
@@ -596,7 +596,7 @@ setReplaceMethod("cellNames", signature = signature(object="RadioSet",value="cha
 #' A generic for the fNames method
 #'
 #' @examples
-#' data(Cleveland_small)
+
 #' fNames(Cleveland_small, "rna")[1:10]
 #'
 #' @inheritParams cellInfo
@@ -634,7 +634,7 @@ setMethod("fNames",
 #' A generic for the dateCreated method
 #'
 #' @examples
-#' data(Cleveland_small)
+
 #' dateCreated(Cleveland_small)
 #'
 #' @inheritParams cellInfo
@@ -655,7 +655,7 @@ setMethod(dateCreated,
 #' A generic for the rSetName method
 #'
 #' @examples
-#' data(Cleveland_small)
+
 #' rSetName <- cSetName
 #' rSetName(Cleveland_small)
 #'
@@ -678,7 +678,7 @@ rSetName <- cSetName
 #' A generic for the pertNumber method
 #'
 #' @examples
-#' data(Cleveland_small)
+
 #' pertNumber(Cleveland_small)
 #'
 #' @inheritParams cellInfo
@@ -701,7 +701,7 @@ setMethod(pertNumber,
 #' A generic for the sensNumber method
 #'
 #' @examples
-#' data(Cleveland_small)
+
 #' sensNumber(Cleveland_small)
 #'
 #' @inheritParams cellInfo
@@ -722,7 +722,7 @@ setMethod(sensNumber,
 #' A generic for the pertNumber method
 #'
 #' @examples
-#' data(Cleveland_small)
+
 #' pertNumber(Cleveland_small) <- pertNumber(Cleveland_small)
 #'
 #' @inheritParams cellInfo<-
@@ -749,7 +749,7 @@ setReplaceMethod('pertNumber', signature = signature(object="RadioSet",value="ar
 #'
 #'
 #' @examples
-#' data(Cleveland_small)
+
 #' sensNumber(Cleveland_small) <- sensNumber(Cleveland_small)
 #'
 #' @inheritParams cellInfo<-
@@ -774,7 +774,7 @@ setReplaceMethod('sensNumber', signature = signature(object="RadioSet",value="ma
 #' @param object A \code{RadioSet} object
 #'
 #' @examples
-#' data(Cleveland_small)
+
 #' Cleveland_small
 #'
 #' @return Prints the RadioSet object to the output stream, and returns invisible NULL.
@@ -802,7 +802,7 @@ setMethod("show", signature=signature(object="RadioSet"),
 #' Returns the molecular data names for the RadioSet.
 #'
 #' @examples
-#' data(Cleveland_small)
+
 #' mDataNames(Cleveland_small)
 #'
 #' @inheritParams cellInfo
@@ -863,7 +863,7 @@ setMethod("dim", signature=signature(x="RadioSet"), function(x){
 #' to keep track of all the metadata conventions between different datasets.
 #'
 #' @examples
-#' data(Cleveland_small)
+
 #' clevelandRadiationTypes  <- radiationTypes(Cleveland_small)
 #' clevelandCells <- cellNames(Cleveland_small)
 #' RSet <- subsetTo(Cleveland_small,radiationTypes = clevelandRadiationTypes[1],
@@ -1386,7 +1386,7 @@ updateRadId <- function(rSet, new.ids = vector("character")){
 #' of data and with other studies.
 #'
 #' @examples
-#' data(Cleveland_small)
+
 #'
 #' checkRSetStructure(Cleveland_small)
 #'

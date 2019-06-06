@@ -1,0 +1,16 @@
+Package: RadioGx
+Type: Package
+Title: Analysis of Large-Scale Radiogenomic Data
+Version: 0.0.0.1
+Date: 2019-05-31
+Author: BHKLab
+Maintainer: Benjamin Haibe-Kains <benjamin.haibe.kains@utoronto.ca>
+Description: Contains a set of functions to perform large-scale analysis of radiogenomic data.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Depends: R (>= 3.5.0)
+Imports: PharmacoGx, CoreGx, Biobase, RColorBrewer, caTools, magicaxis,
+        methods, reshape2, KernSmooth, cluster, Matrix, scales
+RoxygenNote: 6.1.1
+Built: R 3.6.0; ; 2019-06-06 20:07:43 UTC; windows

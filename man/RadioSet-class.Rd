@@ -298,69 +298,49 @@ RadioSet, for proper processing of the data}
 }}
 
 \examples{
-data(Cleveland_small)
 phenoInfo(Cleveland_small, mDataType="rna")
 
 
-data(Cleveland_small)
 phenoInfo(Cleveland_small, mDataType="rna") <- phenoInfo(Cleveland_small, mDataType="rna")
 
-data(Cleveland_small)
 Cleveland_mProf <- molecularProfiles(Cleveland_small, "rna")
 Cleveland_mProf[1:10,]
 
-data(Cleveland_small)
 molecularProfiles(Cleveland_small, "rna") <- molecularProfiles(Cleveland_small, "rna")
 
-data(Cleveland_small)
 featureInfo(Cleveland_small, "rna")[1:10,]
 
-data(Cleveland_small)
 featureInfo(Cleveland_small, "rna") <- featureInfo(Cleveland_small, "rna")
 
-data(Cleveland_small)
 sensInf<- sensitivityInfo(Cleveland_small)
 sensInf[1:10,]
 
-data(Cleveland_small)
 sensitivityInfo(Cleveland_small) <- sensitivityInfo(Cleveland_small)
 
-data(Cleveland_small)
 sensitivityProfiles(Cleveland_small)
 
-data(Cleveland_small)
 sensitivityProfiles(Cleveland_small) <- sensitivityProfiles(Cleveland_small)
 
-data(Cleveland_small)
 sensitivityMeasures(Cleveland_small)
 
 
-data(Cleveland_small)
 cellNames(Cleveland_small)
 
-data(Cleveland_small)
 cellNames(Cleveland_small) <- cellNames(Cleveland_small)
 
-data(Cleveland_small)
 fNames(Cleveland_small, "rna")[1:10]
 
-data(Cleveland_small)
 dateCreated(Cleveland_small)
 
-data(Cleveland_small)
 rSetName <- cSetName
 rSetName(Cleveland_small)
 
-data(Cleveland_small)
 pertNumber(Cleveland_small)
 
-data(Cleveland_small)
 sensNumber(Cleveland_small)
 
-data(Cleveland_small)
 pertNumber(Cleveland_small) <- pertNumber(Cleveland_small)
 
-data(Cleveland_small)
 sensNumber(Cleveland_small) <- sensNumber(Cleveland_small)
 
 }

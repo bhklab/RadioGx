@@ -16,7 +16,6 @@ a \code{data.frame} with the radiation annotations
 Generic for radiationInfo method
 }
 \examples{
-data(Cleveland_small)
 radiationInfo(Cleveland_small)
 
 }
