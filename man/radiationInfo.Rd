@@ -7,7 +7,7 @@
 radiationInfo(rSet)
 }
 \arguments{
-\item{rSet}{The \code{RadioSet} to retrieve radiation info from}
+\item{rSet}{A \code{RadioSet} object}
 }
 \value{
 a \code{data.frame} with the radiation annotations

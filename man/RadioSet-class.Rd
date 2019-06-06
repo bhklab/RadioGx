@@ -91,7 +91,7 @@
 \S4method{sensNumber}{RadioSet,matrix}(object) <- value
 }
 \arguments{
-\item{cSet}{Parameter name for rSet inherited from CoreGx}
+\item{cSet}{Parameter name for parent method inherited from CoreGx}
 
 \item{object}{A \code{RadioSet} object}
 
@@ -101,20 +101,38 @@
 
 \item{mDataType}{A \code{character} with the type of molecular data to return/update}
 
+\item{object}{The \code{RadioSet} to replace gene annotations in}
+
+\item{mDataType}{The type of molecular data to be updated}
+
 \item{value}{A \code{data.frame} with the new feature annotations}
+
+\item{object}{The \code{RadioSet} to update}
 
 \item{value}{A \code{data.frame} with the new sensitivity annotations}
 
+\item{object}{The \code{RadioSet} to update}
+
 \item{value}{A \code{data.frame} with the new sensitivity profiles. If a matrix object is passed in, converted to data.frame before assignment}
 
+\item{object}{The \code{RadioSet} to update}
+
 \item{value}{A \code{character} vector of the new cell names}
+
+\item{object}{A \code{RadioSet}}
 
 \item{value}{A new 3D \code{array} with the number of perturbation experiments per radiation type and cell line, and data type}
 
 \item{value}{A new \code{data.frame} with the number of sensitivity experiments per radiation and cell line}
+
+\item{object}{A \code{RadioSet}}
 }
 \value{
 An object of the RadioSet class
+
+a \code{data.frame} with the cell annotations
+
+Updated \code{RadioSet}
 
 a \code{data.frame} with the experiment info
 
@@ -173,8 +191,6 @@ Generic for phenoInfo replace method
 Generic for molecularProfiles method
 
 Generic for molecularProfiles replace method
-
-Generic for featureInfo method
 
 Generic for featureInfo replace method
 
@@ -337,7 +353,6 @@ sensitivityInfo(Cleveland_small) <- sensitivityInfo(Cleveland_small)
 
 data(Cleveland_small)
 sensitivityProfiles(Cleveland_small)
-
 
 data(Cleveland_small)
 sensitivityProfiles(Cleveland_small) <- sensitivityProfiles(Cleveland_small)

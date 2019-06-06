@@ -7,6 +7,9 @@
 \usage{
 \S4method{show}{RadioSet}(object)
 }
+\arguments{
+\item{object}{A \code{RadioSet} object}
+}
 \value{
 Prints the RadioSet object to the output stream, and returns invisible NULL.
 }

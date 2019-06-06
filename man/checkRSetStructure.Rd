@@ -7,7 +7,7 @@
 checkRSetStructure(rSet, plotDist = FALSE, result.dir = ".")
 }
 \arguments{
-\item{rSet}{A \code{RadioSet} to be verified}
+\item{rSet}{A \code{RadiOSet} object}
 
 \item{plotDist}{Should the function also plot the distribution of molecular data?}
 
