@@ -3,7 +3,7 @@ Type: Package
 Title: Analysis of Large-Scale Radiogenomic Data 
 Version: 0.0.0.1
 Date: 2019-05-31
-Author: BHKLab
+Author: Venkata SK Manem, Petr Smirnov, Ian Smith, Meghan Lambie, Christopher Eeles, Scott Bratman, Benjamin Haibe Kains
 Maintainer: Benjamin Haibe-Kains <benjamin.haibe.kains@utoronto.ca>
 Description: Contains a set of functions to perform large-scale analysis of radiogenomic data.
 License: GPL-3
