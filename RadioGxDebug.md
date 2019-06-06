@@ -241,10 +241,15 @@ Execution **halted**
 - Changed to `radiationTypes(Cleveland_small`
 
 **Errors**
-```R
 
-```
+
 
 **Warnings**
 
-
+```R
+Warning: Failed to find topic 'phenoInfo<-'
+```
+- Problem with `@inheritParams` argument
+  - Sometimes it won't work unless you redefine the `@param`s after the `@inheritParams` statement
+  - Not sure why
+- Solution was to 
