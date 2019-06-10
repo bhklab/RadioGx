@@ -7,13 +7,13 @@
 #' @export
 
 computeD10 <- function(pars) {
-  CoreGx:::.sanitizeInput(pars = pars,
+  CoreGx::.sanitizeInput(pars = pars,
                           x_as_log = FALSE,
                           y_as_log = FALSE,
                           y_as_pct = FALSE,
                           trunc = FALSE,
                           verbose = FALSE)
-  
+
   return(.linearQuadraticInv(SF = 0.1,
                              pars = pars,
                              SF_as_log = FALSE))

@@ -45,10 +45,10 @@ combine experiments and controls when doing the summary if run on a
 perturbation dataset.
 }
 \examples{
-data(GDSCsmall)
-GDSCsmall <- summarizeMolecularProfiles(GDSCsmall,
-                    mDataType = "rna", cell.lines=cellNames(GDSCsmall),
+data(Cleveland_small)
+Cleveland_small <- summarizeMolecularProfiles(Cleveland_small,
+                    mDataType = "rna", cell.lines=cellNames(Cleveland_small),
                     summary.stat = 'median', fill.missing = TRUE, verbose=TRUE)
-GDSCsmall
+Cleveland_small
 
 }

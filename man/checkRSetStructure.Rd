@@ -7,7 +7,7 @@
 checkRSetStructure(rSet, plotDist = FALSE, result.dir = ".")
 }
 \arguments{
-\item{rSet}{A \code{RadioSet} to be verified}
+\item{rSet}{A \code{RadiOSet} object}
 
 \item{plotDist}{Should the function also plot the distribution of molecular data?}
 
@@ -23,8 +23,7 @@ that matching of cells and radiations can be properly done across different type
 of data and with other studies.
 }
 \examples{
-data(CCLEsmall)
 
-checkRSetStructure(CCLEsmall)
+checkRSetStructure(Cleveland_small)
 
 }

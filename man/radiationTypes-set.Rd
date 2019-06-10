@@ -7,7 +7,7 @@
 radiationTypes(object) <- value
 }
 \arguments{
-\item{object}{The \code{RadioSet} to update}
+\item{object}{A \code{RadioSet} object to update}
 
 \item{value}{A \code{character} vector of the new radiation names}
 }
@@ -18,7 +18,6 @@ Updated \code{RadioSet}
 A generic for the radiationTypes replacement method
 }
 \examples{
-data(CCLEsmall)
-radiationTypes(CCLEsmall) <- radiationTypes(CCLEsmall)
+radiationTypes(Cleveland_small) <- radiationTypes(Cleveland_small)
 
 }

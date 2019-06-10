@@ -7,7 +7,7 @@
 radiationInfo(rSet)
 }
 \arguments{
-\item{rSet}{The \code{RadioSet} to retrieve radiation info from}
+\item{rSet}{A \code{RadioSet} object}
 }
 \value{
 a \code{data.frame} with the radiation annotations
@@ -16,7 +16,6 @@ a \code{data.frame} with the radiation annotations
 Generic for radiationInfo method
 }
 \examples{
-data(CCLEsmall)
-radiationInfo(CCLEsmall)
+radiationInfo(Cleveland_small)
 
 }

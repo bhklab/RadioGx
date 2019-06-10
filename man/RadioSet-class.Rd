@@ -26,14 +26,14 @@
 \alias{cellNames<-,RadioSet,character-method}
 \alias{fNames,RadioSet,character-method}
 \alias{dateCreated,RadioSet-method}
-\alias{rSetName,RadioSet-method}
+\alias{cSetName,RadioSet-method}
 \alias{pertNumber,RadioSet-method}
 \alias{sensNumber,RadioSet-method}
 \alias{pertNumber<-,RadioSet,array-method}
 \alias{sensNumber<-,RadioSet,matrix-method}
 \title{A Class to Contain RadioGenomic datasets together with their curations}
 \usage{
-\S4method{cellInfo}{RadioSet}(cSet)
+\S4method{cellInfo}{RadioSet}(cSet = rSet)
 
 \S4method{cellInfo}{RadioSet,data.frame}(object) <- value
 
@@ -41,56 +41,58 @@
 
 \S4method{radiationInfo}{RadioSet,data.frame}(object) <- value
 
-\S4method{phenoInfo}{RadioSet,character}(cSet, mDataType)
+\S4method{phenoInfo}{RadioSet,character}(cSet = rSet, mDataType)
 
 \S4method{phenoInfo}{RadioSet,character,data.frame}(object,
   mDataType) <- value
 
-\S4method{molecularProfiles}{RadioSet,character}(cSet, mDataType)
+\S4method{molecularProfiles}{RadioSet,character}(cSet = rSet, mDataType)
 
 \S4method{molecularProfiles}{RadioSet,character,matrix}(object,
   mDataType) <- value
 
-\S4method{featureInfo}{RadioSet,character}(cSet, mDataType)
+\S4method{featureInfo}{RadioSet,character}(cSet = rSet, mDataType)
 
 \S4method{featureInfo}{RadioSet,character,data.frame}(object,
   mDataType) <- value
 
-\S4method{sensitivityInfo}{RadioSet}(cSet)
+\S4method{sensitivityInfo}{RadioSet}(cSet = rSet)
 
 \S4method{sensitivityInfo}{RadioSet,data.frame}(object) <- value
 
-\S4method{sensitivityProfiles}{RadioSet}(cSet)
+\S4method{sensitivityProfiles}{RadioSet}(cSet = rSet)
 
 \S4method{sensitivityProfiles}{RadioSet,data.frame}(object) <- value
 
 \S4method{sensitivityProfiles}{RadioSet,matrix}(object) <- value
 
-\S4method{sensitivityMeasures}{RadioSet}(cSet)
+\S4method{sensitivityMeasures}{RadioSet}(cSet = rSet)
 
 \S4method{radiationTypes}{RadioSet}(rSet)
 
 \S4method{radiationTypes}{RadioSet,character}(object) <- value
 
-\S4method{cellNames}{RadioSet}(cSet)
+\S4method{cellNames}{RadioSet}(cSet = rSet)
 
 \S4method{cellNames}{RadioSet,character}(object) <- value
 
-\S4method{fNames}{RadioSet,character}(cSet, mDataType)
+\S4method{fNames}{RadioSet,character}(cSet = rSet, mDataType)
 
-\S4method{dateCreated}{RadioSet}(cSet)
+\S4method{dateCreated}{RadioSet}(cSet = rSet)
 
-\S4method{rSetName}{RadioSet}(rSet)
+\S4method{cSetName}{RadioSet}(cSet = rSet)
 
-\S4method{pertNumber}{RadioSet}(cSet)
+\S4method{pertNumber}{RadioSet}(cSet = rSet)
 
-\S4method{sensNumber}{RadioSet}(cSet)
+\S4method{sensNumber}{RadioSet}(cSet = rSet)
 
 \S4method{pertNumber}{RadioSet,array}(object) <- value
 
 \S4method{sensNumber}{RadioSet,matrix}(object) <- value
 }
 \arguments{
+\item{cSet}{Parameter name for parent method inherited from CoreGx}
+
 \item{object}{A \code{RadioSet} object}
 
 \item{value}{A replacement value}
@@ -98,77 +100,13 @@
 \item{rSet}{A \code{RadioSet} object}
 
 \item{mDataType}{A \code{character} with the type of molecular data to return/update}
-
-\item{rSet}{The \code{RadioSet} to retrieve rna annotations from}
-
-\item{mDataType}{the type of molecular data}
-
-\item{object}{The \code{RadioSet} to retrieve molecular experiment annotations from}
-
-\item{mDataType}{the type of molecular data}
-
-\item{value}{a \code{data.frame} with the new experiment annotations}
-
-\item{rSet}{The \code{RadioSet} to retrieve molecular profiles from}
-
-\item{mDataType}{the type of molecular data}
-
-\item{object}{The \code{RadioSet} to replace molecular profiles in}
-
-\item{mDataType}{The type of molecular data to be updated}
-
-\item{value}{A \code{matrix} with the new profiles}
-
-\item{rSet}{The \code{RadioSet} to retrieve feature annotations from}
-
-\item{mDataType}{the type of molecular data}
-
-\item{object}{The \code{RadioSet} to replace gene annotations in}
-
-\item{mDataType}{The type of molecular data to be updated}
-
-\item{value}{A \code{data.frame} with the new feature annotations}
-
-\item{rSet}{The \code{RadioSet} to retrieve sensitivity experiment annotations from}
-
-\item{object}{The \code{RadioSet} to update}
-
-\item{value}{A \code{data.frame} with the new sensitivity annotations}
-
-\item{rSet}{The \code{RadioSet} to retrieve sensitivity experiment data from}
-
-\item{object}{The \code{RadioSet} to update}
-
-\item{value}{A \code{data.frame} with the new sensitivity profiles. If a matrix object is passed in, converted to data.frame before assignment}
-
-\item{rSet}{The \code{RadioSet}}
-
-\item{rSet}{The \code{RadioSet} to return cell names from}
-
-\item{object}{The \code{RadioSet} to update}
-
-\item{value}{A \code{character} vector of the new cell names}
-
-\item{rSet}{The \code{RadioSet}}
-
-\item{mDataType}{The molecular data type to return feature names for}
-
-\item{rSet}{A \code{RadioSet}}
-
-\item{rSet}{A \code{RadioSet}}
-
-\item{rSet}{A \code{RadioSet}}
-
-\item{object}{A \code{RadioSet}}
-
-\item{value}{A new 3D \code{array} with the number of perturbation experiments per radiation type and cell line, and data type}
-
-\item{object}{A \code{RadioSet}}
-
-\item{value}{A new \code{data.frame} with the number of sensitivity experiments per radiation and cell line}
 }
 \value{
 An object of the RadioSet class
+
+a \code{data.frame} with the cell annotations
+
+Updated \code{RadioSet}
 
 a \code{data.frame} with the experiment info
 
@@ -177,8 +115,6 @@ The updated \code{RadioSet}
 a \code{data.frame} with the experiment info
 
 Updated \code{RadioSet}
-
-a \code{data.frame} with the experiment info
 
 Updated \code{RadioSet}
 
@@ -200,6 +136,8 @@ A \code{character} vector of the feature names
 
 The date the RadioSet was created
 
+The name of the RadioSet
+
 A 3D \code{array} with the number of perturbation experiments per radiation type and cell line, and data type
 
 A \code{data.frame} with the number of sensitivity experiments per radiation type and cell line
@@ -209,15 +147,15 @@ The updated \code{RadioSet}
 The updated \code{RadioSet}
 }
 \description{
-The RadioSet (RSet) class was developed to contain and organise large 
-RadioGenomic datasets, and aid in their metanalysis. It was designed 
-primarily to allow bioinformaticians and biologists to work with data at the 
-level of genes and cell lines, providing a more naturally intuitive 
-interface and simplifying analyses between several datasets. As such, it was 
-designed to be flexible enough to hold datasets of two different natures 
-while providing a common interface. The class can accomidate datasets 
-containing both radiation dose response data, as well as datasets contaning 
-genetic profiles of cell lines pre and post treatement with compounds, known 
+The RadioSet (RSet) class was developed to contain and organise large
+RadioGenomic datasets, and aid in their metanalysis. It was designed
+primarily to allow bioinformaticians and biologists to work with data at the
+level of genes and cell lines, providing a more naturally intuitive
+interface and simplifying analyses between several datasets. As such, it was
+designed to be flexible enough to hold datasets of two different natures
+while providing a common interface. The class can accomidate datasets
+containing both radiation dose response data, as well as datasets contaning
+genetic profiles of cell lines pre and post treatement with compounds, known
 respecitively as sensitivity and perturbation datasets.
 
 Generic for phenoInfo method
@@ -227,8 +165,6 @@ Generic for phenoInfo replace method
 Generic for molecularProfiles method
 
 Generic for molecularProfiles replace method
-
-Generic for featureInfo method
 
 Generic for featureInfo replace method
 
@@ -249,6 +185,8 @@ A generic for the cellNames replacement method
 A generic for the fNames method
 
 A generic for the dateCreated method
+
+A generic for the rSetName method
 
 A generic for the pertNumber method
 
@@ -307,7 +245,7 @@ summaries, for example, whether there are IC50 values available
 
 \item \code{dateCreated}: Return the date the RadioSet was created
 
-\item \code{rSetName}: Return the name of the RadioSet
+\item \code{cSetName}: Return the name of the RadioSet
 
 \item \code{pertNumber}: Return the summary of available perturbation
 experiments
@@ -329,93 +267,80 @@ experiments
 including the \code{$name} and the session information for how the object
 was creating, detailing the exact versions of R and all the packages used}
 
-\item{\code{molecularProfiles}}{A \code{list} containing 4 \code{Biobase::ExpressionSet} 
-type object for holding data for RNA, DNA, SNP and Copy Number Variation 
-measurements respectively, with associated \code{fData} and \code{pData} 
+\item{\code{molecularProfiles}}{A \code{list} containing 4 \code{Biobase::ExpressionSet}
+type object for holding data for RNA, DNA, SNP and Copy Number Variation
+measurements respectively, with associated \code{fData} and \code{pData}
 containing the row and column metadata}
 
-\item{\code{cell}}{A \code{data.frame} containg the annotations for all the cell 
+\item{\code{cell}}{A \code{data.frame} containg the annotations for all the cell
 lines profiled in the data set, across all data types}
 
-\item{\code{radiation}}{A \code{data.frame} containg the annotations for all the radiation treatment types 
+\item{\code{radiation}}{A \code{data.frame} containg the annotations for all the radiation treatment types
 used in the in the dataset, across all data types}
 
-\item{\code{sensitivity}}{A \code{list} containing all the data for the sensitivity 
-experiments, including \code{$info}, a \code{data.frame} containing the 
-experimental info,\code{$raw} a 3D \code{array} containing raw data, 
-\code{$profiles}, a \code{data.frame} containing sensitivity profiles 
-statistics, and \code{$n}, a \code{data.frame} detailing the number of 
+\item{\code{sensitivity}}{A \code{list} containing all the data for the sensitivity
+experiments, including \code{$info}, a \code{data.frame} containing the
+experimental info,\code{$raw} a 3D \code{array} containing raw data,
+\code{$profiles}, a \code{data.frame} containing sensitivity profiles
+statistics, and \code{$n}, a \code{data.frame} detailing the number of
 experiments for each cell-radiation type pair}
 
-\item{\code{perturbation}}{A \code{list} containting \code{$n}, a \code{data.frame} 
+\item{\code{perturbation}}{A \code{list} containting \code{$n}, a \code{data.frame}
 summarizing the available perturbation data,}
 
-\item{\code{curation}}{A \code{list} containing mappings for 
-\code{cell} and \code{tissue} names used in the data set to universal 
+\item{\code{curation}}{A \code{list} containing mappings for
+\code{cell} and \code{tissue} names used in the data set to universal
 identifiers used between different RadioSet objects}
 
-\item{\code{datasetType}}{A \code{character} string of 'sensitivity', 
-'perturbation', or both detailing what type of data can be found in the 
+\item{\code{datasetType}}{A \code{character} string of 'sensitivity',
+'perturbation', or both detailing what type of data can be found in the
 RadioSet, for proper processing of the data}
 }}
 
 \examples{
-data(CCLEsmall)
-phenoInfo(CCLEsmall, mDataType="rna")
+phenoInfo(Cleveland_small, mDataType="rna")
 
 
-data(CCLEsmall)
-phenoInfo(CCLEsmall, mDataType="rna") <- phenoInfo(CCLEsmall, mDataType="rna")
+phenoInfo(Cleveland_small, mDataType="rna") <- phenoInfo(Cleveland_small, mDataType="rna")
 
-data(CCLEsmall)
-molecularProfiles(CCLEsmall, "rna")
+Cleveland_mProf <- molecularProfiles(Cleveland_small, "rna")
+Cleveland_mProf[1:10,]
 
-data(CCLEsmall)
-molecularProfiles(CCLEsmall, "rna") <- molecularProfiles(CCLEsmall, "rna")
+molecularProfiles(Cleveland_small, "rna") <- molecularProfiles(Cleveland_small, "rna")
 
-data(CCLEsmall)
-featureInfo(CCLEsmall, "rna")
+featureInfo(Cleveland_small, "rna")[1:10,]
 
-data(CCLEsmall)
-featureInfo(CCLEsmall, "rna") <- featureInfo(CCLEsmall, "rna")
+featureInfo(Cleveland_small, "rna") <- featureInfo(Cleveland_small, "rna")
 
-data(CCLEsmall)
-sensitivityInfo(CCLEsmall)
+sensInf<- sensitivityInfo(Cleveland_small)
+sensInf[1:10,]
 
-data(CCLEsmall)
-sensitivityInfo(CCLEsmall) <- sensitivityInfo(CCLEsmall)
+sensitivityInfo(Cleveland_small) <- sensitivityInfo(Cleveland_small)
 
-data(CCLEsmall)
-sensitivityProfiles(CCLEsmall)
+sensitivityProfiles(Cleveland_small)
 
-data(CCLEsmall)
-sensitivityProfiles(CCLEsmall) <- sensitivityProfiles(CCLEsmall)
+sensitivityProfiles(Cleveland_small) <- sensitivityProfiles(Cleveland_small)
 
-data(CCLEsmall)
-sensitivityMeasures(CCLEsmall)
+sensitivityMeasures(Cleveland_small)
 
-data(CCLEsmall)
-cellNames(CCLEsmall)
 
-data(CCLEsmall)
-cellNames(CCLEsmall) <- cellNames(CCLEsmall)
+cellNames(Cleveland_small)
 
-data(CCLEsmall)
-fNames(CCLEsmall, "rna")
+cellNames(Cleveland_small) <- cellNames(Cleveland_small)
 
-data(CCLEsmall)
-dateCreated(CCLEsmall)
+fNames(Cleveland_small, "rna")[1:10]
 
-data(CCLEsmall)
-pertNumber(CCLEsmall)
+dateCreated(Cleveland_small)
 
-data(CCLEsmall)
-sensNumber(CCLEsmall)
+rSetName <- cSetName
+rSetName(Cleveland_small)
 
-data(CCLEsmall)
-pertNumber(CCLEsmall) <- pertNumber(CCLEsmall)
+pertNumber(Cleveland_small)
 
-data(CCLEsmall)
-sensNumber(CCLEsmall) <- sensNumber(CCLEsmall)
+sensNumber(Cleveland_small)
+
+pertNumber(Cleveland_small) <- pertNumber(Cleveland_small)
+
+sensNumber(Cleveland_small) <- sensNumber(Cleveland_small)
 
 }

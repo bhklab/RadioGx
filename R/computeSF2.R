@@ -6,14 +6,14 @@
 #' @export
 
 computeSF2 <- function(pars) {
-  
-  CoreGx:::.sanitizeInput(pars = pars,
+
+  CoreGx::.sanitizeInput(pars = pars,
                           x_as_log = FALSE,
                           y_as_log = FALSE,
                           y_as_pct = FALSE,
                           trunc = FALSE,
                           verbose = FALSE)
-  
+
   SF <- .linearQuadratic(D = 2,
                          pars = pars,
                          SF_as_log = FALSE)

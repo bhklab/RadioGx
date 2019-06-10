@@ -7,7 +7,7 @@
 radiationTypes(rSet)
 }
 \arguments{
-\item{rSet}{The \code{RadioSet} to return radiation names from}
+\item{rSet}{A \code{RadioSet}}
 }
 \value{
 A vector of the radiation names used in the RadioSet
@@ -16,7 +16,7 @@ A vector of the radiation names used in the RadioSet
 A generic for the radiationTypes method
 }
 \examples{
-data(CCLEsmall)
-radiationTypes(CCLEsmall)
+radType <- radiationTypes(Cleveland_small)
+radType[1:10]
 
 }

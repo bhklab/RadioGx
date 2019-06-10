@@ -8,19 +8,19 @@ showSigAnnot(Sigs)
 }
 \arguments{
 \item{Sigs}{An object of the \code{RadioSig} Class, as
-returned by \code{drugPerturbationSig} or \code{drugSensitivitySig}}
+returned by \code{radPerturbationSig} or \code{radSensitivitySig}}
 }
 \value{
 Prints the RadioGx Signatures annotations to the output stream, and returns invisible NULL.
 }
 \description{
-This funtion prints out the information about the call used to compute the drug signatures, and the session info 
+This funtion prints out the information about the call used to compute the rad signatures, and the session info
 for the session in which the computation was done. Useful for determining the exact conditions used to generate signatures.
 }
 \examples{
-data(GDSCsmall)
-drug.sensitivity <- drugSensitivitySig(GDSCsmall, mDataType="rna", 
-             nthread=1, features = fNames(GDSCsmall, "rna")[1])
-showSigAnnot(drug.sensitivity)
+data(Cleveland_small)
+rad.sensitivity <- radSensitivitySig(Cleveland_small, mDataType="rna",
+             nthread=1, features = fNames(Cleveland_small, "rna")[1])
+showSigAnnot(rad.sensitivity)
 
 }

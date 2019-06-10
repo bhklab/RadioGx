@@ -4,8 +4,8 @@
 \alias{computeAUC}
 \title{computeAUC: computes AUC}
 \usage{
-computeAUC(D, SF, pars, lower, upper, trunc = TRUE, area.type = c("Fitted",
-  "Actual"), verbose = TRUE)
+computeAUC(D, SF, pars, lower, upper, trunc = TRUE, SF_as_log = TRUE,
+  area.type = c("Fitted", "Actual"), verbose = TRUE)
 }
 \arguments{
 \item{D}{vector of dosages}
@@ -20,6 +20,8 @@ computeAUC(D, SF, pars, lower, upper, trunc = TRUE, area.type = c("Fitted",
 
 \item{trunc}{should survival fractions be truncated downward to 1 if they exceed 1?}
 
+\item{SF_as_log}{A boolean indicating whether survival fraction is displayed on a log axis. Defaults to TRUE}
+
 \item{area.type}{should the AUC of the raw (D, SF) points be returned, or should the AUC of a curve fit to said points be returned instead?}
 
 \item{verbose}{how detailed should error and warning messages be? See details.}
@@ -31,6 +33,6 @@ This function computes the area under a dose-response curve of the form survival
 If lower and/or upper are missing, the function assumes their values to be the minimum and maximum D-values, respectively. For all warnings to be silent, set trunc = FALSE. For warnings to be output, set trunc = TRUE. For warnings to be output along with the arguments that triggered them, set trunc = 2.
 }
 \examples{
-computeAUC(pars = c(0.2, 0.1), lower = 0, upper = 4)
+computeAUC(D=c(0.1, 0.5, 0.7, 0.9), pars=c(0.2, 0.1), lower = 0, upper = 4) # Returns 0.7039296
 
 }
