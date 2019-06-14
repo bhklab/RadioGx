@@ -9,7 +9,8 @@
 #' @param fit_curve should the graph include a linear-quadratic curve of best fit? Defaults to TRUE
 #' @param SF_as_log should SF be expressed in log10 on the graph? Defaults to TRUE
 #' @examples plotCurve(c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
-#'     c(1.1, 0.8, 0.7, 0.45, 0.15, -0.1, -0.1, -0.4, -0.65, -0.75, -1.1))
+#'     c(1.1, 0.8, 0.7, 0.45, 0.15, -0.1, -0.1, -0.4, -0.65, -0.75, -1.1),
+#'         filename = NULL)
 #' @importFrom graphics lines plot points axis
 #' @importFrom grDevices dev.off pdf
 #' @export
