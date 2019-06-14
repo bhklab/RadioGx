@@ -21,7 +21,7 @@ Authors@R: c(
   )  
 Description: Computational tool box for radio-genomic analysis which integrates
     radio-response data, radio-biological modelling and comprehensive cell line
-    annotations for hundreds of cancer cell lines. The RadioSet class enables
+    annotations for hundreds of cancer cell lines. The 'RadioSet' class enables
     creation and manipulation of standardized datasets including information
     about cancer cells lines, radio-response assays and dose-response indicators. 
     Included methods allow fitting and plotting dose-response data using 
