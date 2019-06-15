@@ -29,7 +29,8 @@ Description: Computational tool box for radio-genomic analysis which integrates
     results. Additional functions related to fitting and plotting dose response 
     curves, quantifying statistical correlation and calculating area under the
     curve (AUC) or survival fraction (SF) are included. For more details please 
-    see the included documentation and references.
+    see the included documentation, references, as well as:
+    Manem, V. et al (2018) <doi:10.1101/449793>.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

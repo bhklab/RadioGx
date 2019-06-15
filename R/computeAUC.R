@@ -2,7 +2,7 @@
 #'
 #' @description This function computes the area under a dose-response curve of the form survival fraction SF = exp(-alpha * D - beta * D ^ 2).
 #'
-#' @examples computeAUC(D=c(0.1, 0.5, 0.7, 0.9), pars=c(0.2, 0.1), lower = 0, upper = 4) # Returns 0.7039296
+#' @examples computeAUC(D=c(0.1, 0.5, 0.7, 0.9), pars=c(0.2, 0.1), lower = 0, upper = 1) # Returns 0.7039296
 #'
 #' @param D vector of dosages
 #' @param SF vector of survival fractions
@@ -10,21 +10,24 @@
 #' @param lower lower bound of dose region to compute AUC over
 #' @param upper upper bound of dose region to compute AUC over
 #' @param trunc should survival fractions be truncated downward to 1 if they exceed 1?
-#' @param SF_as_log A boolean indicating whether survival fraction is displayed on a log axis. Defaults to TRUE
+#' @param SF_as_log A boolean indicating whether survival fraction is displayed on a log axis. Defaults to FALSE
 #' @param area.type should the AUC of the raw (D, SF) points be returned, or should the AUC of a curve fit to said points be returned instead?
 #' @param verbose how detailed should error and warning messages be? See details.
 #'
-#' @details If lower and/or upper are missing, the function assumes their values to be the minimum and maximum D-values, respectively. For all warnings to be silent, set trunc = FALSE. For warnings to be output, set trunc = TRUE. For warnings to be output along with the arguments that triggered them, set trunc = 2.
+#' @details If lower and/or upper are missing, the function assumes their values
+#'   to be the minimum and maximum D-values, respectively. For all warnings to
+#'   be silent, set trunc = FALSE. For warnings to be output, set trunc = TRUE.
+#'   For warnings to be output along with the arguments that triggered them,
+#'   set trunc = 2.
 #' @export
 #' @importFrom stats pnorm
 #' @importFrom caTools trapz
 
 # Added SF_as_log arguement with default as false to match condition on line 93
-computeAUC <- function(D, SF, pars, lower, upper, trunc = TRUE, SF_as_log = TRUE, area.type = c("Fitted", "Actual"), verbose = TRUE) {
+computeAUC <- function(D, SF, pars, lower, upper, trunc = TRUE, SF_as_log = FALSE, area.type = c("Fitted", "Actual"), verbose = TRUE) {
   area.type <- match.arg(area.type)
 
   if (!missing(SF)) {
-    print("SF")
     CoreGx::.sanitizeInput(x = D,
                             y = SF,
                             x_as_log = FALSE,
@@ -42,7 +45,6 @@ computeAUC <- function(D, SF, pars, lower, upper, trunc = TRUE, SF_as_log = TRUE
     D <- DSF[["x"]]
     SF <- DSF[["y"]]
   } else if (!missing(pars)) {
-    print("pars")
     CoreGx::.sanitizeInput(pars = pars,
                             x_as_log = FALSE,
                             y_as_log = FALSE,
@@ -62,7 +64,6 @@ computeAUC <- function(D, SF, pars, lower, upper, trunc = TRUE, SF_as_log = TRUE
   }
 
   if (!missing(lower) && !missing(upper)) {
-    print("lower & upper")
     ###TODO:: Check if this function still works correctly
     CoreGx::.sanitizeInput(pars = pars, # Added this line to resolve error returned from CoreGx
                             lower = lower,
@@ -75,7 +76,6 @@ computeAUC <- function(D, SF, pars, lower, upper, trunc = TRUE, SF_as_log = TRUE
   }
 
   if (area.type == "Fitted") {
-    print("fitted")
     if (missing(pars)) {
       pars <- unlist(linearQuadraticModel(D = D,
                                           SF = SF,
@@ -83,19 +83,15 @@ computeAUC <- function(D, SF, pars, lower, upper, trunc = TRUE, SF_as_log = TRUE
                                           verbose = verbose))
     }
     if (missing(lower)) {
-      print("missing lower")
       lower <- min(D)
     }
     if (missing(upper)) {
-      print("missing")
       upper <- max(D)
     }
 
     if (SF_as_log == TRUE) { # Modified condition to correct error
-      print("SF_as_log")
       return(pars[[1]] / 2 * (lower ^ 2 - upper ^ 2) + pars[[2]] / 3 * (lower ^ 3 - upper ^ 3))
     } else {
-      print("!SF_as_log")
       if (pars[[2]] == 0) {
         if (pars[[1]] == 0) {
           return(upper - lower)
@@ -119,7 +115,7 @@ computeAUC <- function(D, SF, pars, lower, upper, trunc = TRUE, SF_as_log = TRUE
     }
 
   } else if (area.type == "Actual") {
-    print("Actual")
+    #print("Actual")
     if (missing(SF)) {
       stop("Please pass in SF-values.")
     } else {
