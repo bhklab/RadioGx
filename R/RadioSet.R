@@ -1392,14 +1392,14 @@ updateRadId <- function(rSet, new.ids = vector("character")){
 #'
 #' @param rSet A \code{RadiOSet} object
 #' @param plotDist Should the function also plot the distribution of molecular data?
-#' @param result.dir The path to the directory for saving the plots as a string
+#' @param result.dir The path to the directory for saving the plots as a string, defaults to `tempdir()``
 #' @return Prints out messages whenever describing the errors found in the structure of the pset object passed in.
 #' @export
 #' @importFrom graphics hist
 #' @importFrom grDevices dev.off pdf
 
 checkRSetStructure <-
-  function(rSet, plotDist=FALSE, result.dir=".") {
+  function(rSet, plotDist=FALSE, result.dir=tempdir()) {
     if(!file.exists(result.dir) & plotDist) { dir.create(result.dir, showWarnings=FALSE, recursive=TRUE) }
     for( i in seq_along(rSet@molecularProfiles)) {
       profile <- rSet@molecularProfiles[[i]]
@@ -1466,13 +1466,15 @@ checkRSetStructure <-
       print("rownames of curation cell slot should be the same as cell slot (curated cell ids)")
     }
 
-    if("unique.radiation.type" %in% colnames(rSet@curation$radiation)) {
-      if(length(intersect(rSet@curation$radiation$unique.radiation.type, rownames(rSet@radiation))) != nrow(rSet@radiation)) {
-        print("rownames of radiation slot should be curated radiation ids")
-      }
-    } else {
-      print("unique.radiation.type which is curated radiation id across data set should be a column of radiation curation slot")
-    }
+    ##TODO:: Determine if rSet@curation$radiation is intended to be defined in rSet objects
+    ## It is not currently defined in rSet class defintion of this package
+    #if("unique.radiation.type" %in% colnames(rSet@curation$radiation)) {
+    #  if(length(intersect(rSet@curation$radiation$unique.radiation.type, rownames(rSet@radiation))) != nrow(rSet@radiation)) {
+    #    print("rownames of radiation slot should be curated radiation ids")
+    #  }
+    #} else {
+    #  print("unique.radiation.type which is curated radiation id across data set should be a column of radiation curation slot")
+    #}
 
 #     if("radiation.type" %in% colnames(rSet@radiation)) {
 #       if(length(intersect(rSet@curation$radiation$radiation.type, rownames(rSet@radiation))) != nrow(rSet@radiation)) {
