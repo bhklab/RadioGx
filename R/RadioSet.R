@@ -117,7 +117,7 @@ RadioSet <-  function(name,
 
     #molecularProfiles <- list("dna"=dna, "rna"=rna, "snp"=snp, "cnv"=cnv)
     for (i in seq_along(molecularProfiles)){
-        if (class(molecularProfiles[[i]]) != "ExpressionSet"){
+        if (!is(molecularProfiles[[i]], "ExpressionSet")) {
             stop(sprintf("Please provide the %s data as an ExpressionSet", names(molecularProfiles[i])))
         }else{
       Biobase::fData(molecularProfiles[[i]]) <- Biobase::fData(molecularProfiles[[i]])[rownames(Biobase::exprs(molecularProfiles[[i]])), , drop=FALSE]
@@ -125,12 +125,6 @@ RadioSet <-  function(name,
         }
 
     }
-    #if (class(cell)!="data.frame"){
-    #    stop("Please provide the cell line annotations as a data frame.")
-    #}
-    #if (class(radiation)!="data.frame"){
-    #    stop("Please provide the radiation annotations as a data frame.")
-    #}
 
     sensitivity <- list()
 
@@ -892,7 +886,7 @@ subsetTo <- function(rSet, cells=NULL, radiationTypes=NULL, molecular.data.cells
   adArgs = list(...)
   if ("exps" %in% names(adArgs)) {
   	exps <- adArgs[["exps"]]
-  	if(class(exps)=="data.frame"){
+  	if(is(exps,"data.frame")){
   		exps2 <- exps[[rSetName(rSet)]]
   		names(exps2) <- rownames(exps)
   		exps <- exps2
@@ -1488,15 +1482,15 @@ checkRSetStructure <-
       print("rownames of curation radiation slot should be the same as radiation slot (curated radiation ids)")
     }
 
-    if(class(rSet@cell) != "data.frame") {
+    if(!is(rSet@cell, "data.frame")) {
       warning("cell slot class type should be dataframe")
     }
-    if(class(rSet@radiation) != "data.frame") {
+    if(!is(rSet@radiation, "data.frame")) {
       warning("radiation slot class type should be dataframe")
     }
     if(rSet@datasetType %in% c("sensitivity", "both"))
     {
-      if(class(rSet@sensitivity$info) != "data.frame") {
+      if(!is(rSet@sensitivity$info, "data.frame")) {
         warning("sensitivity info slot class type should be dataframe")
       }
       if("cellid" %in% colnames(rSet@sensitivity$info)) {

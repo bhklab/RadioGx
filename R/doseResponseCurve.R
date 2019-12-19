@@ -85,8 +85,8 @@ function(rad.type = "radiation",
  legend.loc = "topright",
  verbose=TRUE) {
   if(!missing(rSets)){
-    if (class(rSets) != "list") {
-      if (class(rSets) == "RadioSet") {
+    if (!is(rSets, "list")) {
+      if (!is(rSets, "RadioSet")) {
         temp <- rSetName(rSets)
         rSets <- list(rSets)
         names(rSets) <- temp
@@ -114,9 +114,9 @@ function(rad.type = "radiation",
         stop("Please pass in the Survival Fractions to Plot with the Doses.")
 
       }
-      if (class(Ds) != "list") {
+      if (!is(Ds, "list")) {
         if (mode(Ds) == "numeric") {
-          if(mode(SFs)!="numeric"){
+          if(mode(SFs) != "numeric"){
             stop("Passed in 1 vector of Doses but the Survival Fractions are not numeric!")
           }
         # cleanData <- sanitizeInput(Ds,
