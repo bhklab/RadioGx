@@ -3,7 +3,7 @@
 \docType{data}
 \name{Cleveland_small}
 \alias{Cleveland_small}
-\title{Cleaveland_mut RadioSet subsetted}
+\title{Cleaveland_mut RadioSet subsetted old}
 \format{
 RadioSet object
 }
@@ -11,11 +11,11 @@ RadioSet object
 data(Cleveland_small)
 }
 \description{
-Documentation for this dataset will be added at a later date. For now I just
-need this package to pass the CRAN checks! This dataset powers the exampe
-usage in the roxygen2 documentation for CoreGx.
+This is the old version where meolecularProfiles are ExpressionSets instead
+  of SummarizedExperiments
 }
 \references{
-Lamb et al. The Connectivity Map: using gene-expression signatures to connect small molecules, genes, and disease. Science, 2006.
+Lamb et al. The Connectivity Map: using gene-expression signatures to connect
+  small molecules, genes, and disease. Science, 2006.
 }
 \keyword{datasets}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/summarizeMolecularProfiles.R
 \name{summarizeMolecularProfiles}
 \alias{summarizeMolecularProfiles}
-\title{Takes molecular data from a PharmacoSet, and summarises them
+\title{Takes molecular data from a RadioSet, and summarises them
 into one entry per drug}
 \usage{
 summarizeMolecularProfiles(
@@ -17,7 +17,7 @@ summarizeMolecularProfiles(
 )
 }
 \arguments{
-\item{rSet}{\code{PharmacoSet} The PharmacoSet to summarize}
+\item{rSet}{\code{RadioSet} The RadioSet to summarize}
 
 \item{mDataType}{\code{character} which one of the molecular data types
 to use in the analysis, out of all the molecular data types available for the rSet
@@ -41,11 +41,11 @@ returns the data unchanged as a ExpressionSet}
 \item{verbose}{\code{boolean} should messages be printed}
 }
 \value{
-\code{matrix} An updated PharmacoSet with the molecular data summarized
+\code{matrix} An updated RadioSet with the molecular data summarized
   per cell line.
 }
 \description{
-Given a PharmacoSet with molecular data, this function will summarize
+Given a RadioSet with molecular data, this function will summarize
 the data into one profile per cell line, using the chosed summary.stat. Note
 that this does not really make sense with perturbation type data, and will
 combine experiments and controls when doing the summary if run on a

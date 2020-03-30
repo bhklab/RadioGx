@@ -1,7 +1,7 @@
-#' Takes molecular data from a PharmacoSet, and summarises them
+#' Takes molecular data from a RadioSet, and summarises them
 #' into one entry per drug
 #'
-#' Given a PharmacoSet with molecular data, this function will summarize
+#' Given a RadioSet with molecular data, this function will summarize
 #' the data into one profile per cell line, using the chosed summary.stat. Note
 #' that this does not really make sense with perturbation type data, and will
 #' combine experiments and controls when doing the summary if run on a
@@ -14,7 +14,7 @@
 #'                     summary.stat = 'median', fill.missing = TRUE, verbose=TRUE)
 #' Cleveland_small
 #'
-#' @param rSet \code{PharmacoSet} The PharmacoSet to summarize
+#' @param rSet \code{RadioSet} The RadioSet to summarize
 #' @param mDataType \code{character} which one of the molecular data types
 #' to use in the analysis, out of all the molecular data types available for the rSet
 #' for example: rna, rnaseq, snp
@@ -29,7 +29,7 @@
 #' @param summarize A flag which when set to FALSE (defaults to TRUE) disables summarizing and
 #'   returns the data unchanged as a ExpressionSet
 #' @param verbose \code{boolean} should messages be printed
-#' @return \code{matrix} An updated PharmacoSet with the molecular data summarized
+#' @return \code{matrix} An updated RadioSet with the molecular data summarized
 #'   per cell line.
 #'
 #' @importFrom utils setTxtProgressBar txtProgressBar

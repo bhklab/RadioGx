@@ -1,7 +1,7 @@
 Package: RadioGx
 Type: Package
 Title: Analysis of Large-Scale Radio-Genomic Data 
-Version: 0.0.2
+Version: 1.0.0
 Date: 2019-12-19
 Authors@R: c(
   person("Venkata","Manem", email = "mail2mvskumar@gmail.com", 
@@ -36,7 +36,6 @@ Encoding: UTF-8
 LazyData: true
 Depends: R (>= 3.5.0), CoreGx
 Imports:
-    PharmacoGx,
     SummarizedExperiment,
     S4Vectors,
     Biobase, 
@@ -44,9 +43,11 @@ Imports:
     caTools, 
     magicaxis, 
     methods, 
-    reshape2, 
-    KernSmooth,
-    cluster,
-    Matrix,
-    scales
+    reshape2,
+    scales,
+    testthat
+Suggests:
+    rmarkdown,
+    knitr,
+    pander
 RoxygenNote: 7.1.0

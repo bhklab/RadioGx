@@ -199,7 +199,7 @@ function(rad.type = "radiation",
                   legend.values[[i]] <- paste(legend.values[i][[1]],sprintf("%s = %s", "beta", round(linQuad_params[2], digits=2)), sep=", ")
                 }
                 if(any(grepl("rsquared", x=legends.label))){
-                  legend.values[[i]] <- paste(legend.values[i][[1]],sprintf("%s = %s", "R^2", round(CoreGx::examineGOF(linQuad_params)[1], digits=2)), sep=", ")
+                  legend.values[[i]] <- paste(legend.values[i][[1]],sprintf("%s = %s", "R^2", round(CoreGx::.examineGOF(linQuad_params)[1], digits=2)), sep=", ")
                 }
               } else {
                 legend.values[[i]] <- ""
@@ -226,7 +226,7 @@ function(rad.type = "radiation",
                     legend.values2[[i]] <- paste(legend.values2[i][[1]],sprintf("%s = %s", "beta", round(linQuad_params[2], digits=2)), sep=", ")
                   }
                   if(any(grepl("rsquared", x=legends.label))){
-                    legend.values2[[i]] <- paste(legend.values2[i][[1]],sprintf("%s = %s", "R^2", round(CoreGx::examineGOF(linQuad_params)[1], digits=2)), sep=", ")
+                    legend.values2[[i]] <- paste(legend.values2[i][[1]],sprintf("%s = %s", "R^2", round(CoreGx::.examineGOF(linQuad_params)[1], digits=2)), sep=", ")
                   }
                 }
               } else {
@@ -259,7 +259,7 @@ function(rad.type = "radiation",
             legend.values2[[i]] <- paste(legend.values2[i][[1]],sprintf("%s = %s", "beta", round(linQuad_params[2], digits=2)), sep=", ")
           }
           if(any(grepl("rsquared", x=legends.label))){
-            legend.values2[[i]] <- paste(legend.values2[i][[1]],sprintf("%s = %s", "R^2", round(CoreGx::examineGOF(linQuad_params)[1], digits=2)), sep=", ")
+            legend.values2[[i]] <- paste(legend.values2[i][[1]],sprintf("%s = %s", "R^2", round(CoreGx::.examineGOF(linQuad_params)[1], digits=2)), sep=", ")
           }
         } else{ legend.values2[[i]] <- ""}
 
@@ -333,12 +333,12 @@ function(rad.type = "radiation",
         lines(doses[[i]], responses[[i]], lty=1, lwd=lwd, col=mycol[i])
       }, "Fitted"={
         linQuad_params <- linearQuadraticModel(D = doses[[i]], SF = responses[[i]])
-        x_vals <- CoreGx::.GetSupportVec(c(0,doses[[i]]))
+        x_vals <- CoreGx::.getSupportVec(c(0,doses[[i]]))
         lines(x_vals, (.linearQuadratic(x_vals, pars=linQuad_params, SF_as_log=FALSE)),lty=1, lwd=lwd, col=mycol[i])
       },"Both"={
       # lines(doses[[i]],responses[[i]],lty=1,lwd=lwd,col = mycol[i])
         linQuad_params <- linearQuadraticModel(D = doses[[i]], SF = responses[[i]])
-        x_vals <- CoreGx::.GetSupportVec(c(0,doses[[i]]))
+        x_vals <- CoreGx::.getSupportVec(c(0,doses[[i]]))
         lines(x_vals, (.linearQuadratic(x_vals, pars=linQuad_params, SF_as_log=FALSE)),lty=1, lwd=lwd, col=mycol[i])
       })
       if (length(legend.values)){
