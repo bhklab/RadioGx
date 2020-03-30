@@ -57,9 +57,6 @@
 #' methods. For a much more detailed instruction on creating RadioSets, please
 #' see the "CreatingRadioSet" vignette.
 #'
-#' @examples
-#' ## For help creating a RadioSet object, please see the following vignette:
-#' browseVignettes("PharmacoGx")
 #'
 #'@inheritParams CoreGx::CoreSet
 # @param name A \code{character} string detailing the name of the dataset
