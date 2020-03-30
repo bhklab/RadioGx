@@ -87,7 +87,7 @@ function(rad.type = "radiation",
   if(!missing(rSets)){
     if (!is(rSets, "list")) {
       if (!is(rSets, "RadioSet")) {
-        temp <- rSetName(rSets)
+        temp <- name(rSets)
         rSets <- list(rSets)
         names(rSets) <- temp
       } else {
@@ -176,7 +176,7 @@ function(rad.type = "radiation",
         exp_i <- which(sensitivityInfo(rSets[[i]])[ ,"cellid"] == cellline & sensitivityInfo(rSets[[i]])[ ,"radiation.type"] == rad.type)
         if(length(exp_i) > 0) {
           if (summarize.replicates) {
-            rSetNames[[i]] <- rSetName(rSets[[i]])
+            rSetNames[[i]] <- name(rSets[[i]])
             if (length(exp_i) == 1) {
               drug.responses <- as.data.frame(cbind("Dose"=as.numeric(as.vector(rSets[[i]]@sensitivity$raw[exp_i, , "Dose"])),
                 "Viability"=as.numeric(as.vector(rSets[[i]]@sensitivity$raw[exp_i, , "Viability"])), stringsAsFactors=FALSE))
@@ -208,7 +208,7 @@ function(rad.type = "radiation",
           } else {
             for (exp in exp_i) {
               j <- j + 1
-              rSetNames[[j]] <- rSetName(rSets[[i]])
+              rSetNames[[j]] <- name(rSets[[i]])
 
               drug.responses <- as.data.frame(cbind("Dose"=as.numeric(as.vector(rSets[[i]]@sensitivity$raw[exp, , "Dose"])),
                 "Viability"=as.numeric(as.vector(rSets[[i]]@sensitivity$raw[exp, , "Viability"])), stringsAsFactors=FALSE))

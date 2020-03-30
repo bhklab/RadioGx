@@ -4,8 +4,14 @@
 \alias{plotCurve}
 \title{Plot radiation dose-response curve}
 \usage{
-plotCurve(D, SF, pars, filename = "dose_response_plot.pdf",
-  fit_curve = TRUE, SF_as_log = TRUE)
+plotCurve(
+  D,
+  SF,
+  pars,
+  filename = "dose_response_plot.pdf",
+  fit_curve = TRUE,
+  SF_as_log = TRUE
+)
 }
 \arguments{
 \item{D}{vector of radiation doses}

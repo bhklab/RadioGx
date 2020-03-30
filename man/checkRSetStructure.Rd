@@ -4,10 +4,10 @@
 \alias{checkRSetStructure}
 \title{A function to verify the structure of a RadioSet}
 \usage{
-checkRSetStructure(rSet, plotDist = FALSE, result.dir = tempdir())
+checkRSetStructure(object, plotDist = FALSE, result.dir = tempdir())
 }
 \arguments{
-\item{rSet}{A \code{RadiOSet} object}
+\item{object}{A \code{RadiOSet} object}
 
 \item{plotDist}{Should the function also plot the distribution of molecular data?}
 

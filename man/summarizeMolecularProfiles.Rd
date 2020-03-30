@@ -5,15 +5,22 @@
 \title{Takes molecular data from a PharmacoSet, and summarises them
 into one entry per drug}
 \usage{
-summarizeMolecularProfiles(rSet, mDataType, cell.lines, features,
+summarizeMolecularProfiles(
+  rSet,
+  mDataType,
+  cell.lines,
+  features,
   summary.stat = c("mean", "median", "first", "last", "and", "or"),
-  fill.missing = TRUE, summarize = TRUE, verbose = TRUE)
+  fill.missing = TRUE,
+  summarize = TRUE,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{rSet}{\code{PharmacoSet} The PharmacoSet to summarize}
 
 \item{mDataType}{\code{character} which one of the molecular data types
-to use in the analysis, out of all the molecular data types available for the pset
+to use in the analysis, out of all the molecular data types available for the rSet
 for example: rna, rnaseq, snp}
 
 \item{cell.lines}{\code{character} The cell lines to be summarized.

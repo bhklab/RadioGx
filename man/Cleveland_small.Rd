@@ -4,7 +4,9 @@
 \name{Cleveland_small}
 \alias{Cleveland_small}
 \title{Cleaveland_mut RadioSet subsetted}
-\format{RadioSet object}
+\format{
+RadioSet object
+}
 \usage{
 data(Cleveland_small)
 }

@@ -20,4 +20,5 @@ Generic for radiationInfo replace method
 \examples{
 radiationInfo(Cleveland_small) <- radiationInfo(Cleveland_small)
 
+
 }

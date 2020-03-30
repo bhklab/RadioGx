@@ -4,8 +4,17 @@
 \alias{computeAUC}
 \title{computeAUC: computes AUC}
 \usage{
-computeAUC(D, SF, pars, lower, upper, trunc = TRUE, SF_as_log = FALSE,
-  area.type = c("Fitted", "Actual"), verbose = TRUE)
+computeAUC(
+  D,
+  SF,
+  pars,
+  lower,
+  upper,
+  trunc = TRUE,
+  SF_as_log = FALSE,
+  area.type = c("Fitted", "Actual"),
+  verbose = TRUE
+)
 }
 \arguments{
 \item{D}{vector of dosages}

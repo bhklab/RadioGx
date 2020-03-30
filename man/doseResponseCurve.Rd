@@ -4,12 +4,26 @@
 \alias{doseResponseCurve}
 \title{Plot drug response curve of a given drug and a given cell for a list of rSets (objects of the RadioSet class).}
 \usage{
-doseResponseCurve(rad.type = "radiation", cellline, rSets = list(),
-  Ds = list(), SFs = list(), trunc = TRUE,
-  legends.label = c("alpha", "beta", "rsquared"), ylim = c(0, 100),
-  xlim, mycol, title, plot.type = c("Fitted", "Actual", "Both"),
-  summarize.replicates = TRUE, lwd = 1, cex = 0.7, cex.main = 0.9,
-  legend.loc = "topright", verbose = TRUE)
+doseResponseCurve(
+  rad.type = "radiation",
+  cellline,
+  rSets = list(),
+  Ds = list(),
+  SFs = list(),
+  trunc = TRUE,
+  legends.label = c("alpha", "beta", "rsquared"),
+  ylim = c(0, 100),
+  xlim,
+  mycol,
+  title,
+  plot.type = c("Fitted", "Actual", "Both"),
+  summarize.replicates = TRUE,
+  lwd = 1,
+  cex = 0.7,
+  cex.main = 0.9,
+  legend.loc = "topright",
+  verbose = TRUE
+)
 }
 \arguments{
 \item{rad.type}{[string] The type(s) of radiation dosage to be

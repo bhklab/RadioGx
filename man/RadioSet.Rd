@@ -4,22 +4,29 @@
 \alias{RadioSet}
 \title{RadioSet constructor}
 \usage{
-RadioSet(name, molecularProfiles = list(), cell = data.frame(),
-  radiation = data.frame(), sensitivityInfo = data.frame(),
+RadioSet(
+  name,
+  molecularProfiles = list(),
+  cell = data.frame(),
+  radiation = data.frame(),
+  sensitivityInfo = data.frame(),
   sensitivityRaw = array(dim = c(0, 0, 0)),
-  sensitivityProfiles = matrix(), sensitivityN = matrix(nrow = 0, ncol
-  = 0), perturbationN = array(NA, dim = c(0, 0, 0)),
-  curationCell = data.frame(), curationTissue = data.frame(),
+  sensitivityProfiles = matrix(),
+  sensitivityN = matrix(nrow = 0, ncol = 0),
+  perturbationN = array(NA, dim = c(0, 0, 0)),
+  curationCell = data.frame(),
+  curationTissue = data.frame(),
   datasetType = c("sensitivity", "perturbation", "both"),
-  verify = TRUE)
+  verify = TRUE
+)
 }
 \arguments{
 \item{name}{A \code{character} string detailing the name of the dataset}
 
-\item{molecularProfiles}{A \code{list} of ExpressionSet objects containing
-molecular profiles}
+\item{molecularProfiles}{A \code{list} of SummarizedExperiment objects containing
+molecular profiles for each molecular data type.}
 
-\item{cell}{A \code{data.frame} containg the annotations for all the cell
+\item{cell}{A \code{data.frame} containing the annotations for all the cell
 lines profiled in the data set, across all data types}
 
 \item{radiation}{A \code{data.frame} containg the annotations for all the radiations
@@ -28,24 +35,29 @@ profiled in the data set, across all data types}
 \item{sensitivityInfo}{A \code{data.frame} containing the information for the
 sensitivity experiments}
 
-\item{sensitivityRaw}{A 3 Dimensional \code{array} contaning the raw radiation
-dose – response data for the sensitivity experiments}
+\item{sensitivityRaw}{A 3 Dimensional \code{array} contaning the raw drug
+dose response data for the sensitivity experiments}
 
-\item{sensitivityProfiles}{\code{data.frame} containing radiation sensitivity profile
+\item{sensitivityProfiles}{\code{data.frame} containing drug sensitivity profile 
 statistics such as IC50 and AUC}
 
-\item{sensitivityN, perturbationN}{A \code{data.frame} summarizing the
+\item{sensitivityN}{A \code{data.frame} summarizing the
+available sensitivity/perturbation data}
+
+\item{perturbationN}{A \code{data.frame} summarizing the
 available sensitivity/perturbation data}
 
 \item{curationCell, curationTissue}{A \code{data.frame} mapping
 the names for radiations, cells and tissues used in the data set to universal
-identifiers used between different RadioSet objects}
-
-\item{datasetType}{A \code{character} string of 'sensitivity',
+identifiers used between different RadioSet objects
 'preturbation', or both detailing what type of data can be found in the
 RadioSet, for proper processing of the data}
 
-\item{verify}{\code{boolean} Should the function verify the RadioSet and
+\item{datasetType}{A \code{character} string of 'sensitivity',
+'preturbation', or both detailing what type of data can be found in the
+CoreSet, for proper processing of the data}
+
+\item{verify}{\code{boolean} Should the function verify the CoreSet and
 print out any errors it finds after construction?}
 }
 \value{

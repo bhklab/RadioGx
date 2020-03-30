@@ -6,13 +6,21 @@
 other molecular profile) and radiation dose response, for use in radiation sensitivity
 analysis.}
 \usage{
-radSensitivitySig(rSet, mDataType, radiation.types, features,
+radSensitivitySig(
+  rSet,
+  mDataType,
+  radiation.types,
+  features,
   sensitivity.measure = "AUC_recomputed",
-  molecular.summary.stat = c("mean", "median", "first", "last", "or",
-  "and"), sensitivity.summary.stat = c("mean", "median", "first",
-  "last"), returnValues = c("estimate", "pvalue", "fdr"),
-  sensitivity.cutoff, standardize = c("SD", "rescale", "none"),
-  nthread = 1, verbose = TRUE, ...)
+  molecular.summary.stat = c("mean", "median", "first", "last", "or", "and"),
+  sensitivity.summary.stat = c("mean", "median", "first", "last"),
+  returnValues = c("estimate", "pvalue", "fdr"),
+  sensitivity.cutoff,
+  standardize = c("SD", "rescale", "none"),
+  nthread = 1,
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{rSet}{[PharmacoSet] a PharmacoSet of the perturbation experiment type}

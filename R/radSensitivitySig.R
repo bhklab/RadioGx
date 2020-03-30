@@ -82,7 +82,7 @@ radSensitivitySig <- function(rSet,
   if (!(mDataType %in% names(rSet@molecularProfiles))) {
     stop (sprintf("Invalid mDataType for %s, choose among: %s", rSet@annotation$name, paste(names(rSet@molecularProfiles), collapse=", ")))
   }
-  switch (Biobase::annotation(rSet@molecularProfiles[[mDataType]]),
+  switch (S4Vectors::metadata(rSet@molecularProfiles[[mDataType]])$annotation,
     "mutation" = {
       if (!is.element(molecular.summary.stat, c("or", "and"))) {
         stop ("Molecular summary statistic for mutation must be either 'or' or 'and'")
@@ -107,7 +107,7 @@ radSensitivitySig <- function(rSet,
       if (!is.element(molecular.summary.stat, c("mean", "median", "first", "last"))) {
         stop ("Molecular summary statistic for rna must be either 'mean', 'median', 'first' or 'last'")
       }},
-      stop (sprintf("No summary statistic for %s has been implemented yet", Biobase::annotation(rSet@molecularProfiles[[mDataType]])))
+      stop (sprintf("No summary statistic for %s has been implemented yet", S4Vectors::metadata(rSet@molecularProfiles[[mDataType]])$annotation))
       )
 
   if (!is.element(sensitivity.summary.stat, c("mean", "median", "first", "last"))) {
@@ -166,7 +166,7 @@ radSensitivitySig <- function(rSet,
 
     if(!is.null(dots[["mProfiles"]])){
       mProfiles <- dots[["mProfiles"]]
-      Biobase::exprs(rSet@molecularProfiles[[mDataType]]) <- mProfiles[features, colnames(rSet@molecularProfiles[[mDataType]]), drop = FALSE]
+      SummarizedExperiment::assay(rSet@molecularProfiles[[mDataType]]) <- mProfiles[features, colnames(rSet@molecularProfiles[[mDataType]]), drop = FALSE]
 
     }
 
@@ -218,7 +218,7 @@ radSensitivitySig <- function(rSet,
       drug.sensitivity[rownames(featureInfo(rSet, mDataType)[features,, drop = FALSE]), names(res), j] <- ttt
     }
 
-    drug.sensitivity <- RadioSig(drug.sensitivity, PSetName = rSetName(rSet), Call ="as.character(match.call())", SigType='Sensitivity')
+    drug.sensitivity <- RadioSig(drug.sensitivity, PSetName = name(rSet), Call ="as.character(match.call())", SigType='Sensitivity')
 
     return(drug.sensitivity)
   }

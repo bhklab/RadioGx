@@ -4,11 +4,17 @@
 \alias{subsetTo}
 \title{A function to subset a RadioSet to data containing only specified radiations, cells and genes}
 \usage{
-subsetTo(rSet, cells = NULL, radiationTypes = NULL,
-  molecular.data.cells = NULL, keep.controls = TRUE, ...)
+subsetTo(
+  object,
+  cells = NULL,
+  radiationTypes = NULL,
+  molecular.data.cells = NULL,
+  keep.controls = TRUE,
+  ...
+)
 }
 \arguments{
-\item{rSet}{A \code{RadioSet} to be subsetted}
+\item{object}{A \code{RadioSet} to be subsetted}
 
 \item{cells}{A list or vector of cell names as used in the dataset to which
 the object will be subsetted. If left blank, then all cells will be left in
