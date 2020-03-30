@@ -70,8 +70,3 @@ objects returned by this constructor are expected to work with the RadioSet
 methods. For a much more detailed instruction on creating RadioSets, please
 see the "CreatingRadioSet" vignette.
 }
-\examples{
-## For help creating a RadioSet object, please see the following vignette:
-browseVignettes("PharmacoGx")
-
-}
