@@ -4,10 +4,10 @@
 \alias{radiationInfo}
 \title{radiationInfo Generic}
 \usage{
-radiationInfo(rSet)
+radiationInfo(object)
 }
 \arguments{
-\item{rSet}{A \code{RadioSet} object}
+\item{object}{A \code{RadioSet} object}
 }
 \value{
 a \code{data.frame} with the radiation annotations

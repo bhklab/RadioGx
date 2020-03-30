@@ -8,11 +8,11 @@
 #' perturbation dataset.
 #'
 #' @examples
-#' data(Cleveland_small)
-#' Cleveland_small <- summarizeMolecularProfiles(Cleveland_small,
-#'                     mDataType = "rna", cell.lines=cellNames(Cleveland_small),
+#' data(clevelandSmall)
+#' clevelandSmall <- summarizeMolecularProfiles(clevelandSmall,
+#'                     mDataType = "rna", cell.lines=cellNames(clevelandSmall),
 #'                     summary.stat = 'median', fill.missing = TRUE, verbose=TRUE)
-#' Cleveland_small
+#' clevelandSmall
 #'
 #' @param rSet \code{RadioSet} The RadioSet to summarize
 #' @param mDataType \code{character} which one of the molecular data types

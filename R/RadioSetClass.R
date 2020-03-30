@@ -219,14 +219,14 @@ setReplaceMethod("cellInfo", signature = signature(object="RadioSet",value="data
 #' @examples
 #' radiationInfo(clevelandSmall)
 #'
-#' @param rSet A \code{RadioSet} object
+#' @param object A \code{RadioSet} object
 #'
 #' @return a \code{data.frame} with the radiation annotations
-setGeneric("radiationInfo", function(rSet) standardGeneric("radiationInfo"))
+setGeneric("radiationInfo", function(object) standardGeneric("radiationInfo"))
 #' @describeIn RadioSet Returns the annotations for all the radiations tested in the RadioSet
 #' @export
-setMethod(radiationInfo, "RadioSet", function(rSet){
-  rSet@radiation
+setMethod(radiationInfo, "RadioSet", function(object){
+  object@radiation
 })
 
 #' radiationInfo<- Generic
@@ -563,12 +563,12 @@ setMethod(sensitivityMeasures, "RadioSet", function(object){
 #' @param object A \code{RadioSet}
 #'
 #' @return A vector of the radiation names used in the RadioSet
-setGeneric("radiationTypes", function(rSet) standardGeneric("radiationTypes"))
+setGeneric("radiationTypes", function(object) standardGeneric("radiationTypes"))
 #'
 #' @describeIn RadioSet Return the names of the radiations used in the RadioSet
 #' @export
-setMethod(radiationTypes, "RadioSet", function(rSet){
-  rownames(radiationInfo(rSet))
+setMethod(radiationTypes, "RadioSet", function(object){
+  rownames(radiationInfo(object))
 })
 
 #' radiationTypes<- Generic
@@ -659,7 +659,7 @@ setReplaceMethod("cellNames",
 #' @export
 setMethod("fNames",
           signature("RadioSet", "character"),
-          function(object=rSet, mDataType){
+          function(object, mDataType){
   callNextMethod(object, mDataType)
 })
 
@@ -924,7 +924,7 @@ setMethod("dim", signature=signature(x="RadioSet"), function(x){
 #' @examples
 #' clevelandRadiationTypes  <- radiationTypes(clevelandSmall)
 #' clevelandCells <- cellNames(clevelandSmall)
-#' RSet <- subsetTo(clevelandSmall,radiationTypes = clevelandRadiationTypes[1],
+#' RSet <- subsetTo(clevelandSmall, radiationTypes = clevelandRadiationTypes[1],
 #'   cells = clevelandCells[1])
 #' RSet
 #'
@@ -1006,10 +1006,12 @@ subsetTo <- function(object, cells=NULL, radiationTypes=NULL, molecular.data.cel
     radiationTypes_index <- NULL
     if(object@datasetType=="perturbation" || object@datasetType=="both"){
       if(length(radiationTypes) != 0) {
-        if (!all(radiationTypes %in% drugNames(object))){
-          stop("Some of the drug names passed to function did not match to names in the RadioSet. Please ensure you are using drug names as returned by the drugNames function")
+        if (!all(radiationTypes %in% radiationTypes(object))) {
+          stop("Some of the radiation types passed to function did not match
+               to names in the RadioSet. Please ensure you are using radiation
+               names as returned by the radiations function")
         }
-        radiationTypes_index <- which(SummarizedExperiment::colData(SE)[["drugid"]] %in% radiationTypes)
+        radiationTypes_index <- which(SummarizedExperiment::colData(SE)[["radiation.type"]] %in% radiationTypes)
         # if (length(radiationTypes_index)==0){
         #         stop("No radiationTypes matched")
         #       }

@@ -18,9 +18,9 @@ This funtion prints out the information about the call used to compute the rad s
 for the session in which the computation was done. Useful for determining the exact conditions used to generate signatures.
 }
 \examples{
-data(Cleveland_small)
-rad.sensitivity <- radSensitivitySig(Cleveland_small, mDataType="rna",
-             nthread=1, features = fNames(Cleveland_small, "rna")[1])
+data(clevelandSmall)
+rad.sensitivity <- radSensitivitySig(clevelandSmall, mDataType="rna",
+             nthread=1, features = fNames(clevelandSmall, "rna")[1])
 showSigAnnot(rad.sensitivity)
 
 }

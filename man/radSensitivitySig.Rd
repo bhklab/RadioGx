@@ -75,10 +75,10 @@ coefficient, in a 3 dimensional array, with genes in the first direction,
 drugs in the second, and the selected return values in the third.
 }
 \examples{
-data(Cleveland_small)
-rad.sensitivity <- radSensitivitySig(Cleveland_small, mDataType="rna",
-             nthread=1, features = fNames(Cleveland_small, "rna")[1],
-             radiation.types=radiationTypes(Cleveland_small))
+data(clevelandSmall)
+rad.sensitivity <- radSensitivitySig(clevelandSmall, mDataType="rna",
+             nthread=1, features = fNames(clevelandSmall, "rna")[1],
+             radiation.types=radiationTypes(clevelandSmall))
 print(rad.sensitivity)
 
 }

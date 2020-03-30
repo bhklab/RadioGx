@@ -16,9 +16,9 @@ Prints the RadioGx Signatures object to the output stream, and returns invisible
 Show RadioGx Signatures
 }
 \examples{
-data(Cleveland_small)
-rad.sensitivity <- radSensitivitySig(Cleveland_small, mDataType="rna",
-             nthread=1, features = fNames(Cleveland_small, "rna")[1])
+data(clevelandSmall)
+rad.sensitivity <- radSensitivitySig(clevelandSmall, mDataType="rna",
+             nthread=1, features = fNames(clevelandSmall, "rna")[1])
 rad.sensitivity
 
 }

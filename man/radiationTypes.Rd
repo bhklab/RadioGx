@@ -4,7 +4,7 @@
 \alias{radiationTypes}
 \title{radiationTypes Generic}
 \usage{
-radiationTypes(rSet)
+radiationTypes(object)
 }
 \arguments{
 \item{object}{A \code{RadioSet}}

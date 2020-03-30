@@ -39,7 +39,7 @@
 
 \S4method{cellInfo}{RadioSet,data.frame}(object) <- value
 
-\S4method{radiationInfo}{RadioSet}(rSet)
+\S4method{radiationInfo}{RadioSet}(object)
 
 \S4method{radiationInfo}{RadioSet,data.frame}(object) <- value
 
@@ -69,7 +69,7 @@
 
 \S4method{sensitivityMeasures}{RadioSet}(object)
 
-\S4method{radiationTypes}{RadioSet}(rSet)
+\S4method{radiationTypes}{RadioSet}(object)
 
 \S4method{radiationTypes}{RadioSet,character}(object) <- value
 
@@ -77,7 +77,7 @@
 
 \S4method{cellNames}{RadioSet,character}(object) <- value
 
-\S4method{fNames}{RadioSet,character}(object = rSet, mDataType)
+\S4method{fNames}{RadioSet,character}(object, mDataType)
 
 \S4method{fNames}{RadioSet,character,character}(object, mDataType) <- value
 
