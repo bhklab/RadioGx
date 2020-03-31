@@ -22,7 +22,6 @@
 #' @export
 #' @importFrom stats pnorm
 #' @importFrom caTools trapz
-
 # Added SF_as_log arguement with default as false to match condition on line 93
 computeAUC <- function(D, SF, pars, lower, upper, trunc = TRUE, SF_as_log = FALSE, area.type = c("Fitted", "Actual"), verbose = TRUE) {
   area.type <- match.arg(area.type)

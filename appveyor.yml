@@ -31,9 +31,9 @@ environment:
 build_script:
   - travis-tool.sh install_deps
   - travis-tool.sh bioc_install S4Vectors
+  - travis-tool.sh bioc_install SummarizedExperiment
   - travis-tool.sh bioc_install piano
   - travis-tool.sh bioc_install lsa
-  - travis-tool.sh bioc_install SummarizedExperiment
   - travis-tool.sh bioc_install GenomeInfoDbData
   - travis-tool.sh bioc_install GenomeInfoDb
 

@@ -4,7 +4,6 @@
 #' @param pars parameters (alpha, beta) in equation y = exp(-alpha * x - beta * x ^ 2)
 #' @examples computeSF2(c(0.2, 0.1))
 #' @export
-
 computeSF2 <- function(pars) {
 
   CoreGx::.sanitizeInput(pars = pars,

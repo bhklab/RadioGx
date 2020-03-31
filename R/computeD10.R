@@ -5,7 +5,6 @@
 #' @details The units of the returned dose are the inverses of the units of the alpha and beta passed in.
 #' @examples computeD10(c(0.2, 0.1))
 #' @export
-
 computeD10 <- function(pars) {
   CoreGx::.sanitizeInput(pars = pars,
                           x_as_log = FALSE,

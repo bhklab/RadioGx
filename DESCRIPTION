@@ -32,6 +32,8 @@ Description: Computational tool box for radio-genomic analysis which integrates
     see the included documentation, references, as well as:
     Manem, V. et al (2018) <doi:10.1101/449793>.
 License: GPL-3
+VignetteBuilder: knitr
+VignetteEngine: knitr::rmarkdown
 Encoding: UTF-8
 LazyData: true
 Depends: R (>= 3.6.0), CoreGx
@@ -45,10 +47,15 @@ Imports:
     methods, 
     reshape2,
     scales,
+    parallel,
+    grDevices,
+    graphics,
+    stats,
+    utils,
     testthat
 Suggests:
     rmarkdown,
     knitr,
     pander
-biocViews: Software, Pharmacogenetics
+biocViews: Software, Pharmacogenetics, QualityControl, Survival
 RoxygenNote: 7.1.0

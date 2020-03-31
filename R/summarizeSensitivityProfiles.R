@@ -96,7 +96,6 @@ summarizeSensitivityProfiles <- function(
   pp_dd <- cbind(pp[,c("cellid", "radiation.type")],
                  "sensitivity.measure"=dd[, sensitivity.measure])
 
-
   summary.function <- function(x) {
     if(all(is.na(x))){
       return(NA_real_)
@@ -120,7 +119,6 @@ summarizeSensitivityProfiles <- function(
         "min" = {
           return(min(as.numeric(x), na.rm=TRUE))
         })
-
   }
 
   pp_dd <- pp_dd[pp_dd[,"cellid"]%in%cell.lines &

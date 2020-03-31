@@ -1,31 +1,30 @@
-########################
-## Benjamin Haibe-Kains & Petr Smirnov
-## October 23, 2013
-########################
-
-#' @importFrom stats sd
-#' @importFrom stats complete.cases
-#' @importFrom stats lm
-#' @importFrom stats glm
-#' @importFrom stats anova
-#' @importFrom stats pf
-#' @importFrom stats formula
-#' @importFrom stats var
+#' Calcualte the gene drug sensitivity score
+#'
+#' @param x numeric vector of gene expression values
+#' @param type vector of factors specifying the cell lines or type types
+#' @param batch vector of factors specifying the batch
+#' @param drugpheno \code{numeric} vector of drug sensitivity values (e.g., IC50 or AUC)
+#' @param duration numeric vector of experiment duration in hours
+#' @param interaction.typexgene Should interaction between gene expression and cell/type type be computed? Default set to FALSE
+#' @param model Should the full linear model be returned? Default set to FALSE
+#'
+#' @return A \code{numeric} vector reporting the effect size (estimate of the
+#'   coefficient of drug concentration), standard error (se), sample size (n),
+#'   t statistic, and F statistics and its corresponding p-value
+#'
+#' @importFrom stats sd complete.cases lm glm anova pf formula var
 #' @importFrom scales rescale
-
-geneDrugSensitivity <- function(x, type, batch, drugpheno, interaction.typexgene=FALSE, model=FALSE,  standardize=c("SD", "rescale", "none"), verbose=FALSE) {
-## input:
-##  x: numeric vector of gene expression values
-##  type: vector of factors specifying the cell lines or type types
-##  batch: vector of factors specifying the batch
-##  drugpheno: numeric vector of drug sensitivity values (e.g., IC50 or AUC)
-##  duration: numeric vector of experiment duration in hours
-##  interaction.typexgene: Should interaction between gene expression and cell/type type be computed? Default set to FALSE
-##  model: Should the full linear model be returned? Default set to FALSE
-##
-## output:
-##  vector reporting the effect size (estimateof the coefficient of drug concentration), standard error (se), sample size (n), t statistic, and F statistics and its corresponding p-value
-
+#' @export
+#' @keywords internal
+geneDrugSensitivity <- function(x,
+                                type,
+                                batch,
+                                drugpheno,
+                                interaction.typexgene=FALSE,
+                                model=FALSE,
+                                standardize=c("SD", "rescale", "none"),
+                                verbose=FALSE)
+{
   standardize <- match.arg(standardize)
 
   colnames(drugpheno) <- paste("drugpheno", seq_len(ncol(drugpheno)), sep=".")

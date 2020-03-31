@@ -318,7 +318,8 @@ function(rad.type = "radiation",
     } else {
       ticks <- magicaxis::maglab(viability.range, exptext = TRUE, log=TRUE)
     }
-    ticks$exp <- sapply(ticks$exp, function(x) return(as.expression(bquote(10^ .(round(log10(eval(x)), 2))))))
+    ticks$exp <- sapply(ticks$exp, function(x)
+      return(as.expression(bquote(10^ .(round(log10(eval(x)), 2))))))
     axis(2, at=ticks$labat,labels=ticks$exp)
     legends <- NULL
     legends.col <- NULL
