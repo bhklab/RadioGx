@@ -1,6 +1,8 @@
 setOldClass('sessionInfo', sessionInfo)
 
 #' @importFrom utils sessionInfo
+#' @export
+#' @keywords internal
 .RadioSig <- setClass('RadioSig', slots=list(
 
             RSetName='character',

@@ -1,26 +1,52 @@
 
-#' @importFrom stats complete.cases
-#' @importFrom stats p.adjust
+
 
 #################################################
-## Rank genes based on drug effect in the Connectivity Map
+##
 ##
 ## inputs:
-##      - data: gene expression data matrix
-##            - drugpheno: sensititivity values fo thr drug of interest
-##            - type: cell or tissue type for each experiment
-##            - duration: experiment duration in hours
+##      - data:
+##            - drugpheno:
+##            - type:
+##            - duration:
 ##      - batch: experiment batches
-##            - single.type: Should the statitsics be computed for each cell/tissue type separately?
-##      - nthread: number of parallel threads (bound to the maximum number of cores available)
-##
+##            - single.type:
+##      - nthread:
 ## outputs:
-## list of datafraes with the statistics for each gene, for each type
 ##
-## Notes:    duration is not taken into account as only 4 perturbations lasted 12h, the other 6096 lasted 6h
+##
+## Notes:
 #################################################
 
-rankGeneDrugSensitivity <- function (data, drugpheno, type, batch, single.type=FALSE, standardize = "SD", nthread=1, verbose=FALSE) {
+#' Rank genes based on drug effect in the Connectivity Map
+#'
+#' @details duration is not taken into account as only 4 perturbations lasted
+#'   12h, the other 6096 lasted 6h
+#'
+#' @param gene gene expression data matrix
+#' @param drugpheno sensititivity values fo thr drug of interest
+#' @param type cell or tissue type for each experiment
+#' @param batch experiment batches
+#' @param single.type Should the statitsics be computed for each cell/tissue
+#'   type separately?
+#' @param nthread  number of parallel threads (bound to the maximum number of cores available)
+#' @param verbose Should details of function operation be printed to console?
+#'
+#' @return A \code{list} of data.frames with the statistics for each gene, for
+#'   each type
+#'
+#' @importFrom stats complete.cases
+#' @importFrom stats p.adjust
+#' @export
+#' @keywords internal
+rankGeneDrugSensitivity <- function (data,
+                                     drugpheno,
+                                     type, batch,
+                                     single.type=FALSE,
+                                     standardize = "SD",
+                                     nthread=1,
+                                     verbose=FALSE)
+{
   if (nthread != 1) {
     availcore <- parallel::detectCores()
     if (missing(nthread) || nthread < 1 || nthread > availcore) {

@@ -3,6 +3,8 @@
 ###TODO:: Figure out why package is called inside itself?
 #library(RadioGx)
 
+#' @export
+#' @keywords internal
 OERmodel <- function(){
 
   pO2 <- readline(prompt="Enter the oxygen concentration (between 0.1 and 10): ")

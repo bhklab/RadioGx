@@ -1,3 +1,5 @@
+#' @export
+#' @keywords internal
 .makeGrittyGuess <- function(lower_bounds, upper_bounds, D, SF) {
   dFromD2 <- abs(D - 2)
   dFromSF10 <- abs(exp(SF) - 0.1)

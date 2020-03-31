@@ -1,5 +1,7 @@
+#' @export
+#' @keywords internal
 .linearQuadraticInv <- function(SF, pars, SF_as_log = TRUE) {
-  
+
   if (!SF_as_log) {
     if (SF < 0) {
       stop("Survival fraction must be nonnegative.")

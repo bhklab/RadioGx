@@ -50,20 +50,13 @@
 #' @param trunc [bool] Should the viability values be truncated to lie in [0-100] before doing the fitting
 #' @param verbose [boolean] Should warning messages about the data passed in be printed?
 #' @return Plots to the active graphics device and returns and invisible NULL.
-#' @export
+#'
 #' @import RColorBrewer
-#' @importFrom graphics plot rect axis
+#' @importFrom graphics plot rect axis points lines legend
 #' @importFrom grDevices rgb
-#' @importFrom graphics plot
-#' @importFrom graphics rect
-#' @importFrom grDevices rgb
-#' @importFrom graphics points
-#' @importFrom graphics lines
-#' @importFrom graphics legend
 #' @importFrom magicaxis magaxis
-
-
-
+#'
+#' @export
 doseResponseCurve <-
 function(rad.type = "radiation",
  cellline,

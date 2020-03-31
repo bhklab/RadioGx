@@ -13,6 +13,7 @@
 #'         filename = NULL)
 #' @importFrom graphics lines plot points axis
 #' @importFrom grDevices dev.off pdf
+#' @keywords internal
 #' @export
 plotCurve <- function(D, SF, pars, filename = "dose_response_plot.pdf", fit_curve = TRUE, SF_as_log = TRUE) {
   CoreGx::.sanitizeInput(x = D,

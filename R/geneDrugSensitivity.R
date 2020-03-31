@@ -1,12 +1,16 @@
 #' Calcualte the gene drug sensitivity score
 #'
-#' @param x numeric vector of gene expression values
-#' @param type vector of factors specifying the cell lines or type types
-#' @param batch vector of factors specifying the batch
+#' @param x \code{numeric} vector of gene expression values
+#' @param type \code{factor} vector specifying the cell lines or type types
+#' @param batch \code{factor} vector of factors specifying the batch
 #' @param drugpheno \code{numeric} vector of drug sensitivity values (e.g., IC50 or AUC)
-#' @param duration numeric vector of experiment duration in hours
-#' @param interaction.typexgene Should interaction between gene expression and cell/type type be computed? Default set to FALSE
+#' @param duration \code{numeric} vector of experiment duration in hours
+#' @param interaction.typexgene \code{logical} Should interaction between gene expression and
+#'   cell/type type be computed? Default set to FALSE
 #' @param model Should the full linear model be returned? Default set to FALSE
+#' @param standardize \code{character} One of 'SD', 'rescale' or 'none'
+#' @param verbose \code{logical} Should informative messages be written to
+#'   the console?
 #'
 #' @return A \code{numeric} vector reporting the effect size (estimate of the
 #'   coefficient of drug concentration), standard error (se), sample size (n),
