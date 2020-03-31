@@ -54,7 +54,8 @@ radSensitivitySig <- function(rSet,
  molecular.summary.stat = c("mean", "median", "first", "last", "or", "and"),
  sensitivity.summary.stat = c("mean", "median", "first", "last"),
  returnValues = c("estimate", "pvalue", "fdr"),
- sensitivity.cutoff, standardize = c("SD", "rescale", "none"),
+ sensitivity.cutoff,
+ standardize = c("SD", "rescale", "none"),
  nthread = 1,
  verbose=TRUE, ...) {
 
@@ -210,7 +211,7 @@ radSensitivitySig <- function(rSet,
       dim = c(nrow(featureInfo(rSet, mDataType)[features,, drop=FALSE]),
         length(res), ncol(res[[1]])),
       dimnames = list(rownames(featureInfo(rSet, mDataType)[features,]), names(res), colnames(res[[1]])))
-    for(j in 1:ncol(res[[1]])) {
+    for(j in seq_len(ncol(res[[1]]))) {
       ttt <- sapply(res, function(x, j, k) {
         xx <- array(NA, dim = length(k), dimnames = list(k))
         xx[rownames(x)] <- x[ , j, drop=FALSE]

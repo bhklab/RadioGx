@@ -139,9 +139,9 @@ function(rad.type = "radiation",
           stop("The number of D and SF vectors passed in differs")
         }
         if(is.null(names(Ds))){
-          names(Ds) <- paste("Exp", 1:length(Ds))
+          names(Ds) <- paste("Exp", seq_along(Ds))
         }
-        for(i in 1:length(Ds)){
+        for(i in seq_along(Ds)){
 
           if (mode(Ds[[i]]) == "numeric") {
             if(mode(SFs[[i]])!="numeric"){
@@ -172,7 +172,7 @@ function(rad.type = "radiation",
 
     doses <- list(); responses <- list(); legend.values <- list(); j <- 0; rSetNames <- list()
     if(!missing(rSets)){
-      for(i in 1:length(rSets)) {
+      for(i in seq_along(rSets)) {
         exp_i <- which(sensitivityInfo(rSets[[i]])[ ,"cellid"] == cellline & sensitivityInfo(rSets[[i]])[ ,"radiation.type"] == rad.type)
         if(length(exp_i) > 0) {
           if (summarize.replicates) {
@@ -188,7 +188,7 @@ function(rad.type = "radiation",
             }
             doses[[i]] <- drug.responses$Dose
             responses[[i]] <- drug.responses$Viability
-            names(doses[[i]]) <- names(responses[[i]]) <- 1:length(doses[[i]])
+            names(doses[[i]]) <- names(responses[[i]]) <- seq_along(doses[[i]])
             if (!missing(legends.label)) {
               if(length(legends.label)>0) {
                 linQuad_params <- linearQuadraticModel(D = doses[[i]], SF = responses[[i]])
@@ -215,7 +215,7 @@ function(rad.type = "radiation",
               drug.responses <- drug.responses[complete.cases(drug.responses), ]
               doses[[j]] <- drug.responses$Dose
               responses[[j]] <- drug.responses$Viability
-              names(doses[[j]]) <- names(responses[[j]]) <- 1:length(doses[[j]])
+              names(doses[[j]]) <- names(responses[[j]]) <- seq_along(doses[[j]])
               if (!missing(legends.label)) {
                 if(length(legends.label)>0){
                   linQuad_params <- linearQuadraticModel(D = doses2[[i]], SF = responses2[[i]])
@@ -247,7 +247,7 @@ function(rad.type = "radiation",
     }
     if(!missing(Ds)){
       doses2 <- list(); responses2 <- list(); legend.values2 <- list(); j <- 0; rSetNames2 <- list();
-      for (i in 1:length(Ds)){
+      for (i in seq_along(Ds)){
         doses2[[i]] <- Ds[[i]]
         responses2[[i]] <- SFs[[i]]
         if(length(legends.label)>0){
@@ -278,7 +278,7 @@ function(rad.type = "radiation",
 
     dose.range <- c(10^100 , 0)
     viability.range <- c(1 , 1)
-    for(i in 1:length(doses)) {
+    for(i in seq_along(doses)) {
       # dose.range <- c(min(dose.range[1], min(doses[[i]], na.rm=TRUE), na.rm=TRUE), max(dose.range[2], max(doses[[i]], na.rm=TRUE), na.rm=TRUE))
       dose.range <- c(0, max(dose.range[2], max(doses[[i]], na.rm=TRUE), na.rm=TRUE))
       viability.range <- c(min(viability.range[1], min(responses[[i]], na.rm=TRUE), na.rm=TRUE), 1)
@@ -288,7 +288,7 @@ function(rad.type = "radiation",
   # if(length(doses) > 1) {
   #   common.ranges <- PharmacoGx::.getCommonConcentrationRange(doses)
 
-  #   for(i in 1:length(doses)) {
+  #   for(i in seq_along(doses)) {
   #     x1 <- min(x1, min(common.ranges[[i]]))
   #     x2 <- max(x2, max(common.ranges[[i]]))
   #   }
@@ -312,7 +312,7 @@ function(rad.type = "radiation",
     # }
     }
     plot(NA, xlab="Dose (Gy)", ylab="Survival Fraction", axes =FALSE, main=title, log="y", ylim=viability.range, xlim=dose.range, cex=cex, cex.main=cex.main)
-    magicaxis::magaxis(side=1:2, frame.plot=TRUE, tcl=-.3, majorn=c(5,5), minorn=c(5,3), label=c(TRUE,FALSE))
+    magicaxis::magaxis(side=seq_len(2), frame.plot=TRUE, tcl=-.3, majorn=c(5,5), minorn=c(5,3), label=c(TRUE,FALSE))
     if(max(viability.range)/min(viability.range)<50){
       ticks <- magicaxis::maglab(viability.range, exptext = TRUE)
     } else {
@@ -326,7 +326,7 @@ function(rad.type = "radiation",
   #   rect(xleft=x1, xright=x2, ybottom=viability.range[1] , ytop=viability.range[2] , col=rgb(240, 240, 240, maxColorValue = 255), border=FALSE)
   # }
 
-    for (i in 1:length(doses)) {
+    for (i in seq_along(doses)) {
       points(doses[[i]],responses[[i]],pch=20,col = mycol[i], cex=cex)
 
       switch(plot.type , "Actual"={
@@ -350,7 +350,7 @@ function(rad.type = "radiation",
     }
   # if (common.range.star) {
   #   if (length(doses) > 1) {
-  #     for (i in 1:length(doses)) {
+  #     for (i in seq_along(doses)) {
   #       points(common.ranges[[i]], responses[[i]][names(common.ranges[[i]])], pch=8, col=mycol[i])
   #     }
   #   }

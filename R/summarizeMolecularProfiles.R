@@ -191,12 +191,12 @@ summarizeMolecularProfiles <- function(rSet,
   SummarizedExperiment::rowData(res) <- featureInfo(rSet, mDataType)
   ##TODO:: Generalize this to multiple assay SummarizedExperiments!
   if(!is.null(SummarizedExperiment::assay(res, 1))) {
-    SummarizedExperiment::assay(res, 2) <- matrix(rep(NA,
-                                                      length(assay(res, 1))
-    ),
-    nrow=nrow(assay(res, 1)),
-    ncol=ncol(assay(res, 1))
-    )
+    SummarizedExperiment::assay(res, 2) <-
+      matrix(rep(NA, length(assay(res, 1),)),
+             nrow=nrow(assay(res, 1)),
+             ncol=ncol(assay(res, 1)),
+             dimnames=dimnames(assay(res, 1))
+      )
   }
   assayNames(res) <- assayNames(rSet@molecularProfiles[[mDataType]])
   res <- res[features,]
