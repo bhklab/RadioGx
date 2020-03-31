@@ -3,6 +3,8 @@ r_packages:
 - covr
 r_github_packages:
 - bhklab/CoreGx
+bioc_packages:
+- SummarizedExperiment
 cache: packages
 matrix:
   include:

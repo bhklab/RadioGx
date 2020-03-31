@@ -23,18 +23,18 @@ radSensitivitySig(
 )
 }
 \arguments{
-\item{rSet}{[PharmacoSet] a PharmacoSet of the perturbation experiment type}
+\item{rSet}{A \code{RadioSet} of the perturbation experiment type}
 
-\item{mDataType}{[character] which one of the molecular data types to use
+\item{mDataType}{\code{character} which one of the molecular data types to use
 in the analysis, out of dna, rna, rnaseq, snp, cnv}
 
-\item{radiation.types}{[character] a vector of radiation.types for which to compute the
+\item{radiation.types}{\code{character} a vector of radiation.types for which to compute the
 signatures. Should match the names used in the PharmacoSet.}
 
-\item{features}{[character] a vector of features for which to compute the
+\item{features}{\code{character} a vector of features for which to compute the
 signatures. Should match the names used in correspondant molecular data in PharmacoSet.}
 
-\item{sensitivity.measure}{[character] which measure of the radiation
+\item{sensitivity.measure}{\code{character} which measure of the radiation
 sensitivity should the function use for its computations? Use the
 sensitivityMeasures function to find out what measures are available for each PSet.}
 
@@ -44,26 +44,26 @@ summarize duplicates for cell line molecular profile measurements?}
 \item{sensitivity.summary.stat}{What summary statistic should be used to
 summarize duplicates for cell line sensitivity measurements?}
 
-\item{returnValues}{[character] Which of estimate, t-stat, p-value and fdr
+\item{returnValues}{\code{character} Which of estimate, t-stat, p-value and fdr
 should the function return for each gene?}
 
 \item{sensitivity.cutoff}{Allows to provide upper and lower bounds to
 sensitivity measures in the cases where the values exceed physical values
 due to numerical or other errors.}
 
-\item{standardize}{[character] One of "SD", "rescale", or "none", for the form of standardization of
+\item{standardize}{\code{character} One of "SD", "rescale", or "none", for the form of standardization of
 the data to use. If "SD", the the data is scaled so that SD = 1. If rescale, then the data is scaled so that the 95%
 interquantile range lies in [0,1]. If none no rescaling is done.}
 
-\item{nthread}{[numeric] if multiple cores are available, how many cores
+\item{nthread}{\code{numeric} if multiple cores are available, how many cores
 should the computation be parallelized over?}
 
-\item{verbose}{[boolean] 'TRUE' if the warnings and other infomrative message shoud be displayed}
+\item{verbose}{\code{boolean} 'TRUE' if the warnings and other infomrative message shoud be displayed}
 
 \item{...}{additional arguments not currently fully supported by the function}
 }
 \value{
-[list] a 3D array with genes in the first dimension, radiation.types in the
+\code{list} a 3D array with genes in the first dimension, radiation.types in the
   second, and return values in the third.
 }
 \description{

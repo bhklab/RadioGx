@@ -16,18 +16,18 @@
 #'              radiation.types=radiationTypes(clevelandSmall))
 #' print(rad.sensitivity)
 #'
-#' @param rSet [PharmacoSet] a PharmacoSet of the perturbation experiment type
-#' @param mDataType [character] which one of the molecular data types to use
+#' @param rSet A \code{RadioSet} of the perturbation experiment type
+#' @param mDataType \code{character} which one of the molecular data types to use
 #'   in the analysis, out of dna, rna, rnaseq, snp, cnv
-#' @param radiation.types [character] a vector of radiation.types for which to compute the
+#' @param radiation.types \code{character} a vector of radiation.types for which to compute the
 #'   signatures. Should match the names used in the PharmacoSet.
-#' @param features [character] a vector of features for which to compute the
+#' @param features \code{character} a vector of features for which to compute the
 #'   signatures. Should match the names used in correspondant molecular data in PharmacoSet.
-#' @param nthread [numeric] if multiple cores are available, how many cores
+#' @param nthread \code{numeric} if multiple cores are available, how many cores
 #'   should the computation be parallelized over?
-#' @param returnValues [character] Which of estimate, t-stat, p-value and fdr
+#' @param returnValues \code{character} Which of estimate, t-stat, p-value and fdr
 #'   should the function return for each gene?
-#' @param sensitivity.measure [character] which measure of the radiation
+#' @param sensitivity.measure \code{character} which measure of the radiation
 #'   sensitivity should the function use for its computations? Use the
 #'   sensitivityMeasures function to find out what measures are available for each PSet.
 #' @param molecular.summary.stat What summary statistic should be used to
@@ -37,12 +37,12 @@
 #' @param sensitivity.cutoff Allows to provide upper and lower bounds to
 #'   sensitivity measures in the cases where the values exceed physical values
 #'   due to numerical or other errors.
-#' @param standardize [character] One of "SD", "rescale", or "none", for the form of standardization of
+#' @param standardize \code{character} One of "SD", "rescale", or "none", for the form of standardization of
 #'   the data to use. If "SD", the the data is scaled so that SD = 1. If rescale, then the data is scaled so that the 95%
 #'   interquantile range lies in [0,1]. If none no rescaling is done.
-#' @param verbose [boolean] 'TRUE' if the warnings and other infomrative message shoud be displayed
+#' @param verbose \code{boolean} 'TRUE' if the warnings and other infomrative message shoud be displayed
 #' @param ... additional arguments not currently fully supported by the function
-#' @return [list] a 3D array with genes in the first dimension, radiation.types in the
+#' @return \code{list} a 3D array with genes in the first dimension, radiation.types in the
 #'   second, and return values in the third.
 #' @export
 #' @import parallel
@@ -75,26 +75,30 @@ radSensitivitySig <- function(rSet,
 
 
   if (!all(sensitivity.measure %in% colnames(sensitivityProfiles(rSet)))) {
-    stop (sprintf("Invalid sensitivity measure for %s, choose among: %s", rSet@annotation$name, paste(colnames(sensitivityProfiles(rSet)), collapse=", ")))
+    stop (sprintf("Invalid sensitivity measure for %s, choose among: %s",
+                  rSet@annotation$name, paste(colnames(sensitivityProfiles(rSet)),
+                                              collapse=", ")))
   }
 
   if (!(mDataType %in% names(rSet@molecularProfiles))) {
-    stop (sprintf("Invalid mDataType for %s, choose among: %s", rSet@annotation$name, paste(names(rSet@molecularProfiles), collapse=", ")))
+    stop (sprintf("Invalid mDataType for %s, choose among: %s",
+                  rSet@annotation$name, paste(names(rSet@molecularProfiles),
+                                              collapse=", ")))
   }
-  switch (S4Vectors::metadata(rSet@molecularProfiles[[mDataType]])$annotation,
+  switch(S4Vectors::metadata(rSet@molecularProfiles[[mDataType]])$annotation,
     "mutation" = {
       if (!is.element(molecular.summary.stat, c("or", "and"))) {
-        stop ("Molecular summary statistic for mutation must be either 'or' or 'and'")
+        stop("Molecular summary statistic for mutation must be either 'or' or 'and'")
       }
     },
     "fusion" = {
       if (!is.element(molecular.summary.stat, c("or", "and"))) {
-        stop ("Molecular summary statistic for fusion must be either 'or' or 'and'")
+        stop("Molecular summary statistic for fusion must be either 'or' or 'and'")
       }
     },
     "rna" = {
       if (!is.element(molecular.summary.stat, c("mean", "median", "first", "last"))) {
-        stop ("Molecular summary statistic for rna must be either 'mean', 'median', 'first' or 'last'")
+        stop("Molecular summary statistic for rna must be either 'mean', 'median', 'first' or 'last'")
       }
     },
     "cnv" = {
