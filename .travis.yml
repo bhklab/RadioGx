@@ -2,7 +2,7 @@ language: r
 r_packages:
 - covr
 r_github_packages:
-- bhklab/CoreGx@eSet_To_SE
+- bhklab/CoreGx
 cache: packages
 matrix:
   include:

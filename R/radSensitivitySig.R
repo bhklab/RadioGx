@@ -46,7 +46,6 @@
 #'   second, and return values in the third.
 #' @export
 #' @import parallel
-
 radSensitivitySig <- function(rSet,
  mDataType,
  radiation.types,

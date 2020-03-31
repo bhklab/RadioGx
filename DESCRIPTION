@@ -34,7 +34,7 @@ Description: Computational tool box for radio-genomic analysis which integrates
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Depends: R (>= 3.5.0), CoreGx
+Depends: R (>= 3.6.0), CoreGx
 Imports:
     SummarizedExperiment,
     S4Vectors,
