@@ -1,0 +1,193 @@
+---
+title: 'RadioGx: An R Package for Analysis of Large Radiogenomic Datasets'
+
+author:  
+- name: Venkata Manem
+
+- name: Petr Smirnov
+  affilnum: '1, 2'
+
+- name: Ian Smith
+  affilnum: '1, 2'
+  
+- name: Meghan Lambie
+  affilnum: 2
+
+- name: Christopher Eeles
+  affilnum: 1
+  
+- name: Scott Bratman
+  affilnum: 1
+
+- name: Benjamin Haibe-Kains
+  affilnum: '1, 2, 3'
+  
+affiliation: 
+
+- affilnum: 1
+  affil: Princess Margaret Cancer Centre, University Health Network, Toronto Canada
+  
+- affilnum: 2
+  affil: Department of Medical Biophysics, University of Toronto, Toronto Canada
+  
+- affilnum: 3
+  affil: Department of Computer Science, University of Toronto, Toronto Canada
+
+output:
+
+  pdf_document:
+    fig_caption: yes
+    fig_width: 7
+    fig_height: 7
+    keep_tex: no
+    number_sections: no
+    template: manuscript.latex
+
+  html_document: null
+  
+  word_document: null
+
+vignette: >
+  %\VignetteEngine{knitr::knitr}
+  %\VignetteEncoding{UTF-8}
+  %\usepackage[UTF-8]{inputenc}
+  %\VignetteIndexEntry{RadioGx: An R Package for Analysis of Large Radiogenomic Datasets}
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+The RadioGx package implements a standardized data structure for storing highly
+curated results from Radiogenomic experiments. Such experiments investigate the
+relationship between different cancer cell lines and their response to various
+doses and types of ionizing radiation. The package is intended for use in 
+conjunction with the PharmacoGx package, a similar data structure and API for 
+storing highly curated Pharmacogenomic experiments.
+
+On top of the S4 RadioSet class, this package also provides a standard API 
+to access functions related to fitting dose response curves, calculating survival
+fraction and fitting various linear models. Additional functions for calculating
+the correlation between radiation dose and radiation response allow
+for characterization of the radiation sensitivity of myriad cancer cell lines
+representing a diverse set of cancer phenotypes.
+
+It is our hope that this package can aid clinicians and fellow researchers in
+treatment planning and radiation sensitivity discovery in existing cancer types
+as well as prospectively in new **in vitro** and **in vivo** models of cancer.
+
+## Creating a RadioSet
+
+Documentation for creating a RadioSet object will be added to this package 
+in the coming months. In the mean time consult the 'Creating A PharmacoSet' 
+vignette from the PharmacoGx Bioconductor package for an example of creating
+a related data structure.
+
+## Getter and Setter Methods
+
+Once a RadioSet is created, various accessor methods exist for retrieving 
+information relevant to a given Radiogenomic analysis as well as for modifying
+or updating existing data as needed.
+
+For this example we will load the toy dataset 'clevelandSmall' to demonstrate
+how to access the most relevant slots in the RadioSet class.
+
+```{r getters_setters}
+# Load the package
+library(RadioGx)
+
+# Load the data
+data("clevelandSmall")
+```
+
+### Molecular Profiles
+
+The molecular profiles slot holds high throughput genomic data such as mutation,
+gene expression, copy number alterations, etc for the cancer cell lines and
+radiation treatments available in a given RadioSet. This information can be used
+for identifying prognostic and/or predictive biological signatures of radiation
+sensitivity.
+
+```{r molecProf}
+# Get the phenotype annotations for cancer cell lines with RNA sequencing data
+phenoInfo(clevelandSmall, mDataType="rna")
+
+# Set the phenotype annotations for cancer cell lines with RNA sequencing data
+phenoInfo(clevelandSmall, mDataType="rna") <- phenoInfo(clevelandSmall, mDataType="rna")
+
+# Get the RNA sequencing molecular profile data for the cancer cell lines
+molecularProfiles(clevelandSmall, "rna")
+
+# Set the RNA sequencing molecular profile data for the cancer cell lines
+molecularProfiles(clevelandSmall, "rna") <- molecularProfiles(clevelandSmall, "rna")
+```
+
+### Radiation
+
+The radiation slot holds information about the radiation treatments available
+in a given RadioSet.
+
+```{r radiation}
+# Get the a list of radiation types in a RadioSet
+radiationInfo(clevelandSmall)
+
+# Set the radiation types in a RadioSet
+radiationInfo(clevelandSmall) <- radiationInfo(clevelandSmall)
+```
+
+### Sensitivity
+
+The sensitivity slot contains the radiation response results for the various 
+cancer cell lines treated in a given RadioSet.
+
+```{r sensitivity}
+# Get the radiation sensitivity annotations for cell lines in a RadioSet
+sensitivityInfo(clevelandSmall)
+
+# Set the radiation sensitivity annotations for cell lines in a RadioSet
+sensitivityInfo(clevelandSmall) <- sensitivityInfo(clevelandSmall)
+
+# Get the radiation sensitivity data associated with cell lines in a RadioSet
+sensitivityProfiles(clevelandSmall)
+
+# Set the radiation sensitivity data associated with cell lines in a RadioSet
+sensitivityProfiles(clevelandSmall) <- sensitivityProfiles(clevelandSmall)
+```
+
+### Cell
+
+The cell slot contains annotations for the various cancer cell lines tested
+in a  given RadioSet object.
+
+```{r cell}
+# Get the annotations for cell lines in a RadioSet
+cellInfo(clevelandSmall)
+
+# Set the annotations for cell lines in a RadioSet
+cellInfo(clevelandSmall) <- cellInfo(clevelandSmall)
+```
+
+### Other
+
+For documentation of all available setter and getter methods for the RadioGx
+package please see the included documentation for 'RadioSet-class'.
+
+## Plotting Functions:
+
+Create a dose response curve for data in a radiation sensitivity experiment.
+
+```{r plotting}
+doseResponseCurve(
+  Ds=list("Experiment 1" = c(0, 2, 4, 6)),
+  SFs=list("Experiment 1" = c(1,.6,.4,.2)), 
+  plot.type="Both"
+  )
+```
+
+## Sample Analyses
+
+Additional vignettes detailing the basic analysis workflow for the RadioGx 
+package will be added in the coming months.
