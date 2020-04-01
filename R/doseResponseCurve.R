@@ -1,54 +1,65 @@
-#' Plot drug response curve of a given drug and a given cell for a list of rSets (objects of the RadioSet class).
+#' Plot drug response curve of a given drug and a given cell for a list of
+#'   rSets (objects of the RadioSet class).
 #'
 #' Given a list of RadioSets, the function will plot the drug_response curve,
-#' for a given drug/cell pair. The y axis of the plot is the viability percentage
-#' and x axis is the log transformed Ds. If more than one rSet is
-#' provided, a light gray area would show the common concentration range between rSets.
-#' User can ask for type of sensitivity measurment to be shown in the plot legend.
-#' The user can also provide a list of their own Ds and viability values,
-#' as in the examples below, and it will be treated as experiments equivalent to values coming
-#' from a pset. The names of the concentration list determine the legend labels.
+#'   for a given drug/cell pair. The y axis of the plot is the viability
+#'   percentage and x axis is the log transformed Ds. If more than one rSet is
+#'   provided, a light gray area would show the common concentration range
+#'   between rSets. User can ask for type of sensitivity measurment to be shown
+#'   in the plot legend. The user can also provide a list of their own Ds and
+#'   viability values, as in the examples below, and it will be treated as
+#'   experiments equivalent to values coming from a pset. The names of the
+#'   concentration list determine the legend labels.
 #'
 #' @examples
 #' doseResponseCurve(Ds=list("Experiment 1" = c(0, 2, 4, 6)),
-#' SFs=list("Experiment 1" = c(1,.6,.4,.2)), plot.type="Both")
+#'   SFs=list("Experiment 1" = c(1,.6,.4,.2)), plot.type="Both")
 #'
 #' @param rad.type [string] The type(s) of radiation dosage to be
-#' plotted. If the plot is desirable for more than one radioset, A unique drug id
-#' should be provided.
-#' @param cellline [string] A cell line name for which the radiation response curve should be
-#' plotted. If the plot is desirable for more than one radioset, a unique cell id
-#' should be provided.
+#'   plotted. If the plot is desirable for more than one radioset, A unique drug
+#'   id should be provided.
+#' @param cellline [string] A cell line name for which the radiation response
+#'   curve should be plotted. If the plot is desirable for more than one
+#'   radioset, a unique cell id should be provided.
 #' @param rSets [list] a list of RadioSet objects, for which the function
-#' should plot the curves.
-#' @param Ds,SFs [list] A list of Doses and SFs to plot, the function assumes that
-#' Ds[[i]] is plotted against SFs[[i]]. The names of the D list are used to create the legend labels
-#' @param legends.label [vector] A vector of sensitivity measurment types which could
-#' be any combination of  ic50_published, auc_published, auc_recomputed and auc_recomputed_star.
-#' A legend will be displayed on the top right of the plot which each line of the legend is
-#' the values of requested sensitivity measerments for one of the requested rSets.
-#' If this parameter is missed no legend would be provided for the plot.
-#' @param ylim [vector] A vector of two numerical values to be used as ylim of the plot.
-#' If this parameter would be missed c(0,100) would be used as the ylim of the plot.
-#' @param xlim [vector] A vector of two numerical values to be used as xlim of the plot.
-#' If this parameter would be missed the minimum and maximum comncentrations between all
-#' the rSets would be used as plot xlim.
-#' @param mycol [vector] A vector with the same lenght of the rSets parameter which
-#' will determine the color of the curve for the pharmaco sets. If this parameter is
-#' missed default colors from Rcolorbrewer package will be used as curves color.
-#' @param plot.type [character] Plot type which can be the actual one ("Actual") or
-#' the one fitted by logl logistic regression ("Fitted") or both of them ("Both").
-#' If this parameter is missed by default actual curve is plotted.
-#' @param summarize.replicates [character] If this parameter is set to true replicates
-#' are summarized and replicates are plotted individually otherwise
-#' @param title [character] The title of the graph. If no title is provided, then it defaults to
-#' 'Drug':'Cell Line'.
+#'   should plot the curves.
+#' @param Ds,SFs [list] A list of Doses and SFs to plot, the function assumes
+#'   that Ds[[i]] is plotted against SFs[[i]]. The names of the D list are used
+#'   to create the legend labels
+#' @param legends.label [vector] A vector of sensitivity measurment types which
+#'   could be any combination of  ic50_published, auc_published, auc_recomputed
+#'   and auc_recomputed_star. A legend will be displayed on the top right of the
+#'   plot which each line of the legend is the values of requested sensitivity
+#'   measerments for one of the requested rSets. If this parameter is missed no
+#'   legend would be provided for the plot.
+#' @param ylim [vector] A vector of two numerical values to be used as ylim of
+#'   the plot. If this parameter would be missed c(0,100) would be used as the
+#'   ylim of the plot.
+#' @param xlim [vector] A vector of two numerical values to be used as xlim of
+#'   the plot. If this parameter would be missed the minimum and maximum
+#'   concentrations between all the rSets would be used as plot xlim.
+#' @param mycol [vector] A vector with the same lenght of the rSets parameter
+#'   which will determine the color of the curve for the pharmaco sets. If this
+#'   parameter is missed default colors from Rcolorbrewer package will be used
+#'   as curves color.
+#' @param plot.type [character] Plot type which can be the actual one ("Actual")
+#'   or the one fitted by logl logistic regression ("Fitted") or both of them
+#'   ("Both"). If this parameter is missed by default actual curve is plotted.
+#' @param summarize.replicates [character] If this parameter is set to true
+#'   replicates are summarized and replicates are plotted individually otherwise
+#' @param title [character] The title of the graph. If no title is provided,
+#'   then it defaults to Drug':'Cell Line'.
 #' @param lwd [numeric] The line width to plot with
 #' @param cex [numeric] The cex parameter passed to plot
-#' @param cex.main [numeric] The cex.main parameter passed to plot, controls the size of the titles
-#' @param legend.loc And argument passable to xy.coords for the position to place the legend.
-#' @param trunc [bool] Should the viability values be truncated to lie in [0-100] before doing the fitting
-#' @param verbose [boolean] Should warning messages about the data passed in be printed?
+#' @param cex.main [numeric] The cex.main parameter passed to plot, controls the
+#'   size of the titles
+#' @param legend.loc And argument passable to xy.coords for the position to
+#'   place the legend.
+#' @param trunc [bool] Should the viability values be truncated to lie in
+#'   [0-100] before doing the fitting
+#' @param verbose [boolean] Should warning messages about the data passed in be
+#'   printed?
+#'
 #' @return Plots to the active graphics device and returns and invisible NULL.
 #'
 #' @import RColorBrewer
@@ -59,24 +70,25 @@
 #' @export
 doseResponseCurve <-
 function(rad.type = "radiation",
- cellline,
- rSets=list(),
- Ds=list(),
- SFs=list(),
+         cellline,
+         rSets=list(),
+         Ds=list(),
+         SFs=list(),
          # conc_as_log = FALSE,
          # viability_as_pct = TRUE,
- trunc=TRUE,
- legends.label = c("alpha", "beta","rsquared"),
- ylim=c(0,100),
- xlim, mycol,
- title,
- plot.type=c("Fitted","Actual", "Both"),
- summarize.replicates=TRUE,
- lwd = 1,
- cex = 0.7,
- cex.main = 0.9,
- legend.loc = "topright",
- verbose=TRUE) {
+         trunc=TRUE,
+         legends.label = c("alpha", "beta","rsquared"),
+         ylim=c(0,100),
+         xlim, mycol,
+         title,
+         plot.type=c("Fitted","Actual", "Both"),
+         summarize.replicates=TRUE,
+         lwd = 1,
+         cex = 0.7,
+         cex.main = 0.9,
+         legend.loc = "topright",
+         verbose=TRUE)
+{
   if(!missing(rSets)){
     if (!is(rSets, "list")) {
       if (!is(rSets, "RadioSet")) {

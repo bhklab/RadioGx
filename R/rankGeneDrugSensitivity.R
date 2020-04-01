@@ -1,34 +1,15 @@
-
-
-
-#################################################
-##
-##
-## inputs:
-##      - data:
-##            - drugpheno:
-##            - type:
-##            - duration:
-##      - batch: experiment batches
-##            - single.type:
-##      - nthread:
-## outputs:
-##
-##
-## Notes:
-#################################################
-
 #' Rank genes based on drug effect in the Connectivity Map
 #'
 #' @details duration is not taken into account as only 4 perturbations lasted
 #'   12h, the other 6096 lasted 6h
 #'
-#' @param gene gene expression data matrix
+#' @param data gene expression data matrix
 #' @param drugpheno sensititivity values fo thr drug of interest
 #' @param type cell or tissue type for each experiment
 #' @param batch experiment batches
 #' @param single.type Should the statitsics be computed for each cell/tissue
 #'   type separately?
+#' @param standardize How to standardize the data? Currently only supports "SD"
 #' @param nthread  number of parallel threads (bound to the maximum number of cores available)
 #' @param verbose Should details of function operation be printed to console?
 #'
@@ -37,8 +18,8 @@
 #'
 #' @importFrom stats complete.cases
 #' @importFrom stats p.adjust
+#'
 #' @export
-#' @keywords internal
 rankGeneDrugSensitivity <- function (data,
                                      drugpheno,
                                      type, batch,

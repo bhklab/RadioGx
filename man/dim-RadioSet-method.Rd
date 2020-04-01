@@ -15,3 +15,8 @@ A named vector with the number of Cells and Drugs in the RadioSet
 \description{
 Get the dimensions of a RadioSet
 }
+\examples{
+data(clevelandSmall)
+dim(clevelandSmall)
+
+}

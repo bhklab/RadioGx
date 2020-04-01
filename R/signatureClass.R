@@ -1,8 +1,6 @@
 setOldClass('sessionInfo', sessionInfo)
 
 #' @importFrom utils sessionInfo
-#' @export
-#' @keywords internal
 .RadioSig <- setClass('RadioSig', slots=list(
 
             RSetName='character',
@@ -11,11 +9,34 @@ setOldClass('sessionInfo', sessionInfo)
             SessionInfo = 'sessionInfo',
             Call = 'character'), contains='array')
 
-RadioSig <- function(Data=array(NA, dim=c(0,0,0)), PSetName='', DateCreated=date(), SigType='sensitivity', SessionInfo=sessionInfo(), Call='No Call Recorded'){
-
-#attr(SessionInfo, 'class') <- NULL
-
-return(.RadioSig(Data, PSetName=PSetName, DateCreated=DateCreated, SigType=SigType, SessionInfo=SessionInfo, Call=Call))}
+# Radiation Signature Class Constructor
+#
+# A documented constructor to provide user friendly interface to .RadioSig
+#
+# @param Data
+# @param PSetName
+# @param DateCreated
+# @param SigType
+# @param SessionInfo
+# @param Call
+#
+# @return A \code{RadioSig} object
+#
+# @export
+RadioSig <- function(Data=array(NA, dim=c(0,0,0)),
+                     PSetName='',
+                     DateCreated=date(),
+                     SigType='sensitivity',
+                     SessionInfo=sessionInfo(),
+                     Call='No Call Recorded')
+{
+return(.RadioSig(Data,
+                 PSetName=PSetName,
+                 DateCreated=DateCreated,
+                 SigType=SigType,
+                 SessionInfo=SessionInfo,
+                  Call=Call))
+}
 
 
 #' Show RadioGx Signatures
@@ -27,7 +48,9 @@ return(.RadioSig(Data, PSetName=PSetName, DateCreated=DateCreated, SigType=SigTy
 #' rad.sensitivity
 #'
 #' @param object \code{RadioSig}
+#'
 #' @return Prints the RadioGx Signatures object to the output stream, and returns invisible NULL.
+#'
 #' @export
 setMethod("show", signature=signature(object='RadioSig'),
         function(object) {
@@ -51,7 +74,9 @@ setMethod("show", signature=signature(object='RadioSig'),
 #'
 #' @param Sigs An object of the \code{RadioSig} Class, as
 #' returned by \code{radPerturbationSig} or \code{radSensitivitySig}
+#'
 #' @return Prints the RadioGx Signatures annotations to the output stream, and returns invisible NULL.
+#'
 #' @export
 showSigAnnot <- function(Sigs){
 

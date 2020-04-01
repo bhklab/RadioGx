@@ -3,10 +3,10 @@
 #' @param x \code{numeric} vector of gene expression values
 #' @param type \code{factor} vector specifying the cell lines or type types
 #' @param batch \code{factor} vector of factors specifying the batch
-#' @param drugpheno \code{numeric} vector of drug sensitivity values (e.g., IC50 or AUC)
-#' @param duration \code{numeric} vector of experiment duration in hours
-#' @param interaction.typexgene \code{logical} Should interaction between gene expression and
-#'   cell/type type be computed? Default set to FALSE
+#' @param drugpheno \code{numeric} vector of drug sensitivity values (e.g.,
+#'   IC50 or AUC)
+#' @param interaction.typexgene \code{logical} Should interaction between gene
+#'   expression and cell/type type be computed? Default set to FALSE
 #' @param model Should the full linear model be returned? Default set to FALSE
 #' @param standardize \code{character} One of 'SD', 'rescale' or 'none'
 #' @param verbose \code{logical} Should informative messages be written to
@@ -18,8 +18,8 @@
 #'
 #' @importFrom stats sd complete.cases lm glm anova pf formula var
 #' @importFrom scales rescale
+#'
 #' @export
-#' @keywords internal
 geneDrugSensitivity <- function(x,
                                 type,
                                 batch,

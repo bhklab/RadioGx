@@ -6,14 +6,6 @@
 \usage{
 .convertRsetMolecularProfilesToSE(rSet)
 }
-\arguments{
-\item{rSet}{\code{S4} A RadioSet containing molecular data in ExpressionSets}
-}
-\value{
-\code{S4} A RadioSet containing molecular data in a SummarizedExperiments
-}
 \description{
 Converts all ExpressionSet objects within the molecularProfiles slot of a
-  RadioSet to SummarizedExperiments
 }
-\keyword{internal}

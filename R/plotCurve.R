@@ -2,18 +2,22 @@
 #'
 #' This function plots doses of radiation against the cancer cell survival fractions thereby observed.
 #'
+#' @examples plotCurve(c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+#'   c(1.1, 0.8, 0.7, 0.45, 0.15, -0.1, -0.1, -0.4, -0.65, -0.75, -1.1),
+#'   filename = NULL)
+#'
 #' @param D vector of radiation doses
 #' @param SF vector of survival fractions corresponding to the doses
 #' @param pars parameters (alpha, beta) in the equation SF = exp(-alpha * D - beta * D ^ 2)
 #' @param filename name of PDF which will be created by the function
 #' @param fit_curve should the graph include a linear-quadratic curve of best fit? Defaults to TRUE
 #' @param SF_as_log should SF be expressed in log10 on the graph? Defaults to TRUE
-#' @examples plotCurve(c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
-#'     c(1.1, 0.8, 0.7, 0.45, 0.15, -0.1, -0.1, -0.4, -0.65, -0.75, -1.1),
-#'         filename = NULL)
+#'
+#' @return \code{nothing} Function works by side effects only
+#'
 #' @importFrom graphics lines plot points axis
 #' @importFrom grDevices dev.off pdf
-#' @keywords internal
+#'
 #' @export
 plotCurve <- function(D, SF, pars, filename = "dose_response_plot.pdf", fit_curve = TRUE, SF_as_log = TRUE) {
   CoreGx::.sanitizeInput(x = D,

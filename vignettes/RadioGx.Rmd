@@ -3,56 +3,18 @@ title: 'RadioGx: An R Package for Analysis of Large Radiogenomic Datasets'
 
 author:  
 - name: Venkata Manem
-
 - name: Petr Smirnov
-  affilnum: '1, 2'
-
 - name: Ian Smith
-  affilnum: '1, 2'
-  
 - name: Meghan Lambie
-  affilnum: 2
-
 - name: Christopher Eeles
-  affilnum: 1
-  
 - name: Scott Bratman
-  affilnum: 1
-
 - name: Benjamin Haibe-Kains
-  affilnum: '1, 2, 3'
-  
-affiliation: 
 
-- affilnum: 1
-  affil: Princess Margaret Cancer Centre, University Health Network, Toronto Canada
-  
-- affilnum: 2
-  affil: Department of Medical Biophysics, University of Toronto, Toronto Canada
-  
-- affilnum: 3
-  affil: Department of Computer Science, University of Toronto, Toronto Canada
-
-output:
-
-  pdf_document:
-    fig_caption: yes
-    fig_width: 7
-    fig_height: 7
-    keep_tex: no
-    number_sections: no
-    template: manuscript.latex
-
-  html_document: null
-  
-  word_document: null
+output: distill::distill_article
 
 vignette: >
   %\VignetteEngine{knitr::knitr}
-  %\VignetteEncoding{UTF-8}
-  %\usepackage[UTF-8]{inputenc}
   %\VignetteIndexEntry{RadioGx: An R Package for Analysis of Large Radiogenomic Datasets}
-
 ---
 
 ```{r setup, include=FALSE}
@@ -113,13 +75,13 @@ sensitivity.
 
 ```{r molecProf}
 # Get the phenotype annotations for cancer cell lines with RNA sequencing data
-phenoInfo(clevelandSmall, mDataType="rna")
+phenoInfo(clevelandSmall, mDataType="rna")[1:5, ]
 
 # Set the phenotype annotations for cancer cell lines with RNA sequencing data
 phenoInfo(clevelandSmall, mDataType="rna") <- phenoInfo(clevelandSmall, mDataType="rna")
 
 # Get the RNA sequencing molecular profile data for the cancer cell lines
-molecularProfiles(clevelandSmall, "rna")
+molecularProfiles(clevelandSmall, "rna")[1:5, ]
 
 # Set the RNA sequencing molecular profile data for the cancer cell lines
 molecularProfiles(clevelandSmall, "rna") <- molecularProfiles(clevelandSmall, "rna")
@@ -145,13 +107,13 @@ cancer cell lines treated in a given RadioSet.
 
 ```{r sensitivity}
 # Get the radiation sensitivity annotations for cell lines in a RadioSet
-sensitivityInfo(clevelandSmall)
+sensitivityInfo(clevelandSmall)[1:5, ]
 
 # Set the radiation sensitivity annotations for cell lines in a RadioSet
 sensitivityInfo(clevelandSmall) <- sensitivityInfo(clevelandSmall)
 
 # Get the radiation sensitivity data associated with cell lines in a RadioSet
-sensitivityProfiles(clevelandSmall)
+sensitivityProfiles(clevelandSmall)[1:5, ]
 
 # Set the radiation sensitivity data associated with cell lines in a RadioSet
 sensitivityProfiles(clevelandSmall) <- sensitivityProfiles(clevelandSmall)
@@ -164,7 +126,7 @@ in a  given RadioSet object.
 
 ```{r cell}
 # Get the annotations for cell lines in a RadioSet
-cellInfo(clevelandSmall)
+cellInfo(clevelandSmall)[1:5, ]
 
 # Set the annotations for cell lines in a RadioSet
 cellInfo(clevelandSmall) <- cellInfo(clevelandSmall)

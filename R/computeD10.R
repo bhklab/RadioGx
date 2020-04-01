@@ -1,9 +1,20 @@
 #' Compute D10
 #'
-#' @description This function computes the radiation dose at which only 10% of cancer cells survive under the exponential model SF = exp(-alpha * D - beta * D ^ 2) given alpha and beta, where D is the radiation dose given and SF is the fraction of cells surviving
-#' @param pars parameters (alpha, beta) in equation y = exp(-alpha * x - beta * x ^ 2)
-#' @details The units of the returned dose are the inverses of the units of the alpha and beta passed in.
-#' @examples computeD10(c(0.2, 0.1))
+#' @description This function computes the radiation dose at which only 10% of
+#'   cancer cells survive under the exponential model
+#'   SF = exp(-alpha * D - beta * D ^ 2) given alpha and beta, where D is the
+#'   radiation dose given and SF is the fraction of cells surviving
+#'
+#' @examples
+#' computeD10(c(0.2, 0.1))
+#'
+#' @param pars parameters (alpha, beta) in equation
+#'   y = exp(-alpha * x - beta * x ^ 2)
+#'
+#' @return \code{numeric} The D10 value
+#'
+#' @details The units of the returned dose are the inverses of the units of
+#'   the alpha and beta passed in.
 #' @export
 computeD10 <- function(pars) {
   CoreGx::.sanitizeInput(pars = pars,

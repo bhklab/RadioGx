@@ -2,7 +2,8 @@
 #'
 #' This function fits a linear-quadratic curve to dose-response data.
 #'
-#' @examples linearQuadraticModel(c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+#' @examples
+#' linearQuadraticModel(c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
 #'  c(1.1, 0.8, 0.7, 0.45, 0.15, -0.1, -0.1, -0.4, -0.65, -0.75, -1.1))
 #'
 #' @param D vector of radiation doses
@@ -24,6 +25,7 @@
 #'   n = 1 (the default) is equivalent to using a simple normal or cauchy
 #'   distribution without taking any medians.)
 #'
+#' @return \code{numeric} The estimated alpha and beta values
 #' @export
 linearQuadraticModel <- function (D,
                                   SF,

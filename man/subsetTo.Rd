@@ -2,7 +2,8 @@
 % Please edit documentation in R/RadioSetClass.R
 \name{subsetTo}
 \alias{subsetTo}
-\title{A function to subset a RadioSet to data containing only specified radiations, cells and genes}
+\title{A function to subset a RadioSet to data containing only specified radiations,
+  cells and genes}
 \usage{
 subsetTo(
   object,
@@ -20,9 +21,9 @@ subsetTo(
 the object will be subsetted. If left blank, then all cells will be left in
 the dataset.}
 
-\item{radiationTypes}{A list or vector of radiation names as used in the dataset to which
-the object will be subsetted. If left blank, then all radiationTypes will be left in
-the dataset.}
+\item{radiationTypes}{A list or vector of radiation names as used in the
+dataset to which the object will be subsetted. If left blank, then all
+radiationTypes will be left in the dataset.}
 
 \item{molecular.data.cells}{A list or vector of cell names to keep in the
 molecular data}
@@ -37,12 +38,13 @@ A RadioSet with only the selected radiation types and cells
 }
 \description{
 This is the prefered method of subsetting a RadioSet. This function allows
-abstraction of the data to the level of biologically relevant objects: radiations
-and cells. The function will automatically go through all of the
+abstraction of the data to the level of biologically relevant objects:
+  radiations and cells. The function will automatically go through all of the
 combined data in the RadioSet and ensure only the requested radiations
 and cell lines are found in any of the slots. This allows quickly picking out
-all the experiments for a radiation or cell of interest, as well removes the need
-to keep track of all the metadata conventions between different datasets.
+all the experiments for a radiation or cell of interest, as well removes the
+need to keep track of all the metadata conventions between different
+datasets.
 }
 \examples{
 clevelandRadiationTypes  <- radiationTypes(clevelandSmall)

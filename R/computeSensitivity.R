@@ -1,54 +1,11 @@
-# .calculateSensitivitiesStar <-
-#   function (pSets = list(), exps=NULL, cap=NA, na.rm=TRUE, area.type=c("Fitted","Actual"), nthread=1) {
-
-#     if (missing(area.type)) {
-#       area.type <- "Fitted"
-#     }
-#     if (is.null(exps)) {
-#       stop("expriments is empty!")
-#     }
-#     for (study in names(pSets)) {
-#       pSets[[study]]@sensitivity$profiles$auc_recomputed_star <- NA
-#     }
-#     if (!is.na(cap)) {
-#       trunc <- TRUE
-#     }else{
-#       trunc <- FALSE
-#     }
-
-#     for(i in seq_len(nrow(exps))) {
-#       ranges <- list()
-#       for (study in names(pSets)) {
-#         ranges[[study]] <- as.numeric(pSets[[study]]@sensitivity$raw[exps[i,study], ,"Dose"])
-#       }
-#       ranges <- .getCommonConcentrationRange(ranges)
-#       names(ranges) <- names(pSets)
-#       for(study in names(pSets)) {
-#       	myx <- as.numeric(pSets[[study]]@sensitivity$raw[exps[i, study],,"Dose"]) %in% ranges[[study]]
-#       	pSets[[study]]@sensitivity$raw[exps[i,study],!myx, ] <- NA
-
-#        }
-#     }
-#    	cl <- makeCluster(nthread)
-#     for(study in names(pSets)){
-
-#     	auc_recomputed_star <- unlist(parSapply(cl=cl, rownames(pSets[[study]]@sensitivity$raw), function(experiment, exps, study, dataset, area.type){
-#     		if(!experiment %in% exps[,study]){return(NA_real_)}
-#     		return(computeAUC(concentration=as.numeric(dataset[experiment,,1]),
-#                         viability=as.numeric(dataset[experiment,,2]),
-#  						trunc=trunc, conc_as_log=FALSE, viability_as_pct=TRUE, area.type=area.type)/100)
-
-
-#     		}, exps = exps, study = study, dataset = pSets[[study]]@sensitivity$raw, area.type=area.type))
-
-#     	pSets[[study]]@sensitivity$profiles$auc_recomputed_star <- auc_recomputed_star
-#     }
-#     stopCluster(cl)
-#     return(pSets)
-#   }
-
 ## This function computes pars/AUC/SF2/D10 for the whole raw sensitivity data of a rset
-.calculateFromRaw <- function(raw.sensitivity, trunc=TRUE, nthread=1, family=c("normal", "Cauchy"), scale = 5, n = 1){
+.calculateFromRaw <- function(raw.sensitivity,
+                              trunc=TRUE,
+                              nthread=1,
+                              family=c("normal", "Cauchy"),
+                              scale = 5,
+                              n = 1)
+  {
   family <- match.arg(family)
 
   AUC <- vector(length=dim(raw.sensitivity)[1])
@@ -141,6 +98,11 @@
 
 
   return(list("AUC"=AUC, "SF2"=SF2, "D10"=D10 ,"alpha"=alpha, "beta"=beta))
+}
+
+updateMaxConc <- function(rSet) {
+  rSet@sensitivity$info$max.conc <- apply(rSet@sensitivity$raw[,,"Dose"], 1, max, na.rm=TRUE)
+  return(rSet)
 }
 
 
@@ -340,9 +302,51 @@
 #   return(beta1)
 # }
 
-updateMaxConc <- function(rSet){
+# .calculateSensitivitiesStar <-
+#   function (pSets = list(), exps=NULL, cap=NA, na.rm=TRUE, area.type=c("Fitted","Actual"), nthread=1) {
 
-   rSet@sensitivity$info$max.conc <- apply(rSet@sensitivity$raw[,,"Dose"], 1, max, na.rm=TRUE)
-   return(rSet)
- }
+#     if (missing(area.type)) {
+#       area.type <- "Fitted"
+#     }
+#     if (is.null(exps)) {
+#       stop("expriments is empty!")
+#     }
+#     for (study in names(pSets)) {
+#       pSets[[study]]@sensitivity$profiles$auc_recomputed_star <- NA
+#     }
+#     if (!is.na(cap)) {
+#       trunc <- TRUE
+#     }else{
+#       trunc <- FALSE
+#     }
 
+#     for(i in seq_len(nrow(exps))) {
+#       ranges <- list()
+#       for (study in names(pSets)) {
+#         ranges[[study]] <- as.numeric(pSets[[study]]@sensitivity$raw[exps[i,study], ,"Dose"])
+#       }
+#       ranges <- .getCommonConcentrationRange(ranges)
+#       names(ranges) <- names(pSets)
+#       for(study in names(pSets)) {
+#       	myx <- as.numeric(pSets[[study]]@sensitivity$raw[exps[i, study],,"Dose"]) %in% ranges[[study]]
+#       	pSets[[study]]@sensitivity$raw[exps[i,study],!myx, ] <- NA
+
+#        }
+#     }
+#    	cl <- makeCluster(nthread)
+#     for(study in names(pSets)){
+
+#     	auc_recomputed_star <- unlist(parSapply(cl=cl, rownames(pSets[[study]]@sensitivity$raw), function(experiment, exps, study, dataset, area.type){
+#     		if(!experiment %in% exps[,study]){return(NA_real_)}
+#     		return(computeAUC(concentration=as.numeric(dataset[experiment,,1]),
+#                         viability=as.numeric(dataset[experiment,,2]),
+#  						trunc=trunc, conc_as_log=FALSE, viability_as_pct=TRUE, area.type=area.type)/100)
+
+
+#     		}, exps = exps, study = study, dataset = pSets[[study]]@sensitivity$raw, area.type=area.type))
+
+#     	pSets[[study]]@sensitivity$profiles$auc_recomputed_star <- auc_recomputed_star
+#     }
+#     stopCluster(cl)
+#     return(pSets)
+#   }

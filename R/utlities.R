@@ -1,21 +1,18 @@
 #' rSet molecularProfiles from ESets to SEs
 #'
 #' Converts all ExpressionSet objects within the molecularProfiles slot of a
-#'   RadioSet to SummarizedExperiments
-#'
-#' @param rSet \code{S4} A RadioSet containing molecular data in ExpressionSets
-#'
-#' @return \code{S4} A RadioSet containing molecular data in a SummarizedExperiments
-#'
-#' @importFrom parallel mclapply
-#' @importFrom SummarizedExperiment assay assays assayNames
-#' @importClassesFrom SummarizedExperiment SummarizedExperiment Assays
-#' @importFrom Biobase exprs fData pData annotation protocolData
-#' @importFrom S4Vectors SimpleList DataFrame
-#' @importFrom stats setNames
-#'
-#' @export
-#' @keywords internal
+#   RadioSet to SummarizedExperiments
+#
+# @param rSet \code{S4} A RadioSet containing molecular data in ExpressionSets
+#
+# @return \code{S4} A RadioSet containing molecular data in a SummarizedExperiments
+#
+# @importFrom parallel mclapply
+# @importFrom SummarizedExperiment assay assays assayNames
+# @importClassesFrom SummarizedExperiment SummarizedExperiment Assays
+# @importFrom Biobase exprs fData pData annotation protocolData
+# @importFrom S4Vectors SimpleList DataFrame
+# @importFrom stats setNames
 .convertRsetMolecularProfilesToSE <- function(rSet) {
 
   eSets <- rSet@molecularProfiles # Extract eSet data
@@ -57,22 +54,20 @@
   rSet
 }
 
-##' Validate rSet molecularProfiles Conversion
-##'
-##' Checks that all the information contained in an ExpressionSet molecularProfile
-##'   was successfully tranferred to the SummarizedExperiment molecularProfile
-##'
-##' @param rSet_new \code{S4} a rSet containing molecularProfiles as SummarizedExperiments
-##' @param rSet_old \code{S4} a rSet containing molecularProfiles as ExpressionSets
-##'
-##' @return \code{message} Any slots which are not the same
-##'
-##' @importFrom testthat expect_equal test_that
-##' @import SummarizedExperiment
-##' @import Biobase
-##'
-##' @export
-##' @keywords internal
+## Validate rSet molecularProfiles Conversion
+##
+## Checks that all the information contained in an ExpressionSet molecularProfile
+##   was successfully tranferred to the SummarizedExperiment molecularProfile
+##
+## @param rSet_new \code{S4} a rSet containing molecularProfiles as SummarizedExperiments
+## @param rSet_old \code{S4} a rSet containing molecularProfiles as ExpressionSets
+##
+## @return \code{message} Any slots which are not the same
+##
+## @importFrom testthat expect_equal test_that
+## @import SummarizedExperiment
+## @import Biobase
+##
 .validaterSetMolecularProfilesToSEConversion <- function(rSet_old, rSet_new) {
 
   # Testing that rSets are in correct order
@@ -190,19 +185,19 @@
 }
 
 ##TODO:: Determine why CCLEsmall is 3x larger in memory after conversion?
-#' Utility function to resave all datasets after modifying convertrSetMolecularProfiles
-#'
-#' Converts all example dastasets specificed as an argument from
-#'   molecularProfiles as ExpressionSet to molecularProfiles as
-#'   SummarizedExperiment and saves them in the data folder
-#'
-#' @param datasets \code{character} A list of the example datasets to update
-#'
-#' @return \code{none} Works by side effects alone to resave all example
-#'   datasets in a package to have SummarizedExperiments for molecularProfiles
-#'
-#' @export
-#' @keywords internal
+# Utility function to resave all datasets after modifying convertrSetMolecularProfiles
+#
+# Converts all example dastasets specificed as an argument from
+#   molecularProfiles as ExpressionSet to molecularProfiles as
+#   SummarizedExperiment and saves them in the data folder
+#
+# @param datasets \code{character} A list of the example datasets to update
+#
+# @return \code{none} Works by side effects alone to resave all example
+#   datasets in a package to have SummarizedExperiments for molecularProfiles
+#
+# @export
+# @keywords internal
 .resaveAllExampleDatasets <- function(datasets) {
   for (dataset in datasets) {
     dataDir <- paste0(grep('data', list.dirs(), value=TRUE))

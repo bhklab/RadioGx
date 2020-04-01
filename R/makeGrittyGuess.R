@@ -1,5 +1,7 @@
-#' @export
-#' @keywords internal
+# Generate initial model parameters for fitting linear models
+#
+# @return Estimated parameters for first model fit
+#
 .makeGrittyGuess <- function(lower_bounds, upper_bounds, D, SF) {
   dFromD2 <- abs(D - 2)
   dFromSF10 <- abs(exp(SF) - 0.1)

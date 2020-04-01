@@ -21,22 +21,31 @@ computeAUC(
 
 \item{SF}{vector of survival fractions}
 
-\item{pars}{parameters (alpha, beta) in equation y = exp(-alpha * x - beta * x ^ 2)}
+\item{pars}{parameters (alpha, beta) in equation
+y = exp(-alpha * x - beta * x ^ 2)}
 
 \item{lower}{lower bound of dose region to compute AUC over}
 
 \item{upper}{upper bound of dose region to compute AUC over}
 
-\item{trunc}{should survival fractions be truncated downward to 1 if they exceed 1?}
+\item{trunc}{should survival fractions be truncated downward to 1 if they
+exceed 1?}
 
-\item{SF_as_log}{A boolean indicating whether survival fraction is displayed on a log axis. Defaults to FALSE}
+\item{SF_as_log}{A boolean indicating whether survival fraction is displayed
+on a log axis. Defaults to FALSE}
 
-\item{area.type}{should the AUC of the raw (D, SF) points be returned, or should the AUC of a curve fit to said points be returned instead?}
+\item{area.type}{should the AUC of the raw (D, SF) points be returned, or
+should the AUC of a curve fit to said points be returned instead?}
 
-\item{verbose}{how detailed should error and warning messages be? See details.}
+\item{verbose}{how detailed should error and warning messages be?
+See details.}
+}
+\value{
+\code{numeric} The area under the ROC curve
 }
 \description{
-This function computes the area under a dose-response curve of the form survival fraction SF = exp(-alpha * D - beta * D ^ 2).
+This function computes the area under a dose-response curve of
+  the form survival fraction SF = exp(-alpha * D - beta * D ^ 2).
 }
 \details{
 If lower and/or upper are missing, the function assumes their values
@@ -46,6 +55,7 @@ If lower and/or upper are missing, the function assumes their values
   set trunc = 2.
 }
 \examples{
-computeAUC(D=c(0.1, 0.5, 0.7, 0.9), pars=c(0.2, 0.1), lower = 0, upper = 1) # Returns 0.7039296
+computeAUC(D=c(0.1, 0.5, 0.7, 0.9), pars=c(0.2, 0.1), lower = 0,
+ upper = 1) # Returns 0.7039296
 
 }

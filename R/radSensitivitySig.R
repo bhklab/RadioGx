@@ -42,8 +42,10 @@
 #'   interquantile range lies in [0,1]. If none no rescaling is done.
 #' @param verbose \code{boolean} 'TRUE' if the warnings and other infomrative message shoud be displayed
 #' @param ... additional arguments not currently fully supported by the function
+#'
 #' @return \code{list} a 3D array with genes in the first dimension, radiation.types in the
 #'   second, and return values in the third.
+#'
 #' @export
 #' @import parallel
 radSensitivitySig <- function(rSet,

@@ -6,3 +6,5 @@
 ^.*\dose_response_plot.pdf
 ^dose_response_plot.pdf
 .travis.yml
+appveyor.yml
+.git

@@ -175,13 +175,20 @@ RadioSet <-  function(name,
 # CELL SLOT GETTERS/SETTERS ----
 #####
 
-#' cellInfo Generic
+#' cellInfo Getter
+#'
+#' Get cell line information from a RadioSet object
+#'
+#' @examples
+#' data(clevelandSmall)
+#' cellInf <- cellInfo(clevelandSmall)
 #'
 #' @param object A \code{RadioSet} object
 #'
 #' @return a \code{data.frame} with the cell annotations
 #'
-#' @describeIn RadioSet Returns the annotations for all the cell lines tested on in the RadioSet
+#' @describeIn RadioSet Returns the annotations for all the cell lines tested
+#'   on in the RadioSet
 #'
 #' @importFrom CoreGx cellInfo
 #' @importFrom methods callNextMethod
@@ -190,7 +197,13 @@ setMethod(cellInfo, "RadioSet", function(object){
    callNextMethod(object)
 })
 
-#' cellInfo Replace Method
+#' cellInfo Setter
+#'
+#' Set cell line annotations for a RadioSet object
+#'
+#' @examples
+#' data(clevelandSmall)
+#' cellInfo(clevelandSmall) <- cellInfo(clevelandSmall)
 #'
 #' @param object A \code{RadioSet} object
 #' @param value A replacement value
@@ -201,7 +214,9 @@ setMethod(cellInfo, "RadioSet", function(object){
 #' @importFrom methods callNextMethod
 #' @describeIn RadioSet Update the cell line annotations
 #' @export
-setReplaceMethod("cellInfo", signature = signature(object="RadioSet",value="data.frame"), function(object, value){
+setReplaceMethod("cellInfo",
+                 signature = signature(object="RadioSet",value="data.frame"),
+                 function(object, value){
   callNextMethod(object, value)
 })
 
@@ -220,7 +235,8 @@ setReplaceMethod("cellInfo", signature = signature(object="RadioSet",value="data
 #'
 #' @return a \code{data.frame} with the radiation annotations
 setGeneric("radiationInfo", function(object) standardGeneric("radiationInfo"))
-#' @describeIn RadioSet Returns the annotations for all the radiations tested in the RadioSet
+#' @describeIn RadioSet Returns the annotations for all the radiations tested
+#'   in the RadioSet
 #' @export
 setMethod(radiationInfo, "RadioSet", function(object){
   object@radiation
@@ -239,10 +255,13 @@ setMethod(radiationInfo, "RadioSet", function(object){
 #' @param value A \code{data.frame} with the new radiation annotations
 #'
 #' @return Updated \code{RadioSet}
-setGeneric("radiationInfo<-", function(object, value) standardGeneric("radiationInfo<-"))
+setGeneric("radiationInfo<-", function(object, value)
+  standardGeneric("radiationInfo<-"))
 #' @describeIn RadioSet Update the radiation annotations
 #' @export
-setReplaceMethod("radiationInfo", signature = signature(object="RadioSet",value="data.frame"), function(object, value){
+setReplaceMethod("radiationInfo",
+                 signature = signature(object="RadioSet",value="data.frame"),
+                 function(object, value){
   object@radiation <- value
   object
 })
@@ -281,7 +300,6 @@ setMethod("phenoInfo", signature = c(object="RadioSet", mDataType="character"),
 #' Setter method for the phenotype information of a given molecular data type
 #'
 #' @examples
-#'
 #' phenoInfo(clevelandSmall, mDataType="rna") <- phenoInfo(clevelandSmall,
 #'   mDataType="rna")
 #'
@@ -572,7 +590,6 @@ setMethod(radiationTypes, "RadioSet", function(object){
 #'
 #' A generic for the radiationTypes replacement method
 #'
-#'
 #' @examples
 #' radiationTypes(clevelandSmall) <- radiationTypes(clevelandSmall)
 #'
@@ -832,11 +849,11 @@ setReplaceMethod('sensNumber',
 
 #' Show a RadioSet
 #'
-#' @param object A \code{RadioSet} object
-#'
 #' @examples
 #' data(clevelandSmall)
 #' clevelandSmall
+#'
+#' @param object A \code{RadioSet} object
 #'
 #' @return Prints the RadioSet object to the output stream, and returns
 #'   invisible NULL.
@@ -848,16 +865,25 @@ setMethod("show", signature=signature(object="RadioSet"),
         cat("Date Created: ", dateCreated(object), "\n")
     cat("Number of cell lines: ", nrow(cellInfo(object)), "\n")
     cat("Number of radiation types: ", nrow(radiationInfo(object)), "\n")
-        if("dna" %in% names(object@molecularProfiles)){cat("DNA: \n");cat("\tDim: ", dim(molecularProfiles(object, mDataType="dna")), "\n")}
-      if("rna" %in% names(object@molecularProfiles)){cat("RNA: \n");cat("\tDim: ", dim(molecularProfiles(object, mDataType="rna")), "\n")}
-      if("rnaseq" %in% names(object@molecularProfiles)){cat("RNASeq: \n");cat("\tDim: ", dim(molecularProfiles(object, mDataType="rnaseq")), "\n")}
-      if("snp" %in% names(object@molecularProfiles)){cat("SNP: \n");cat("\tDim: ", dim(molecularProfiles(object, mDataType="snp")), "\n")}
-      if("cnv" %in% names(object@molecularProfiles)){cat("CNV: \n");cat("\tDim: ", dim(molecularProfiles(object, mDataType="cnv")), "\n")}
+        if("dna" %in% names(object@molecularProfiles)){
+          cat("DNA: \n");cat("\tDim: ", dim(
+            molecularProfiles(object, mDataType="dna")), "\n")}
+      if("rna" %in% names(object@molecularProfiles)){cat("RNA: \n");
+        cat("\tDim: ", dim(molecularProfiles(object, mDataType="rna")), "\n")}
+      if("rnaseq" %in% names(object@molecularProfiles)){cat("RNASeq: \n");
+        cat("\tDim: ", dim(molecularProfiles(object, mDataType="rnaseq")),
+            "\n")}
+      if("snp" %in% names(object@molecularProfiles)){cat("SNP: \n");
+        cat("\tDim: ", dim(molecularProfiles(object, mDataType="snp")), "\n")}
+      if("cnv" %in% names(object@molecularProfiles)){cat("CNV: \n");
+        cat("\tDim: ", dim(molecularProfiles(object, mDataType="cnv")), "\n")}
         cat("Drug pertubation: \n")
-        cat("\tPlease look at pertNumber(rSet) to determine number of experiments for each radiation-cell combination.\n")
+        cat("\tPlease look at pertNumber(rSet) to determine number of
+            experiments for each radiation-cell combination.\n")
         cat("Drug sensitivity: \n")
         cat("\tNumber of Experiments: ",nrow(sensitivityInfo(object)),"\n")
-        cat("\tPlease look at sensNumber(rSet) to determine number of experiments for each radiation-cell combination.\n")
+        cat("\tPlease look at sensNumber(rSet) to determine number of
+            experiments for each radiation-cell combination.\n")
     })
 
 #' mDataNames
@@ -865,7 +891,6 @@ setMethod("show", signature=signature(object="RadioSet"),
 #' Returns the molecular data names for the RadioSet.
 #'
 #' @examples
-
 #' mDataNames(clevelandSmall)
 #'
 #' @param object The parameter
@@ -900,6 +925,10 @@ setMethod(`[`, "RadioSet", function(x, i, j, ..., drop = FALSE){
 
 #' Get the dimensions of a RadioSet
 #'
+#' @examples
+#' data(clevelandSmall)
+#' dim(clevelandSmall)
+#'
 #' @param x RadioSet
 #' @return A named vector with the number of Cells and Drugs in the RadioSet
 #' @export
@@ -907,16 +936,19 @@ setMethod("dim", signature=signature(x="RadioSet"), function(x){
   return(c(Cells=length(cellNames(x)), Radiation=length(radiationTypes(x))))
 })
 
-## FIXED? TODO:: Subset function breaks if it doesnt find cell line in sensitivity info
-#' A function to subset a RadioSet to data containing only specified radiations, cells and genes
+## FIXED? TODO:: Subset function breaks if it doesnt find cell line in
+##  sensitivity info
+#' A function to subset a RadioSet to data containing only specified radiations,
+#'   cells and genes
 #'
 #' This is the prefered method of subsetting a RadioSet. This function allows
-#' abstraction of the data to the level of biologically relevant objects: radiations
-#' and cells. The function will automatically go through all of the
+#' abstraction of the data to the level of biologically relevant objects:
+#'   radiations and cells. The function will automatically go through all of the
 #' combined data in the RadioSet and ensure only the requested radiations
 #' and cell lines are found in any of the slots. This allows quickly picking out
-#' all the experiments for a radiation or cell of interest, as well removes the need
-#' to keep track of all the metadata conventions between different datasets.
+#' all the experiments for a radiation or cell of interest, as well removes the
+#' need to keep track of all the metadata conventions between different
+#' datasets.
 #'
 #' @examples
 #' clevelandRadiationTypes  <- radiationTypes(clevelandSmall)
@@ -929,9 +961,9 @@ setMethod("dim", signature=signature(x="RadioSet"), function(x){
 #' @param cells A list or vector of cell names as used in the dataset to which
 #'   the object will be subsetted. If left blank, then all cells will be left in
 #'   the dataset.
-#' @param radiationTypes A list or vector of radiation names as used in the dataset to which
-#'   the object will be subsetted. If left blank, then all radiationTypes will be left in
-#'   the dataset.
+#' @param radiationTypes A list or vector of radiation names as used in the
+#'   dataset to which the object will be subsetted. If left blank, then all
+#'   radiationTypes will be left in the dataset.
 #' @param molecular.data.cells A list or vector of cell names to keep in the
 #'   molecular data
 #' @param keep.controls If the dataset has perturbation type experiments, should
@@ -940,8 +972,15 @@ setMethod("dim", signature=signature(x="RadioSet"), function(x){
 #' @return A RadioSet with only the selected radiation types and cells
 #' @importFrom CoreGx .unionList
 #' @export
-# subsetTo <- function(object, cells=NULL, radiationTypes=NULL, exps=NULL, molecular.data.cells=NULL, keep.controls=TRUE) {
-subsetTo <- function(object, cells=NULL, radiationTypes=NULL, molecular.data.cells=NULL, keep.controls=TRUE, ...) {
+# subsetTo <- function(object, cells=NULL, radiationTypes=NULL, exps=NULL,
+# molecular.data.cells=NULL, keep.controls=TRUE) {
+subsetTo <- function(object,
+                     cells=NULL,
+                     radiationTypes=NULL,
+                     molecular.data.cells=NULL,
+                     keep.controls=TRUE,
+                     ...)
+  {
   drop=FALSE
 
   adArgs = list(...)
@@ -971,12 +1010,16 @@ subsetTo <- function(object, cells=NULL, radiationTypes=NULL, molecular.data.cel
 
     ### TODO:: implement strict subsetting at this level!!!!
 
-    ### the function missing does not work as expected in the context below, because the arguments are passed to the anonymous
+    ### the function missing does not work as expected in the context below,
+    ### because the arguments are passed to the anonymous
     ### function in lapply, so it does not recognize them as missing
 
-  object@molecularProfiles <- lapply(object@molecularProfiles, function(SE, cells, radiationTypes, molecular.data.cells){
+  object@molecularProfiles <- lapply(object@molecularProfiles,
+                                     function(SE, cells, radiationTypes,
+                                              molecular.data.cells){
 
-    molecular.data.type <- ifelse(length(grep("rna", S4Vectors::metadata(SE)$annotation) > 0), "rna", S4Vectors::metadata(SE)$annotation)
+    molecular.data.type <- ifelse(length(grep("rna",
+                                              S4Vectors::metadata(SE)$annotation) > 0), "rna", S4Vectors::metadata(SE)$annotation)
     if (length(grep(molecular.data.type, names(molecular.data.cells))) > 0) {
       cells <- molecular.data.cells[[molecular.data.type]]
     }

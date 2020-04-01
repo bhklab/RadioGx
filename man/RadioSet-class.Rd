@@ -166,6 +166,10 @@ containing both radiation dose response data, as well as datasets contaning
 genetic profiles of cell lines pre and post treatement with compounds, known
 respecitively as sensitivity and perturbation datasets.
 
+Get cell line information from a RadioSet object
+
+Set cell line annotations for a RadioSet object
+
 Getter method for the phenotype information of a given molecular data type
 
 Setter method for the phenotype information of a given molecular data type
@@ -215,11 +219,13 @@ Set the summary of the available sensitivity experiments in the RadioSet
 }
 \section{Methods (by generic)}{
 \itemize{
-\item \code{cellInfo}: Returns the annotations for all the cell lines tested on in the RadioSet
+\item \code{cellInfo}: Returns the annotations for all the cell lines tested
+on in the RadioSet
 
 \item \code{cellInfo<-}: Update the cell line annotations
 
-\item \code{radiationInfo}: Returns the annotations for all the radiations tested in the RadioSet
+\item \code{radiationInfo}: Returns the annotations for all the radiations tested
+in the RadioSet
 
 \item \code{radiationInfo<-}: Update the radiation annotations
 
@@ -323,8 +329,13 @@ RadioSet, for proper processing of the data}
 
 \examples{
 data(clevelandSmall)
-phenoInf <- phenoInfo(clevelandSmall, mDataType="rna")
+cellInf <- cellInfo(clevelandSmall)
 
+data(clevelandSmall)
+cellInfo(clevelandSmall) <- cellInfo(clevelandSmall)
+
+data(clevelandSmall)
+phenoInf <- phenoInfo(clevelandSmall, mDataType="rna")
 
 phenoInfo(clevelandSmall, mDataType="rna") <- phenoInfo(clevelandSmall,
   mDataType="rna")
