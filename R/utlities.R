@@ -1,18 +1,18 @@
-#' rSet molecularProfiles from ESets to SEs
-#'
-#' Converts all ExpressionSet objects within the molecularProfiles slot of a
-#   RadioSet to SummarizedExperiments
+# rSet molecularProfiles from ESets to SEs
+#
+# Converts all ExpressionSet objects within the molecularProfiles slot of a
+#  RadioSet to SummarizedExperiments
 #
 # @param rSet \code{S4} A RadioSet containing molecular data in ExpressionSets
 #
 # @return \code{S4} A RadioSet containing molecular data in a SummarizedExperiments
 #
-# @importFrom parallel mclapply
-# @importFrom SummarizedExperiment assay assays assayNames
-# @importClassesFrom SummarizedExperiment SummarizedExperiment Assays
-# @importFrom Biobase exprs fData pData annotation protocolData
-# @importFrom S4Vectors SimpleList DataFrame
-# @importFrom stats setNames
+#' @importFrom parallel mclapply
+#' @importFrom SummarizedExperiment assay assays assayNames
+#' @importClassesFrom SummarizedExperiment SummarizedExperiment Assays
+#' @importFrom Biobase exprs fData pData annotation protocolData
+#' @importFrom S4Vectors SimpleList DataFrame
+#' @importFrom stats setNames
 .convertRsetMolecularProfilesToSE <- function(rSet) {
 
   eSets <- rSet@molecularProfiles # Extract eSet data
@@ -64,10 +64,9 @@
 ##
 ## @return \code{message} Any slots which are not the same
 ##
-## @importFrom testthat expect_equal test_that
-## @import SummarizedExperiment
-## @import Biobase
-##
+#' @importFrom testthat expect_equal test_that
+#' @import SummarizedExperiment
+#' @import Biobase
 .validaterSetMolecularProfilesToSEConversion <- function(rSet_old, rSet_new) {
 
   # Testing that rSets are in correct order
