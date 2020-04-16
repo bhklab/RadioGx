@@ -1,7 +1,7 @@
 Package: RadioGx
 Type: Package
 Title: Analysis of Large-Scale Radio-Genomic Data 
-Version: 0.99.1
+Version: 0.99.2
 Date: 2020-03-30
 Authors@R: c(
   person("Venkata","Manem", email = "mail2mvskumar@gmail.com", 
