@@ -58,10 +58,10 @@ linearQuadraticModel <- function (D,
 
   if (!(all(lower_bounds < upper_bounds))) {
     if (verbose == 2) {
-      print("lower_bounds:")
-      print(lower_bounds)
-      print("upper_bounds:")
-      print(upper_bounds)
+      message("lower_bounds:")
+      message(lower_bounds)
+      message("upper_bounds:")
+      message(upper_bounds)
     }
     stop ("All lower bounds must be less than the corresponding upper_bounds.")
   }

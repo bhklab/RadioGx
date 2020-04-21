@@ -10,10 +10,10 @@ OERmodel <- function(oxygenConc) {
   pO2 <- oxygenConc
   pO2 <- as.numeric(pO2)
   if (is.na(pO2)) {
-    print("Error")}
+    stop("Error: oxygenConc is NA!")}
 
   if (pO2<0.1 | pO2>10){
-    print("Please enter an oxygenConc between 0.1 and 10")
+    stop("Please enter an oxygenConc between 0.1 and 10!")
   }
 
   OER_m = 3

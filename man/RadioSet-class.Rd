@@ -13,9 +13,15 @@
 \alias{molecularProfiles,RadioSet,character-method}
 \alias{molecularProfiles<-,RadioSet,character,character,matrix-method}
 \alias{molecularProfiles<-,RadioSet,character,missing,matrix-method}
+\alias{molecularProfilesSlot,RadioSet-method}
+\alias{molecularProfilesSlot<-,RadioSet,ANY-method}
 \alias{featureInfo,RadioSet,character-method}
 \alias{featureInfo<-,RadioSet,character,data.frame-method}
 \alias{sensitivityInfo,RadioSet-method}
+\alias{sensitivityRaw,RadioSet-method}
+\alias{sensitivityRaw<-,RadioSet,array-method}
+\alias{sensitivitySlot,RadioSet-method}
+\alias{sensitivitySlot<-,RadioSet,list-method}
 \alias{sensitivityInfo<-,RadioSet,DataFrame-method}
 \alias{sensitivityProfiles,RadioSet-method}
 \alias{sensitivityProfiles<-,RadioSet,data.frame-method}
@@ -28,6 +34,8 @@
 \alias{fNames,RadioSet,character-method}
 \alias{fNames<-,RadioSet,character,character-method}
 \alias{dateCreated,RadioSet-method}
+\alias{datasetType,RadioSet-method}
+\alias{datasetType<-,RadioSet-method}
 \alias{name,RadioSet-method}
 \alias{pertNumber,RadioSet-method}
 \alias{sensNumber,RadioSet-method}
@@ -53,11 +61,23 @@
 
 \S4method{molecularProfiles}{RadioSet,character,missing,matrix}(object, mDataType, assay) <- value
 
+\S4method{molecularProfilesSlot}{RadioSet}(object)
+
+\S4method{molecularProfilesSlot}{RadioSet,ANY}(object) <- value
+
 \S4method{featureInfo}{RadioSet,character}(object, mDataType)
 
 \S4method{featureInfo}{RadioSet,character,data.frame}(object, mDataType) <- value
 
 \S4method{sensitivityInfo}{RadioSet}(object)
+
+\S4method{sensitivityRaw}{RadioSet}(object)
+
+\S4method{sensitivityRaw}{RadioSet,array}(object) <- value
+
+\S4method{sensitivitySlot}{RadioSet}(object)
+
+\S4method{sensitivitySlot}{RadioSet,list}(object) <- value
 
 \S4method{sensitivityInfo}{RadioSet,DataFrame}(object) <- value
 
@@ -82,6 +102,10 @@
 \S4method{fNames}{RadioSet,character,character}(object, mDataType) <- value
 
 \S4method{dateCreated}{RadioSet}(object)
+
+\S4method{datasetType}{RadioSet}(object)
+
+\S4method{datasetType}{RadioSet}(object) <- value
 
 \S4method{name}{RadioSet}(object)
 
@@ -117,6 +141,10 @@ The updated \code{RadioSet}
 a \code{data.frame} with the experiment info
 
 Updated \code{RadioSet}
+
+A \code{list} containing the molecularProfiles from a cSet
+
+A copy of the \code{CoreSet} with the molecularProfiles slot updated
 
 A \code{DataFrame} containing the feature information
 
@@ -242,11 +270,26 @@ info in the RadioSet
 \item \code{molecularProfiles<-}: Update the given type of molecular data from
 the RadioSet
 
+\item \code{molecularProfilesSlot}: Get contents of molecularProfiles slot
+
+\item \code{molecularProfilesSlot<-}: Update the molecular profiles slot of a RadioSet and
+returns the updated copy
+
 \item \code{featureInfo}: Return the feature info for the given molecular data
 
 \item \code{featureInfo<-}: Replace the gene info for the molecular data
 
 \item \code{sensitivityInfo}: Return the radiation dose sensitivity experiment info
+
+\item \code{sensitivityRaw}: Retrive the raw dose and viability data from an rSet
+
+\item \code{sensitivityRaw<-}: Set the raw dose and viability data for an rSet and return
+and updated copty
+
+\item \code{sensitivitySlot}: Retrieve the contents of the sensitivity slot
+
+\item \code{sensitivitySlot<-}: Set the raw dose and viability data for an rSet and return
+and updated copty
 
 \item \code{sensitivityInfo<-}: Update the sensitivity experiment info
 
@@ -275,6 +318,12 @@ summaries, for example, whether there are IC50 values available
 \item \code{fNames<-}: Set the feature names for a given molecular data type
 
 \item \code{dateCreated}: Return the date the RadioSet was created
+
+\item \code{datasetType}: Update the dataset type of an rSet and return a copy of
+the updated object
+
+\item \code{datasetType<-}: Update the dataset type of an rSet and return a copy of
+the updated object
 
 \item \code{name}: Return the name of the RadioSet
 
@@ -345,6 +394,12 @@ Cleveland_mProf <- molecularProfiles(clevelandSmall, "rna")
 
 molecularProfiles(clevelandSmall, "rna") <-
   molecularProfiles(clevelandSmall, "rna")
+
+data(clevelandSmall)
+molecularProfilesSlot(clevelandSmall)
+
+data(clevelandSmall_cSet)
+molecularProfilesSlot(clevelandSmall_cSet) <- molecularProfilesSlot(clevelandSmall_cSet)
 
 featInf <- featureInfo(clevelandSmall, "rna")
 

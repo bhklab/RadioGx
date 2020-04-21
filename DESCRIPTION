@@ -40,22 +40,24 @@ Depends: R (>= 4.0), CoreGx
 Imports:
     SummarizedExperiment,
     S4Vectors,
-    Biobase, 
+    Biobase,
+    BiocParallel,
+    BiocGenerics,
     RColorBrewer, 
     caTools, 
     magicaxis, 
     methods, 
     reshape2,
     scales,
-    parallel,
     grDevices,
     graphics,
     stats,
     utils,
-    testthat
+    assertthat,
+    matrixStats
 Suggests:
     rmarkdown,
-    distill,
+    BiocStyle,
     knitr,
     pander
 biocViews: Software, Pharmacogenetics, QualityControl, Survival

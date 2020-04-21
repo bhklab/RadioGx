@@ -47,7 +47,7 @@
 #'   second, and return values in the third.
 #'
 #' @export
-#' @import parallel
+#' @importFrom parallel detectCores splitIndices
 radSensitivitySig <- function(rSet,
  mDataType,
  radiation.types,
@@ -83,12 +83,12 @@ radSensitivitySig <- function(rSet,
                                               collapse=", ")))
   }
 
-  if (!(mDataType %in% names(rSet@molecularProfiles))) {
+  if (!(mDataType %in% names(molecularProfilesSlot(rSet)))) {
     stop (sprintf("Invalid mDataType for %s, choose among: %s",
-                  rSet@annotation$name, paste(names(rSet@molecularProfiles),
+                  rSet@annotation$name, paste(names(molecularProfilesSlot(rSet)),
                                               collapse=", ")))
   }
-  switch(S4Vectors::metadata(rSet@molecularProfiles[[mDataType]])$annotation,
+  switch(S4Vectors::metadata(molecularProfilesSlot(rSet)[[mDataType]])$annotation,
     "mutation" = {
       if (!is.element(molecular.summary.stat, c("or", "and"))) {
         stop("Molecular summary statistic for mutation must be either 'or' or 'and'")
@@ -113,7 +113,7 @@ radSensitivitySig <- function(rSet,
       if (!is.element(molecular.summary.stat, c("mean", "median", "first", "last"))) {
         stop ("Molecular summary statistic for rna must be either 'mean', 'median', 'first' or 'last'")
       }},
-      stop (sprintf("No summary statistic for %s has been implemented yet", S4Vectors::metadata(rSet@molecularProfiles[[mDataType]])$annotation))
+      stop (sprintf("No summary statistic for %s has been implemented yet", S4Vectors::metadata(molecularProfilesSlot(rSet)[[mDataType]])$annotation))
       )
 
   if (!is.element(sensitivity.summary.stat, c("mean", "median", "first", "last"))) {
@@ -165,14 +165,14 @@ radSensitivitySig <- function(rSet,
     }
     drugn <- drugn[dix]
 
-    rSet@molecularProfiles[[mDataType]] <- summarizeMolecularProfiles(rSet = rSet,
+    molecularProfilesSlot(rSet)[[mDataType]] <- summarizeMolecularProfiles(rSet = rSet,
       mDataType = mDataType,
       summary.stat = molecular.summary.stat,
       verbose = verbose)[features, ]
 
     if(!is.null(dots[["mProfiles"]])){
       mProfiles <- dots[["mProfiles"]]
-      SummarizedExperiment::assay(rSet@molecularProfiles[[mDataType]]) <- mProfiles[features, colnames(rSet@molecularProfiles[[mDataType]]), drop = FALSE]
+      SummarizedExperiment::assay(molecularProfilesSlot(rSet)[[mDataType]]) <- mProfiles[features, colnames(molecularProfilesSlot(rSet)[[mDataType]]), drop = FALSE]
 
     }
 
@@ -190,7 +190,7 @@ radSensitivitySig <- function(rSet,
 
     splitix <- parallel::splitIndices(nx = length(drugn), ncl = 1)
     splitix <- splitix[sapply(splitix, length) > 0]
-    mcres <-  parallel::mclapply(splitix, function(x, drugn, expr, drugpheno, type, batch, standardize, nthread) {
+    mcres <-  BiocParallel::bplapply(splitix, function(x, drugn, expr, drugpheno, type, batch, standardize, nthread) {
       res <- NULL
       for(i in drugn[x]) {
         ## using a linear model (x ~ concentration + cell + batch)
@@ -224,7 +224,7 @@ radSensitivitySig <- function(rSet,
       drug.sensitivity[rownames(featureInfo(rSet, mDataType)[features,, drop = FALSE]), names(res), j] <- ttt
     }
 
-    drug.sensitivity <- RadioSig(drug.sensitivity, PSetName = name(rSet), Call ="as.character(match.call())", SigType='Sensitivity')
+    drug.sensitivity <- RadioSig(drug.sensitivity, RSetName = name(rSet), Call ="as.character(match.call())", SigType='Sensitivity')
 
     return(drug.sensitivity)
   }

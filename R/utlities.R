@@ -7,7 +7,6 @@
 #
 # @return \code{S4} A RadioSet containing molecular data in a SummarizedExperiments
 #
-#' @importFrom parallel mclapply
 #' @importFrom SummarizedExperiment assay assays assayNames
 #' @importClassesFrom SummarizedExperiment SummarizedExperiment Assays
 #' @importFrom Biobase exprs fData pData annotation protocolData
@@ -15,9 +14,9 @@
 #' @importFrom stats setNames
 .convertRsetMolecularProfilesToSE <- function(rSet) {
 
-  eSets <- rSet@molecularProfiles # Extract eSet data
+  eSets <- molecularProfilesSlot(rSet) # Extract eSet data
 
-  rSet@molecularProfiles <-
+  molecularProfilesSlot(rSet) <-
     lapply(eSets,
            function(eSet){
 
@@ -48,9 +47,9 @@
              SummarizedExperiment::assayNames(SE) <- Biobase::assayDataElementNames(eSet)
              # Assign SE to rSet
              mDataType <- Biobase::annotation(eSet)
-             rSet@molecularProfiles[[mDataType]] <- SE
+             molecularProfilesSlot(rSet)[[mDataType]] <- SE
            })
-  setNames(rSet@molecularProfiles, names(eSets))
+  setNames(molecularProfilesSlot(rSet), names(eSets))
   rSet
 }
 
@@ -64,123 +63,100 @@
 ##
 ## @return \code{message} Any slots which are not the same
 ##
-#' @importFrom testthat expect_equal test_that
+#' @importFrom assertthat are_equal
 #' @import SummarizedExperiment
 #' @import Biobase
-.validaterSetMolecularProfilesToSEConversion <- function(rSet_old, rSet_new) {
+#' @keywords internal
+.validateRsetMolecularProfilesToSEConversion <- function(rSet_old, rSet_new) {
 
   # Testing that rSets are in correct order
-  print("Checking is rSet structures are correct")
+  message("Checking is rSet structures are correct")
 
-  testthat::expect_true(
-    all(vapply(rSet_old@molecularProfiles, function(x) { is(x, "ExpressionSet") }, FUN.VALUE = logical(1))),
-    info = "Old rSet doesn't contain ExpressionSet objects, maybe argument order is wrong?"
-  )
+  if(!all(vapply(rSet_old@molecularProfiles,
+                 function(x) { is(x, "ExpressionSet") }, FUN.VALUE = logical(1)))
+  ) message("Old rSet doesn't contain ExpressionSet objects, maybe argument order is wrong?")
 
-  testthat::expect_true(
-    all(vapply(rSet_new@molecularProfiles, function(x) { is(x, "SummarizedExperiment") }, FUN.VALUE = logical(1))),
-    info = "New rSet doesn't contain SummarizedExperiment objects, maybe argument order is wrong?"
-  )
+  if(
+    !all(vapply(molecularProfilesSlot(rSet_new),
+                function(x) { is(x, "SummarizedExperiment") }, FUN.VALUE = logical(1)))
+  ) message("New rSet doesn't contain SummarizedExperiment objects, maybe argument order is wrong?")
 
   # Comparing molecularProfiles slot data
-  print("Checking molecularProfiles slots hold equivalent data.")
+  message("Checking molecularProfiles slots hold equivalent data.")
 
   for (i in seq_len(length(rSet_old@molecularProfiles))) {
-    for (j in seq_along(assays(rSet_new@molecularProfiles[[i]]))) {
-      testthat::expect_true(
-        all(
-          as.list(assayData(rSet_old@molecularProfiles[[i]]))[[j]] ==
-            assay(rSet_new@molecularProfiles[[i]], j),
-          na.rm = TRUE
-        ),
-        info = "The assay data is not equivalent"
-      )
+    for (j in seq_along(assays(molecularProfilesSlot(rSet_new)[[i]]))) {
+      if(!all(
+          as.list(assayData(rSet_old@molecularProfiles[[i]]))[[j]],
+            assay(molecularProfilesSlot(rSet_new)[[i]], j),
+          na.rm = TRUE)) message("The assay data is not equivalent")
     }
   }
   ## TODO:: Rewrite this as an apply statement
   for (i in seq_len(length(rSet_old@molecularProfiles))) { # Have to compare like this due to NAs in data
     # Checking phenoData
-    testthat::expect_true(
-      if (nrow(pData(rSet_old@molecularProfiles[[i]])) > 0) {
+    if(
+      !(if (nrow(pData(rSet_old@molecularProfiles[[i]])) > 0) {
         all(
           as(rSet_old@molecularProfiles[[i]]@phenoData, "data.frame") ==
-            as.data.frame(rSet_new@molecularProfiles[[i]]@colData[
-              seq_len(length(rSet_new@molecularProfiles[[i]]@colData) -1)]),
+            as.data.frame(molecularProfilesSlot(rSet_new)[[i]]@colData[
+              seq_len(length(molecularProfilesSlot(rSet_new)[[i]]@colData) -1)]),
           na.rm = TRUE)
-      } else { TRUE },
-      info = "The phenoData is not equivalent",
-    )
+      } else { FALSE })
+    ) message("The phenoData is not equivalent")
     # Checking featureData
-    testthat::expect_true(
-      if (nrow(fData(rSet_old@molecularProfiles[[i]])) > 0) {
+    if(
+      !(if (nrow(fData(rSet_old@molecularProfiles[[i]])) > 0) {
         all(
           as(rSet_old@molecularProfiles[[i]]@featureData, "data.frame") ==
-            as.data.frame(rSet_new@molecularProfiles[[i]]@elementMetadata[
-              seq_len(length(rSet_new@molecularProfiles[[i]]@elementMetadata) -1)]),
+            as.data.frame(molecularProfilesSlot(rSet_new)[[i]]@elementMetadata[
+              seq_len(length(molecularProfilesSlot(rSet_new)[[i]]@elementMetadata) -1)]),
           na.rm = TRUE)
-      } else { TRUE },
-      info = "The featureData is not equivalent",
-    )
+      } else { FALSE })
+    ) message("The featureData is not equivalent")
     # Checking protocolData
-    testthat::expect_true(
-      all(
+    if(
+      !all(
         as(rSet_old@molecularProfiles[[i]]@protocolData, "data.frame") ==
-          as(rSet_new@molecularProfiles[[i]]@metadata$protocolData, "data.frame"),
-        na.rm = TRUE),
-      info = "The protocolData is not equivalent"
-    )
+          as(molecularProfilesSlot(rSet_new)[[i]]@metadata$protocolData, "data.frame"),
+        na.rm = TRUE)
+      ) message("The protocolData is not equivalent")
   }
 
-  testthat::expect_equal(
-    lapply(rSet_old@molecularProfiles, function(x) { x@annotation }),
-    lapply(rSet_new@molecularProfiles, function(x) { x@metadata$annotation }),
-    info = "The annotation is not equivalent"
-  )
+  if(!assertthat::are_equal(
+    lapply(rSet_old@molecularProfiles, function(x) { annotation(x) }),
+    lapply(molecularProfilesSlot(rSet_new), function(x) { metadata(x)$annotation }))
+  )  message("The annotation is not equivalent")
 
-  testthat::expect_equal(
-    lapply(rSet_old@molecularProfiles, function(x) { x@experimentData }),
-    lapply(rSet_new@molecularProfiles, function(x) { x@metadata$experimentData }),
-    info = "The experimentData is not equivalent"
-  )
-
-  ##TODO:: Removed .__classVersion__ from SE as it is a property specific to eSet
-  # testthat::expect_equal(
-  #   lapply(rSet_old@molecularProfiles, function(x) { x@.__classVersion__ }),
-  #   lapply(rSet_new@molecularProfiles, function(x) { x@metadata$.__classVersion__}),
-  #   info = "The .__classVersion__ is not equivalent"
-  # )
+  if(!assertthat::are_equal(
+    lapply(rSet_old@molecularProfiles, function(x) { experimentData(x) }),
+    lapply(molecularProfilesSlot(rSet_new), function(x) { metadata(x)$experimentData })
+    )
+  ) message("The experimentData is not equivalent")
 
   # Comparing remainder of rSet slots; should not be affect by conversion
-  print("Comparing remainder of rSet slots")
+  message("Comparing remainder of rSet slots")
 
-  testthat::test_that("Checking rSet@annotation slot is unchanged.", {
-    testthat::expect_equal(rSet_old@annotation, rSet_new@annotation)
-  })
+  if (!assertthat::are_equal(rSet_old@annotation, rSet_new@annotation))
+    message("annotation slots not equal!")
 
-  testthat::test_that("Checking rSet@cell slot is unchanged.", {
-    testthat::expect_equal(rSet_old@cell, rSet_new@cell)
-  })
+  if (!assertthat::are_equal(rSet_old@cell, rSet_new@cell))
+    message("cell slots are not equal!")
 
-  testthat::test_that("Checking rSet@radiation slot is unchanged.", {
-    testthat::expect_equal(rSet_old@radiation, rSet_new@radiation)
-  })
+  if (!assertthat::are_equal(rSet_old@radiation, rSet_new@radiation))
+    message("radiation slots are not equal!")
 
-  testthat::test_that("Checking rSet@sensitivity slot is unchanged.", {
-    testthat::expect_equal(rSet_old@sensitivity, rSet_new@sensitivity)
-  })
+  if (!assertthat::are_equal(rSet_old@sensitivity, sensitivitySlot(rSet_new)))
+    message("sensitivty slots are not equal!")
 
-  testthat::test_that("Checking rSet@datasetType slot is unchanged.", {
-    testthat::expect_equal(rSet_old@datasetType, rSet_new@datasetType)
-  })
+  if (!assertthat::are_equal(rSet_old@datasetType, datasetType(rSet_new)))
+    message("datasetType slots are not equal!")
 
-  testthat::test_that("Checking rSet@perturbation slot is unchanged.", {
-    testthat::expect_equal(rSet_old@perturbation, rSet_new@perturbation)
-  })
+  if (!assertthat::are_equal(rSet_old@perturbation, rSet_new@perturbation))
+    message("perturbation slots are not equal!")
 
-  testthat::test_that("Checking rSet@curation slot is unchanged.", {
-    testthat::expect_equal(rSet_old@curation, rSet_new@curation)
-  })
-  message("Tests pass!")
+  if (!assertthat::are_equal(rSet_old@curation, rSet_new@curation))
+    message("curation slots are not equal")
 }
 
 ##TODO:: Determine why CCLEsmall is 3x larger in memory after conversion?

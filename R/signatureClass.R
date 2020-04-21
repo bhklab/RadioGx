@@ -9,33 +9,33 @@ setOldClass('sessionInfo', sessionInfo)
             SessionInfo = 'sessionInfo',
             Call = 'character'), contains='array')
 
-# Radiation Signature Class Constructor
-#
-# A documented constructor to provide user friendly interface to .RadioSig
-#
-# @param Data
-# @param PSetName
-# @param DateCreated
-# @param SigType
-# @param SessionInfo
-# @param Call
-#
-# @return A \code{RadioSig} object
-#
-# @export
+#' Radiation Signature Class Constructor
+#'
+#' A documented constructor to provide user friendly interface to .RadioSig
+#'
+#' @param Data The data
+#' @param RSetName The name of the pSet
+#' @param DateCreated The date the object was created
+#' @param SigType The type of sensitivyt signature
+#' @param SessionInfo The package version used to generate the object
+#' @param Call The calls for sensitivity vs not
+#'
+#' @return A \code{RadioSig} object
+#'
+#' @export
 RadioSig <- function(Data=array(NA, dim=c(0,0,0)),
-                     PSetName='',
+                     RSetName='',
                      DateCreated=date(),
                      SigType='sensitivity',
                      SessionInfo=sessionInfo(),
                      Call='No Call Recorded')
 {
 return(.RadioSig(Data,
-                 PSetName=PSetName,
+                 RSetName=RSetName,
                  DateCreated=DateCreated,
                  SigType=SigType,
                  SessionInfo=SessionInfo,
-                  Call=Call))
+                 Call=Call))
 }
 
 
@@ -80,8 +80,8 @@ setMethod("show", signature=signature(object='RadioSig'),
 #' @export
 showSigAnnot <- function(Sigs){
 
-  print(Sigs@Call)
-  print(Sigs@SessionInfo)
+  print(attr(Sigs, 'Call'))
+  print(attr(Sigs, 'SessionInfo'))
   return(invisible(NULL))
 }
 

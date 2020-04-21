@@ -57,31 +57,30 @@
 #' methods. For a much more detailed instruction on creating RadioSets, please
 #' see the "CreatingRadioSet" vignette.
 #'
-#'
-#'@inheritParams CoreGx::CoreSet
-# @param name A \code{character} string detailing the name of the dataset
-# @param molecularProfiles A \code{list} of ExpressionSet objects containing
-#   molecular profiles
-# @param cell A \code{data.frame} containg the annotations for all the cell
-#   lines profiled in the data set, across all data types
+##TODO:: Figure out how to inherit constructor parameters?
+#' @param name A \code{character} string detailing the name of the dataset
+#' @param molecularProfiles A \code{list} of ExpressionSet objects containing
+#'   molecular profiles
+#' @param cell A \code{data.frame} containg the annotations for all the cell
+#'   lines profiled in the data set, across all data types
 #' @param radiation A \code{data.frame} containg the annotations for all the radiations
 #'   profiled in the data set, across all data types
-# @param sensitivityInfo A \code{data.frame} containing the information for the
-#   sensitivity experiments
-# @param sensitivityRaw A 3 Dimensional \code{array} contaning the raw radiation
-#   dose – response data for the sensitivity experiments
-# @param sensitivityProfiles \code{data.frame} containing radiation sensitivity profile
-#   statistics such as IC50 and AUC
-# @param sensitivityN,perturbationN A \code{data.frame} summarizing the
-#   available sensitivity/perturbation data
+#' @param sensitivityInfo A \code{data.frame} containing the information for the
+#'   sensitivity experiments
+#' @param sensitivityRaw A 3 Dimensional \code{array} contaning the raw radiation
+#'   dose – response data for the sensitivity experiments
+#' @param sensitivityProfiles \code{data.frame} containing radiation sensitivity profile
+#'   statistics such as IC50 and AUC
+#' @param sensitivityN,perturbationN A \code{data.frame} summarizing the
+#'   available sensitivity/perturbation data
 #' @param curationCell,curationTissue A \code{data.frame} mapping
 #'   the names for radiations, cells and tissues used in the data set to universal
 #'   identifiers used between different RadioSet objects
-# @param datasetType A \code{character} string of 'sensitivity',
+#' @param datasetType A \code{character} string of 'sensitivity',
 #'   'preturbation', or both detailing what type of data can be found in the
 #'   RadioSet, for proper processing of the data
-# @param verify \code{boolean} Should the function verify the RadioSet and
-#   print out any errors it finds after construction?
+#' @param verify \code{boolean} Should the function verify the RadioSet and
+#'   print out any errors it finds after construction?
 
 #' @return An object of class RadioSet
 #'
@@ -161,10 +160,10 @@ RadioSet <-  function(name,
     rSet  <- .RadioSet(annotation=annotation, molecularProfiles=molecularProfiles, cell=as.data.frame(cell), radiation=as.data.frame(radiation), datasetType=datasetType, sensitivity=sensitivity, perturbation=perturbation, curation=curation)
     if (verify) { checkRSetStructure(rSet)}
   if(length(sensitivityN) == 0 & datasetType %in% c("sensitivity", "both")) {
-    rSet@sensitivity$n <- .summarizeSensitivityNumbers(rSet)
+    sensNumber(rSet) <- .summarizeSensitivityNumbers(rSet)
   }
     if(length(perturbationN) == 0  & datasetType %in% c("perturbation", "both")) {
-      rSet@perturbation$n <- .summarizePerturbationNumbers(rSet)
+      pertNumber(rSet) <- .summarizePerturbationNumbers(rSet)
     }
   return(rSet)
 }
@@ -375,7 +374,10 @@ setReplaceMethod("molecularProfiles",
                  signature = signature(object="RadioSet",
                                        mDataType ="character",
                                        assay="character",
-                                       value="matrix"), function(object, mDataType, assay, value){
+                                       value="matrix"), function(object,
+                                                                 mDataType,
+                                                                 assay,
+                                                                 value) {
   callNextMethod(object, mDataType, assay, value)
 })
 #' @describeIn RadioSet Update the given type of molecular data from
@@ -390,6 +392,48 @@ setReplaceMethod("molecularProfiles",
   callNextMethod(object, mDataType, assay, value)
 })
 
+#' molecularProfilesSlot Getter
+#'
+#' @describeIn RadioSet Get contents of molecularProfiles slot
+#'
+#' @examples
+#' data(clevelandSmall)
+#' molecularProfilesSlot(clevelandSmall)
+#'
+#' @param object A \code{RadioSet} from which to return a list of all availble
+#'   SummarizedExperiment objects
+#'
+#' @return A \code{list} containing the molecularProfiles from a cSet
+#'
+#' @importFrom CoreGx molecularProfilesSlot
+#' @importFrom methods callNextMethod
+#' @export
+setMethod("molecularProfilesSlot", signature("RadioSet"), function(object) {
+  callNextMethod(object)
+})
+
+#' molecularProfilesSlot<- Setter
+#'
+#' @describeIn RadioSet Update the molecular profiles slot of a RadioSet and
+#'    returns the updated copy
+#'
+#' @examples
+#' data(clevelandSmall_cSet)
+#' molecularProfilesSlot(clevelandSmall_cSet) <- molecularProfilesSlot(clevelandSmall_cSet)
+#'
+#' @param object A \code{RadioSet} object for which values will be replaced
+#' @param value A \code{list} containing molecular profiles as SummarizedExperiments
+#'
+#' @return A copy of the \code{CoreSet} with the molecularProfiles slot updated
+#'
+#' @importFrom CoreGx molecularProfilesSlot<-
+#' @importFrom methods callNextMethod
+
+#' @export
+setReplaceMethod("molecularProfilesSlot", signature("RadioSet"),
+                 function(object, value){
+  callNextMethod(object, value)
+})
 
 #' featureInfo Getter
 #'
@@ -466,6 +510,99 @@ callNextMethod(object, mDataType, value)
 setMethod(sensitivityInfo, "RadioSet", function(object) {
     callNextMethod(object)
 })
+
+##TODO:: Migrate this to CoreGx
+#' sensitivityRaw Generic
+#'
+#' @examples
+#' data(clevelandSmall)
+#' sensitivityRaw(clevelandSmall)
+#'
+#' @param object A \code{RadiSet} to extract the raw sensitivity data from
+#' @param ... A \code{list} to allow new parameters in specific methods
+#'
+#' @return A \code{array} containing the raw sensitivity data
+#'
+#' @export
+setGeneric("sensitivityRaw", function(object, ...) standardGeneric("sensitivityRaw"))
+#' @describeIn RadioSet Retrive the raw dose and viability data from an rSet
+#' @inheritParams sensitivityRaw
+#' @export
+setMethod("sensitivityRaw", signature("RadioSet"), function(object) {
+  object@sensitivity$raw
+})
+
+##TODO:: Migrate this to CoreGx
+#' sensitivityRaw<- Replacement Generic
+#'
+#' @examples
+#' data(clevelandSmall)
+#' sensitivityRaw(clevelandSmall) <- sensitivityRaw(clevelandSmall)
+#'
+#' @param object A \code{RadioSet} to extract the raw sensitivity data from
+#' @param ... A \code{list} to allow new parameters in specific methods
+#' @param value A \code{array} containing the raw dose and viability data for the
+#'   rSet
+#'
+#' @return A copy of the \code{RadioSet} containing the updated sensitivty data
+#'
+#' @export
+setGeneric("sensitivityRaw<-", function(object, ..., value) standardGeneric("sensitivityRaw<-"))
+#' @describeIn RadioSet Set the raw dose and viability data for an rSet and return
+#'   and updated copty
+#' @inheritParams sensitivityRaw<-
+#' @export
+setReplaceMethod("sensitivityRaw", signature("RadioSet", "array"),
+                 function(object, value) {
+  object@sensitivity$raw <- value
+})
+
+##TODO:: Migrate this to CoreGx
+#' sensitivitySlot Generic
+#'
+#' @examples
+#' data(clevelandSmall)
+#' sensitivitySlot(clevelandSmall)
+#'
+#' @param object A \code{RadioSet} to extract the raw sensitivity data from
+#' @param ... A \code{list} to allow new parameters in specific methods
+#'
+#' @return A \code{list} of the sensitivity slot contents
+#'
+#' @export
+setGeneric("sensitivitySlot", function(object, ...) standardGeneric("sensitivitySlot"))
+#' @describeIn RadioSet Retrieve the contents of the sensitivity slot
+#' @inheritParams sensitivitySlot
+#' @export
+setMethod("sensitivitySlot", signature("RadioSet"), function(object) {
+  object@sensitivity
+})
+
+##TODO:: Migrate this to CoreGx
+#' sensitivitySlot<- Replacement Generic
+#'
+#' @examples
+#' data(clevelandSmall)
+#' sensitivitySlot(clevelandSmall) <- sensitivitySlot(clevelandSmall)
+#'
+#' @param object A \code{RadioSet} to extract the raw sensitivity data from
+#' @param ... A \code{list} to allow new parameters in specific methods
+#' @param value A \code{list} of new sensitivity slot data for the rSet
+#'
+#' @return A copy of the \code{RadioSet} containing the updated sensitivty slot
+#'
+#' @export
+setGeneric("sensitivitySlot<-", function(object, ..., value) standardGeneric("sensitivitySlot<-"))
+#' @describeIn RadioSet Set the raw dose and viability data for an rSet and return
+#'   and updated copty
+#' @inheritParams sensitivityRaw<-
+#' @export
+setReplaceMethod("sensitivitySlot", signature("RadioSet", "list"),
+                 function(object, value) {
+                   ##TODO:: Implement error handinlg for this slot
+                   object@sensitivity <- value
+                 })
+
 
 #' sensitivityInfo<- Setter
 #'
@@ -727,6 +864,58 @@ setMethod(dateCreated,
   callNextMethod(object)
 })
 
+##TODO:: Export this to CoreGx
+#' datasetType Generic
+#'
+#' A generic for retrieving the dataset type of an rSet object
+#'
+#' @examples
+#' data(clevelandSmall)
+#' datasetType(clevelandSmall)
+#'
+#' @param object A \code{RadioSet} from which to retrieve the dataset type
+#' @param ... A \code{list} containing fall through arguments; this allows
+#'   addition of new parameters to methods for this generic
+#'
+#' @return A \code{character} vector containing the dataset tpye
+#'
+#' @export
+setGeneric("datasetType", function(object, ...) standardGeneric("datasetType"))
+
+#' @inheritParams datasetType
+#' @describeIn RadioSet Update the dataset type of an rSet and return a copy of
+#'     the updated object
+#' @export
+setMethod("datasetType", signature("RadioSet"), function(object) {
+  ##TODO:: Add error handling to this function
+  object@datasetType
+})
+
+
+##TODO:: Export this to CoreGx
+#' datasetType<- Replacement Generic
+#'
+#' A generic for updating the dataset type of a RadioSet object
+#'
+#' @examples
+#' data(clevelandSmall)
+#' datasetType(clevelandSmall)
+#'
+#' @param object A \code{RadioSet} from which to retrieve the dataset type
+#' @param value A \code{character} vector containing the dataset type
+#'
+#' @return A \code{character} vector containing the dataset tpye
+#'
+#' @export
+setGeneric("datasetType<-",  function(object, value) standardGeneric("datasetType<-"))
+#' @inheritParams datasetType<-
+#' @describeIn RadioSet Update the dataset type of an rSet and return a copy of
+#'     the updated object
+#' @export
+setReplaceMethod("datasetType", signature("RadioSet"), function(object, value) {
+  ##TODO:: Add error handling to this function
+  object@datasetType <- value
+})
 
 #' name Getter
 #'
@@ -770,7 +959,6 @@ setMethod("name", "RadioSet", function(object) {
 setMethod(pertNumber, "RadioSet", function(object) {
   callNextMethod(object)
 })
-
 
 #' sensNumber Getter
 #'
@@ -865,17 +1053,17 @@ setMethod("show", signature=signature(object="RadioSet"),
         cat("Date Created: ", dateCreated(object), "\n")
     cat("Number of cell lines: ", nrow(cellInfo(object)), "\n")
     cat("Number of radiation types: ", nrow(radiationInfo(object)), "\n")
-        if("dna" %in% names(object@molecularProfiles)){
+        if("dna" %in% names(molecularProfilesSlot(object))){
           cat("DNA: \n");cat("\tDim: ", dim(
             molecularProfiles(object, mDataType="dna")), "\n")}
-      if("rna" %in% names(object@molecularProfiles)){cat("RNA: \n");
+      if("rna" %in% names(molecularProfilesSlot(object))){cat("RNA: \n");
         cat("\tDim: ", dim(molecularProfiles(object, mDataType="rna")), "\n")}
-      if("rnaseq" %in% names(object@molecularProfiles)){cat("RNASeq: \n");
+      if("rnaseq" %in% names(molecularProfilesSlot(object))){cat("RNASeq: \n");
         cat("\tDim: ", dim(molecularProfiles(object, mDataType="rnaseq")),
             "\n")}
-      if("snp" %in% names(object@molecularProfiles)){cat("SNP: \n");
+      if("snp" %in% names(molecularProfilesSlot(object))){cat("SNP: \n");
         cat("\tDim: ", dim(molecularProfiles(object, mDataType="snp")), "\n")}
-      if("cnv" %in% names(object@molecularProfiles)){cat("CNV: \n");
+      if("cnv" %in% names(molecularProfilesSlot(object))){cat("CNV: \n");
         cat("\tDim: ", dim(molecularProfiles(object, mDataType="cnv")), "\n")}
         cat("Drug pertubation: \n")
         cat("\tPlease look at pertNumber(rSet) to determine number of
@@ -903,15 +1091,43 @@ setMethod(
     callNextMethod(object)
 })
 
-#'`[`
+#' annotation Slot Getter
 #'
-#'@param x a \code{RadioSet} object
-#'@param i Cell lines to keep in RSet
-#'@param j Drugs to keep in RSet
-#'@param ... further arguments
-#'@param drop A boolean flag of whether to drop single dimensions or not
-#'@return Returns the subsetted RSet
-#'@export
+#' @inheritParams BiocGenerics::annotation
+#'
+#' @examples
+#' data(clevelandSmall)
+#' annotation(clevelandSmall)
+#'
+#' @importFrom BiocGenerics annotation
+#' @export
+setMethod('annotation', signature("RadioSet"), function(object) {
+  object@annotation
+})
+
+#' annotation<- Slot Setter
+#'
+#' @inheritParams BiocGenerics::`annotation<-`
+#'
+#' @examples
+#' data(clevelandSmall)
+#' annotation(clevelandSmall) <- annotation(clevelandSmall)
+#'
+#' @importFrom BiocGenerics `annotation<-`
+#' @export
+setReplaceMethod("annotation", signature("RadioSet"), function(object, value) {
+  object@annotation <- value
+})
+
+#' `[`
+#'
+#' @param x a \code{RadioSet} object
+#' @param i Cell lines to keep in RSet
+#' @param j Drugs to keep in RSet
+#' @param ... further arguments
+#' @param drop A boolean flag of whether to drop single dimensions or not
+#' @return Returns the subsetted RSet
+#' @export
 setMethod(`[`, "RadioSet", function(x, i, j, ..., drop = FALSE){
   if(is.character(i)&&is.character(j)){
     return(subsetTo(x, cells=i, radiations=j,  molecular.data.cells=i))
@@ -1014,7 +1230,7 @@ subsetTo <- function(object,
     ### because the arguments are passed to the anonymous
     ### function in lapply, so it does not recognize them as missing
 
-  object@molecularProfiles <- lapply(object@molecularProfiles,
+  molecularProfilesSlot(object) <- lapply(molecularProfilesSlot(object),
                                      function(SE, cells, radiationTypes,
                                               molecular.data.cells){
 
@@ -1026,10 +1242,10 @@ subsetTo <- function(object,
 
     column_indices <- NULL
 
-    if (length(cells)==0 && length(radiationTypes)==0) {
+    if (length(cells)==0 && length(radiationTypes) == 0) {
       column_indices <- seq_len(ncol(SE)) # This still returns the number of samples in an SE, but without a label
     }
-    if(length(cells)==0 && object@datasetType=="sensitivity") {
+    if(length(cells) == 0 && datasetType(object) == "sensitivity") {
       column_indices <- seq_len(ncol(SE))
     }
 
@@ -1044,7 +1260,7 @@ subsetTo <- function(object,
       #     }
     }
     radiationTypes_index <- NULL
-    if(object@datasetType=="perturbation" || object@datasetType=="both"){
+    if(datasetType(object)=="perturbation" || datasetType(object)=="both"){
       if(length(radiationTypes) != 0) {
         if (!all(radiationTypes %in% radiationTypes(object))) {
           stop("Some of the radiation types passed to function did not match
@@ -1083,19 +1299,19 @@ subsetTo <- function(object,
 
   }, cells=cells, radiationTypes=radiationTypes, molecular.data.cells=molecular.data.cells)
 
-  if ((object@datasetType == "sensitivity" | object@datasetType == "both") & length(exps) != 0) {
-      object@sensitivity$info <- object@sensitivity$info[exps, , drop=drop]
-      rownames(object@sensitivity$info) <- names(exps)
-      if(length(object@sensitivity$raw) > 0) {
-        object@sensitivity$raw <- object@sensitivity$raw[exps, , , drop=drop]
-        dimnames(object@sensitivity$raw)[[1]] <- names(exps)
+  if ((datasetType(object) == "sensitivity" | datasetType(object) == "both") & length(exps) != 0) {
+      sensitivityInfo(object) <- sensitivityInfo(object)[exps, , drop=drop]
+      rownames(sensitivityInfo(object)) <- names(exps)
+      if(length(sensitivityRaw(object)) > 0) {
+        sensitivityRaw(object) <- sensitivityRaw(object)[exps, , , drop=drop]
+        dimnames(sensitivityRaw(object))[[1]] <- names(exps)
       }
-      object@sensitivity$profiles <- object@sensitivity$profiles[exps, , drop=drop]
-      rownames(object@sensitivity$profiles) <- names(exps)
+      sensitivityProfiles(object) <- sensitivityProfiles(object)[exps, , drop=drop]
+      rownames(sensitivityProfiles(object)) <- names(exps)
 
-      object@sensitivity$n <- .summarizeSensitivityNumbers(object)
+      sensNumber(object) <- .summarizeSensitivityNumbers(object)
   }
-  else if ((object@datasetType == "sensitivity" | object@datasetType == "both") & (length(radiationTypes) != 0 | length(cells) != 0)) {
+  else if ((datasetType(object) == "sensitivity" | datasetType(object) == "both") & (length(radiationTypes) != 0 | length(cells) != 0)) {
 
         radiationTypes_index <- which (sensitivityInfo(object)[, "radiation.type"] %in% radiationTypes)
         cell_line_index <- which (sensitivityInfo(object)[,"cellid"] %in% cells)
@@ -1115,8 +1331,10 @@ subsetTo <- function(object,
               }
           }
        }
-        object@sensitivity[names(object@sensitivity)[names(object@sensitivity)!="n"]] <- lapply(object@sensitivity[names(object@sensitivity)[names(object@sensitivity)!="n"]], function(x,i, drop){
-            #browser()
+        sensitivitySlot(object)[names(sensitivitySlot(object))[names(sensitivitySlot(object))!="n"]] <-
+          lapply(sensitivitySlot(object)[names(sensitivitySlot(object))[names(sensitivitySlot(object))!="n"]],
+                 function(x,i, drop){
+
           if (length(dim(x))==2){
             return(x[i,,drop=drop])
           }
@@ -1127,16 +1345,16 @@ subsetTo <- function(object,
   }
 
 	if (length(radiationTypes)==0) {
-		if(object@datasetType == "sensitivity" | object@datasetType == "both"){
+		if(datasetType(object) == "sensitivity" | datasetType(object) == "both"){
 			radiationTypes <- unique(sensitivityInfo(object)[["radiation.type"]])
 		}
-		if(object@datasetType == "perturbation" | object@datasetType == "both"){
-			radiationTypes <- union(radiationTypes, na.omit(.unionList(lapply(object@molecularProfiles, function(SE){unique(colData(SE)[["radiation.type"]])}))))
+		if(datasetType(object) == "perturbation" | datasetType(object) == "both"){
+			radiationTypes <- union(radiationTypes, na.omit(.unionList(lapply(molecularProfilesSlot(object), function(SE){unique(colData(SE)[["radiation.type"]])}))))
 		}
 	}
 	if (length(cells)==0) {
-		cells <- union(cells, na.omit(.unionList(lapply(object@molecularProfiles, function(SE){unique(colData(SE)[["cellid"]])}))))
-        if (object@datasetType =="sensitivity" | object@datasetType == "both"){
+		cells <- union(cells, na.omit(.unionList(lapply(molecularProfilesSlot(object), function(SE){unique(colData(SE)[["cellid"]])}))))
+        if (datasetType(object) =="sensitivity" | datasetType(object) == "both"){
             cells <- union(cells, sensitivityInfo(object)[["cellid"]])
         }
 	}
@@ -1145,10 +1363,10 @@ subsetTo <- function(object,
 	object@curation$radiation <- object@curation$radiation[radiationTypes , , drop=drop]
 	object@curation$cell <- object@curation$cell[cells , , drop=drop]
 	object@curation$tissue <- object@curation$tissue[cells , , drop=drop]
-	if (object@datasetType == "sensitivity" | object@datasetType == "both"  & length(exps) == 0) {
-	  object@sensitivity$n <- object@sensitivity$n[cells, radiationTypes , drop=drop]
+	if (datasetType(object) == "sensitivity" | datasetType(object) == "both"  & length(exps) == 0) {
+	  sensNumber(object) <- sensNumber(object)[cells, radiationTypes , drop=drop]
 	}
-	if (object@datasetType == "perturbation" | object@datasetType == "both") {
+	if (datasetType(object) == "perturbation" | datasetType(object) == "both") {
 	    object@perturbation$n <- object@perturbation$n[cells,radiationTypes, , drop=drop]
     }
       return(object)
@@ -1159,54 +1377,20 @@ updateCellId <- function(object, new.ids = vector("character")){
   CoreGx::updateCellId(object, new.ids)
 }
 
-# updateFeatureNames <- function(object, new.ids = vector("character")){
-#
-#   if (length(new.ids)!=nrow(cellInfo(object))){
-#     stop("Wrong number of cell identifiers")
-#   }
-#
-#   if(object@datasetType=="sensitivity"|object@datasetType=="both"){
-#     myx <- match(sensitivityInfo(object)[,"cellid"],rownames(cellInfo(object)))
-#     sensitivityInfo(object)[,"cellid"] <- new.ids[myx]
-#
-#   }
-#
-#   object@molecularProfiles <- lapply(object@molecularProfiles, function(eset){
-#
-#     myx <- match(pData(eset)[["cellid"]],rownames(cellInfo(object)))
-#     pData(eset)[["cellid"]]  <- new.ids[myx]
-#     return(eset)
-#       })
-#   myx <- match(rownames(object@curation$cell),rownames(cellInfo(object)))
-#   rownames(object@curation$cell) <- new.ids[myx]
-#   rownames(object@curation$tissue) <- new.ids[myx]
-#   if (dim(pertNumber(object))[[1]]>0){
-#     myx <- match(dimnames(pertNumber(object))[[1]], rownames(cellInfo(object)))
-#     dimnames(pertNumber(object))[[1]] <- new.ids[myx]
-#   }
-#   if (nrow(sensNumber(object))>0){
-#     myx <- match(rownames(sensNumber(object)), rownames(cellInfo(object)))
-#     rownames(sensNumber(object)) <- new.ids[myx]
-#   }
-#   rownames(cellInfo(object)) <- new.ids
-#   return(object)
-#
-# }
-
 ### TODO:: Add updating of sensitivity Number tables
 updateRadId <- function(object, new.ids = vector("character")){
 
-  if (length(new.ids)!=nrow(radiationInfo(object))){
+  if (length(new.ids) != nrow(radiationInfo(object))){
      stop("Wrong number of radiation identifiers")
   }
 
-   if(object@datasetType=="sensitivity"|object@datasetType=="both"){
+   if(datasetType(object)=="sensitivity"|datasetType(object)=="both"){
      myx <- match(sensitivityInfo(object)[,"radiation.type"],rownames(radiationInfo(object)))
      sensitivityInfo(object)[,"radiation.type"] <- new.ids[myx]
 
    }
-   if(object@datasetType=="perturbation"|object@datasetType=="both"){
-     object@molecularProfiles <- lapply(object@molecularProfiles, function(SE){
+   if(datasetType(object)=="perturbation"|datasetType(object)=="both"){
+     molecularProfilesSlot(object) <- lapply(molecularProfilesSlot(object), function(SE){
 
        myx <- match(SummarizedExperiment::colData(SE)[["radiation.type"]],rownames(radiationInfo(object)))
        SummarizedExperiment::colData(SE)[["radiation.type"]]  <- new.ids[myx]
@@ -1283,25 +1467,25 @@ updateRadId <- function(object, new.ids = vector("character")){
 
 .summarizeSensitivityNumbers <- function(object) {
 
-  if (object@datasetType != "sensitivity" && object@datasetType != "both") {
+  if (datasetType(object) != "sensitivity" && datasetType(object) != "both") {
     stop ("Data type must be either sensitivity or both")
   }
 
   ## unique radiation identifiers
-  # radiationn <- sort(unique(object@sensitivity$info[ , "radiation.type"]))
+  # radiationn <- sort(unique(sensitivityInfo(object)[ , "radiation.type"]))
 
   ## consider all radiations
   radiationn <- rownames(object@radiation)
 
   ## unique radiation identifiers
-  # celln <- sort(unique(object@sensitivity$info[ , "cellid"]))
+  # celln <- sort(unique(sensitivityInfo(object)[ , "cellid"]))
 
   ## consider all cell lines
   celln <- rownames(object@cell)
 
   sensitivity.info <- matrix(0, nrow=length(celln), ncol=length(radiationn), dimnames=list(celln, radiationn))
-  radiation.types <- object@sensitivity$info[ , "radiation.type"]
-  cellids <- object@sensitivity$info[ , "cellid"]
+  radiation.types <- sensitivityInfo(object)[ , "radiation.type"]
+  cellids <- sensitivityInfo(object)[ , "cellid"]
   cellids <- cellids[grep("///", radiation.types, invert=TRUE)]
   radiation.types <- radiation.types[grep("///", radiation.types, invert=TRUE)]
 
@@ -1333,40 +1517,20 @@ updateRadId <- function(object, new.ids = vector("character")){
 
 .summarizePerturbationNumbers <- function(object) {
 
-  if (object@datasetType != "perturbation" && object@datasetType != "both") {
+  if (datasetType(object) != "perturbation" && datasetType(object) != "both") {
     stop ("Data type must be either perturbation or both")
   }
 
-  ## unique radiation identifiers
-  # radiationn <- sort(unique(unlist(lapply(object@molecularProfiles, function (x) {
-  #   res <- NULL
-  #   if (nrow(pData(x)) > 0 & "radiation.type" %in% colnames(pData(x))) {
-  #     res <- pData(x)[ , "radiation.type"]
-  #   }
-  #   return (res)
-  # }))))
-
-  ## consider all radiations
   radiationn <- rownames(object@radiation)
 
-  ## unique cell line identifiers
-  # celln <- sort(unique(unlist(lapply(object@molecularProfiles, function (x) {
-  #   res <- NULL
-  #   if (nrow(pData(x)) > 0 & "cellid" %in% colnames(pData(x))) {
-  #     res <- pData(x)[ , "cellid"]
-  #   }
-  #   return (res)
-  # }))))
-
-  ## consider all cell lines
   celln <- rownames(object@cell)
 
-  perturbation.info <- array(0, dim=c(length(celln), length(radiationn), length(object@molecularProfiles)), dimnames=list(celln, radiationn, names((object@molecularProfiles))))
+  perturbation.info <- array(0, dim=c(length(celln), length(radiationn), length(molecularProfilesSlot(object))), dimnames=list(celln, radiationn, names((molecularProfilesSlot(object)))))
 
-  for (i in seq_len(length(object@molecularProfiles))) {
-    if (nrow(SummarizedExperiment::colData(object@molecularProfiles[[i]])) > 0 && all(is.element(c("cellid", "drugid"), colnames(SummarizedExperiment::colData(object@molecularProfiles[[i]]))))) {
-      tt <- table(SummarizedExperiment::colData(object@molecularProfiles[[i]])[ , "cellid"], SummarizedExperiment::colData(object@molecularProfiles[[i]])[ , "drugid"])
-      perturbation.info[rownames(tt), colnames(tt), names(object@molecularProfiles)[i]] <- tt
+  for (i in seq_len(length(molecularProfilesSlot(object)))) {
+    if (nrow(SummarizedExperiment::colData(molecularProfilesSlot(object)[[i]])) > 0 && all(is.element(c("cellid", "drugid"), colnames(SummarizedExperiment::colData(molecularProfilesSlot(object)[[i]]))))) {
+      tt <- table(SummarizedExperiment::colData(molecularProfilesSlot(object)[[i]])[ , "cellid"], SummarizedExperiment::colData(molecularProfilesSlot(object)[[i]])[ , "drugid"])
+      perturbation.info[rownames(tt), colnames(tt), names(molecularProfilesSlot(object))[i]] <- tt
     }
   }
 
@@ -1401,9 +1565,9 @@ checkRSetStructure <-
     # Checking molecularProfiles
     #####
     # Can this be parallelized or does it mess with the order of printing warnings?
-    for( i in seq_along(object@molecularProfiles)) {
-      profile <- object@molecularProfiles[[i]]
-      nn <- names(object@molecularProfiles)[i]
+    for( i in seq_along(molecularProfilesSlot(object))) {
+      profile <- molecularProfilesSlot(object)[[i]]
+      nn <- names(molecularProfilesSlot(object))[i]
 
       # Testing plot rendering for rna and rnaseq
       if((S4Vectors::metadata(profile)$annotation == "rna" | S4Vectors::metadata(profile)$annotation == "rnaseq") & plotDist)
@@ -1530,13 +1694,13 @@ checkRSetStructure <-
     if(!is(object@radiation, "data.frame")) {
       warning("radiation slot class type should be dataframe")
     }
-    if(object@datasetType %in% c("sensitivity", "both"))
+    if(datasetType(object) %in% c("sensitivity", "both"))
     {
-      if(!is(object@sensitivity$info, "data.frame")) {
+      if(!is(sensitivityInfo(object), "data.frame")) {
         warning("sensitivity info slot class type should be dataframe")
       }
-      if("cellid" %in% colnames(object@sensitivity$info)) {
-        if(!all(object@sensitivity$info[,"cellid"] %in% rownames(object@cell))) {
+      if("cellid" %in% colnames(sensitivityInfo(object))) {
+        if(!all(sensitivityInfo(object)[,"cellid"] %in% rownames(object@cell))) {
           warning("not all the cell lines in sensitivity data are in cell slot")
         }
       }else {
@@ -1546,8 +1710,8 @@ checkRSetStructure <-
       ###
       # CHECKING RADIATION
       ###
-      if("radiation.type" %in% colnames(object@sensitivity$info)) {
-        radiation.ids <- unique(object@sensitivity$info[,"radiation.type"])
+      if("radiation.type" %in% colnames(sensitivityInfo(object))) {
+        radiation.ids <- unique(sensitivityInfo(object)[,"radiation.type"])
         radiation.ids <- radiation.ids[grep("///",radiation.ids, invert=TRUE)]
         if(!all(radiation.ids %in% rownames(object@radiation))) {
           print("not all the radiations in sensitivity data are in radiation slot")
@@ -1556,12 +1720,12 @@ checkRSetStructure <-
         warning("radiation.type does not exist in sensitivity info")
       }
 
-      if(any(!is.na(object@sensitivity$raw))) {
-        if(!all(dimnames(object@sensitivity$raw)[[1]] %in% rownames(object@sensitivity$info))) {
+      if(any(!is.na(sensitivityRaw(object)))) {
+        if(!all(dimnames(sensitivityRaw(object))[[1]] %in% rownames(sensitivityInfo(object)))) {
           warning("For some experiments there is raw sensitivity data but no experimet information in sensitivity info")
         }
       }
-      if(!all(rownames(object@sensitivity$profiles) %in% rownames(object@sensitivity$info))) {
+      if(!all(rownames(sensitivityProfiles(object)) %in% rownames(sensitivityInfo(object)))) {
         warning("For some experiments there is sensitivity profiles but no experimet information in sensitivity info")
       }
     }

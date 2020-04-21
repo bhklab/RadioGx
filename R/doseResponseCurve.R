@@ -66,6 +66,7 @@
 #' @importFrom graphics plot rect axis points lines legend
 #' @importFrom grDevices rgb
 #' @importFrom magicaxis magaxis
+#' @importFrom matrixStats colMedians colMeans
 #'
 #' @export
 doseResponseCurve <-
@@ -74,8 +75,6 @@ function(rad.type = "radiation",
          rSets=list(),
          Ds=list(),
          SFs=list(),
-         # conc_as_log = FALSE,
-         # viability_as_pct = TRUE,
          trunc=TRUE,
          legends.label = c("alpha", "beta","rsquared"),
          ylim=c(0,100),
@@ -103,16 +102,10 @@ function(rad.type = "radiation",
   if(!all(legends.label %in% c("alpha", "beta","rsquared"))){
     stop(paste("Only", paste(c("'alpha'", "'beta'","'rsquared'"), collapse = ", "), "implemented for legend labels.", split = " "))
   }
-  # if(!missing(rSets) && (missing(rad.type) || missing(cellline))){
   ## XXX:: HACK
   if(!missing(rSets) && (missing(cellline))){
     stop("If you pass in a rSet then drug and cellline must be set") }
-  # } else {
-  #   if(missing(drug)){
-  #   drug <- "Drug"}
-  #   if(missing(cellline))
-  #   cellline <- "Cell Line"
-  # }
+
     if(!missing(Ds)){
       if(missing(SFs)){
 
@@ -124,15 +117,7 @@ function(rad.type = "radiation",
           if(mode(SFs) != "numeric"){
             stop("Passed in 1 vector of Doses but the Survival Fractions are not numeric!")
           }
-        # cleanData <- sanitizeInput(Ds,
-        #   SFs,
-        #   conc_as_log = conc_as_log,
-        #   viability_as_pct = viability_as_pct,
-        #   trunc = trunc,
-        #   verbose = verbose)
-        # Ds <- 10^cleanData[["log_conc"]]
           Ds <- list(Ds)
-        # SFs <- 100*cleanData[["viability"]]
           SFs <- list(SFs)
           names(Ds) <- "Exp1"
           names(SFs) <- "Exp1"
@@ -152,18 +137,9 @@ function(rad.type = "radiation",
             if(mode(SFs[[i]])!="numeric"){
               stop(sprintf("Ds[[%d]] are numeric but the SFs[[%d]] are not numeric!",i,i))
             }
-          # cleanData <- sanitizeInput(Ds[[i]],
-          #   SFs[[i]],
-          #   conc_as_log = conc_as_log,
-          #   viability_as_pct = viability_as_pct,
-          #   trunc = trunc,
-          #   verbose = verbose)
-          # Ds[[i]] <- 10^cleanData[["log_conc"]]
-          # SFs[[i]] <- 100*cleanData[["viability"]]
           } else {
             stop(sprintf("Mode of Ds[[%d]] parameter should be numeric",i))
           }
-
         }
 
       }
@@ -183,12 +159,12 @@ function(rad.type = "radiation",
           if (summarize.replicates) {
             rSetNames[[i]] <- name(rSets[[i]])
             if (length(exp_i) == 1) {
-              drug.responses <- as.data.frame(cbind("Dose"=as.numeric(as.vector(rSets[[i]]@sensitivity$raw[exp_i, , "Dose"])),
-                "Viability"=as.numeric(as.vector(rSets[[i]]@sensitivity$raw[exp_i, , "Viability"])), stringsAsFactors=FALSE))
+              drug.responses <- as.data.frame(cbind("Dose"=as.numeric(as.vector(sensitivityRaw(rSets[[i]])[exp_i, , "Dose"])),
+                "Viability" = as.numeric(as.vector(sensitivityRaw(rSets[[i]])[exp_i, , "Viability"])), stringsAsFactors=FALSE))
               drug.responses <- drug.responses[complete.cases(drug.responses), ]
             }else{
-              drug.responses <- as.data.frame(cbind("Dose"=apply(rSets[[i]]@sensitivity$raw[exp_i, , "Dose"], 2, function(x){median(as.numeric(x), na.rm=TRUE)}),
-                "Viability"=apply(rSets[[i]]@sensitivity$raw[exp_i, , "Viability"], 2, function(x){median(as.numeric(x), na.rm=TRUE)}), stringsAsFactors=FALSE))
+              drug.responses <- as.data.frame(cbind("Dose"=colMedians(sensitivityRaw(rSets[[i]])[exp_i, , "Dose"], na.rm=TRUE),
+                "Viability"=colMedians(sensitivityRaw(rSets[[i]])[exp_i, , "Viability"], na.rm=TRUE)))
               drug.responses <- drug.responses[complete.cases(drug.responses), ]
             }
             doses[[i]] <- drug.responses$Dose
@@ -215,8 +191,8 @@ function(rad.type = "radiation",
               j <- j + 1
               rSetNames[[j]] <- name(rSets[[i]])
 
-              drug.responses <- as.data.frame(cbind("Dose"=as.numeric(as.vector(rSets[[i]]@sensitivity$raw[exp, , "Dose"])),
-                "Viability"=as.numeric(as.vector(rSets[[i]]@sensitivity$raw[exp, , "Viability"])), stringsAsFactors=FALSE))
+              drug.responses <- as.data.frame(cbind("Dose"=as.numeric(as.vector(sensitivityRaw(rSets[[i]])[exp, , "Dose"])),
+                "Viability"=as.numeric(as.vector(sensitivityRaw(rSets[[i]])[exp, , "Viability"])), stringsAsFactors=FALSE))
               drug.responses <- drug.responses[complete.cases(drug.responses), ]
               doses[[j]] <- drug.responses$Dose
               responses[[j]] <- drug.responses$Viability
@@ -235,11 +211,11 @@ function(rad.type = "radiation",
                   }
                 }
               } else {
-                tt <- unlist(strsplit(rownames(rSets[[i]]@sensitivity$info)[exp], split="_"))
+                tt <- unlist(strsplit(rownames(sensitivityInfo(rSets[[i]]))[exp], split="_"))
                 if (tt[1] == "radiation.type") {
                   legend.values[[j]] <- tt[2]
                 }else{
-                  legend.values[[j]] <- rownames(rSets[[i]]@sensitivity$info)[exp]
+                  legend.values[[j]] <- rownames(sensitivityInfo(rSets[[i]]))[exp]
                 }
               }
             }

@@ -35,6 +35,7 @@
 #' @importFrom utils setTxtProgressBar txtProgressBar
 #' @importFrom SummarizedExperiment SummarizedExperiment rowData rowData<- colData colData<- assays assays<- assayNames assayNames<-
 #' @importFrom Biobase AnnotatedDataFrame
+#' @importFrom matrixStats rowMeans rowMedians
 #' @export
 ##TODO:: Add features parameter
 summarizeMolecularProfiles <- function(rSet,
@@ -48,13 +49,13 @@ summarizeMolecularProfiles <- function(rSet,
 
 
   ### Placed here to make sure the rSet argument gets checked first by R.
-  mDataTypes <- names(rSet@molecularProfiles)
+  mDataTypes <- names(molecularProfilesSlot(rSet))
   if (!(mDataType %in% mDataTypes)) {
-    stop (sprintf("Invalid mDataType, choose among: %s", paste(names(rSet@molecularProfiles), collapse=", ")))
+    stop (sprintf("Invalid mDataType, choose among: %s", paste(names(molecularProfilesSlot(rSet)), collapse=", ")))
   }
 
   if(summarize==FALSE){
-    return(rSet@molecularProfiles[[mDataType]])
+    return(molecularProfilesSlot(rSet)[[mDataType]])
   }
 
   if (missing(features)) {
@@ -68,10 +69,10 @@ summarizeMolecularProfiles <- function(rSet,
   }
 
   summary.stat <- match.arg(summary.stat)
-  if((!S4Vectors::metadata(rSet@molecularProfiles[[mDataType]])$annotation %in% c("mutation","fusion")) & (!summary.stat %in% c("mean", "median", "first", "last"))) {
+  if((!S4Vectors::metadata(molecularProfilesSlot(rSet)[[mDataType]])$annotation %in% c("mutation","fusion")) & (!summary.stat %in% c("mean", "median", "first", "last"))) {
     stop ("Invalid summary.stat, choose among: mean, median, first, last" )
   }
-  if((S4Vectors::metadata(rSet@molecularProfiles[[mDataType]])$annotation %in% c("mutation","fusion")) & (!summary.stat %in% c("and", "or"))) {
+  if((S4Vectors::metadata(molecularProfilesSlot(rSet)[[mDataType]])$annotation %in% c("mutation","fusion")) & (!summary.stat %in% c("and", "or"))) {
     stop ("Invalid summary.stat, choose among: and, or" )
   }
 
@@ -82,7 +83,7 @@ summarizeMolecularProfiles <- function(rSet,
   dd <- molecularProfiles(rSet, mDataType)
   pp <- phenoInfo(rSet, mDataType)
 
-  if(S4Vectors::metadata(rSet@molecularProfiles[[mDataType]])$annotation == "mutation") {
+  if(S4Vectors::metadata(molecularProfilesSlot(rSet)[[mDataType]])$annotation == "mutation") {
     tt <- dd
     tt[which(!is.na(dd) & dd =="wt")] <- FALSE
     tt[which(!is.na(dd) & dd !="wt")] <- TRUE
@@ -90,7 +91,7 @@ summarizeMolecularProfiles <- function(rSet,
     dimnames(tt) <- dimnames(dd)
     dd <- tt
   }
-  if(S4Vectors::metadata(rSet@molecularProfiles[[mDataType]])$annotation == "fusion") {
+  if(S4Vectors::metadata(molecularProfilesSlot(rSet)[[mDataType]])$annotation == "fusion") {
     tt <- dd
     tt[which(!is.na(dd) & dd =="0")] <- FALSE
     tt[which(!is.na(dd) & dd !="0")] <- TRUE
@@ -137,10 +138,10 @@ summarizeMolecularProfiles <- function(rSet,
       myx <- which(!is.na(pp[ , "cellid"]) & is.element(pp[ , "cellid"], x))
       switch(summary.stat,
         "mean" = {
-          ddt <- apply(dd[ , myx, drop=FALSE], 1, mean)
+          ddt <- rowMeans(dd[ , myx, drop=FALSE])
         },
         "median"={
-          ddt <- apply(dd[ , myx, drop=FALSE], 1, median)
+          ddt <- rowMedians(dd[ , myx, drop=FALSE])
         },
         "first"={
           ddt <- dd[ , myx[1], drop=FALSE]
@@ -177,8 +178,8 @@ summarizeMolecularProfiles <- function(rSet,
   dd2 <- dd2[ , cell.lines, drop=FALSE]
   pp2 <- pp2[cell.lines, , drop=FALSE]
   pp2[ , "cellid"] <- cell.lines
-  res <- rSet@molecularProfiles[[mDataType]]
-  if(S4Vectors::metadata(rSet@molecularProfiles[[mDataType]])$annotation %in% c("mutation", "fusion")) {
+  res <- molecularProfilesSlot(rSet)[[mDataType]]
+  if(S4Vectors::metadata(molecularProfilesSlot(rSet)[[mDataType]])$annotation %in% c("mutation", "fusion")) {
     tt <- dd2
     tt[which(!is.na(dd2) & dd2)] <- "1"
     tt[which(!is.na(dd2) & !dd2)] <- "0"
@@ -198,8 +199,8 @@ summarizeMolecularProfiles <- function(rSet,
              dimnames=dimnames(assay(res, 1))
       )
   }
-  assayNames(res) <- assayNames(rSet@molecularProfiles[[mDataType]])
+  assayNames(res) <- assayNames(molecularProfilesSlot(rSet)[[mDataType]])
   res <- res[features,]
-  S4Vectors::metadata(res) <- S4Vectors::metadata(rSet@molecularProfiles[[mDataType]])
+  S4Vectors::metadata(res) <- S4Vectors::metadata(molecularProfilesSlot(rSet)[[mDataType]])
   return(res)
 }

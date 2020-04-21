@@ -44,7 +44,7 @@ summarizeSensitivityProfiles <- function(
   #sensitivity.measure <- match.arg(sensitivity.measure)
   if (!(sensitivity.measure %in% c(colnames(sensitivityProfiles(rSet)),"max.conc"))) {
     stop (sprintf("Invalid sensitivity measure for %s, choose among: %s",
-                  rSet@annotation$name,
+                  annotation(rSet)$name,
                   paste(colnames(sensitivityProfiles(rSet)),
                         collapse=", ")))
   }
@@ -81,17 +81,6 @@ summarizeSensitivityProfiles <- function(
   result <- matrix(NA_real_, nrow=length(radTypes), ncol=length(cell.lines))
   rownames(result) <- radTypes
   colnames(result) <- cell.lines
-
-  # if(verbose){
-
-  #   message(sprintf("Summarizing %s sensitivity data for:\t%s", sensitivity.measure, rSet@annotation$name))
-  #   total <- length(radTypes)*length(cell.lines)
-  #   # create progress bar
-  #   pb <- utils::txtProgressBar(min=0, max=total, style=3)
-  #   i <- 1
-
-
-  # }
 
   pp_dd <- cbind(pp[,c("cellid", "radiation.type")],
                  "sensitivity.measure"=dd[, sensitivity.measure])
