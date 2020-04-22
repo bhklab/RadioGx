@@ -114,9 +114,7 @@ RadioSet <-  function(name,
     annotation$sessionInfo <- sessionInfo()
     annotation$call <- match.call()
 
-    #molecularProfiles <- list("dna"=dna, "rna"=rna, "snp"=snp, "cnv"=cnv)
     ## TODO:: If the colnames and rownames are not found below, it will fill with NAs. This is undersirable behaviour.
-    #molecularProfiles <- list("dna"=dna, "rna"=rna, "snp"=snp, "cnv"=cnv)
     ## TODO:: Determine if I should use SummarizedExperiment construtor here?
     for (i in seq_along(molecularProfiles)){
       if (!is(molecularProfiles[[i]], "SummarizedExperiment")) {
@@ -1140,6 +1138,54 @@ setReplaceMethod("annotation", signature("RadioSet", "list"), function(object, v
   object
 })
 
+##TODO:: Export to CoreGx
+#' curation Slot Getter
+#'
+#' @param object A \code{RadioSet}
+#' @param ... A \code{list} to allow definition of new parameters on this generic
+#'
+#' @return A \code{list} of unique cell and tissue identifiers to check validity
+#'   of an rSet
+#'
+#' @examples
+#' data(clevelandSmall)
+#' curation(clevelandSmall)
+#'
+#' @export
+setGeneric("curation", function(object, ...) standardGeneric("curation"))
+#' @describeIn RadioSet Retrieve the curation slot form an rSet
+#' @inheritParams curation
+#' @export
+setMethod('curation', signature("RadioSet"), function(object) {
+  object@curation
+})
+
+##TODO:: Export to CoreGx
+##FIXME:: How do I import generics from BiocGenerics?
+#' curation<- Slot Setter
+#'
+#' @param object A \code{RadioSet}
+#' @param ... A \code{list} to allow definition of new parameters on this generic
+#' @param value A \code{list} of curations for the cell and tissues types in the
+#'   rSet object
+#'
+#' @return A copy of the \code{RadioSet} with the updated curation slot
+#'
+#' @examples
+#' data(clevelandSmall)
+#' curation(clevelandSmall) <- curation(clevelandSmall)
+#'
+#' @export
+setGeneric("curation<-", function(object, ..., value) standardGeneric("curation<-"))
+#' @describeIn RadioSet Update the annotation slot of a tSet
+#' @inheritParams annotation<-
+#' @export
+setReplaceMethod("curation", signature("RadioSet", "list"), function(object, value) {
+  object@curation <- value
+  object
+})
+
+
 #' `[`
 #'
 #' @param x a \code{RadioSet} object
@@ -1422,7 +1468,7 @@ updateRadId <- function(object, new.ids = vector("character")){
      if(dim(pertNumber(object))[[2]]>0){
        pertMatch <- match(dimnames(pertNumber(object))[[2]], rownames(radiationInfo(object)))
      }
-     curMatch <- match(rownames(object@curation$radiation),rownames(radiationInfo(object)))
+     curMatch <- match(rownames(curation(object)$radiation),rownames(radiationInfo(object)))
 
      duplId <- unique(new.ids[duplicated(new.ids)])
      for(id in duplId){
@@ -1441,8 +1487,8 @@ updateRadId <- function(object, new.ids = vector("character")){
        }
 
        myx <- which(new.ids[curMatch] == id)
-       object@curation$radiation[myx[1],] <- apply(object@curation$radiation[myx,], 2, paste, collapse="///")
-       object@curation$radiation <- object@curation$radiation[-myx[-1],]
+       curation(object)$radiation[myx[1],] <- apply(curation(object)$radiation[myx,], 2, paste, collapse="///")
+       curation(object)$radiation <- curation(object)$radiation[-myx[-1],]
        curMatch <- curMatch[-myx[-1]]
 
        myx <- which(new.ids == id)
@@ -1455,7 +1501,7 @@ updateRadId <- function(object, new.ids = vector("character")){
        if(dim(pertNumber(object))[[2]]>0){
          pertMatch <- match(dimnames(pertNumber(object))[[2]], rownames(radiationInfo(object)))
        }
-       curMatch <- match(rownames(object@curation$radiation),rownames(radiationInfo(object)))
+       curMatch <- match(rownames(curation(object)$radiation),rownames(radiationInfo(object)))
      }
    } else {
      if (dim(pertNumber(object))[[2]]>0){
@@ -1464,7 +1510,7 @@ updateRadId <- function(object, new.ids = vector("character")){
      if (ncol(sensNumber(object))>0){
        sensMatch <- match(colnames(sensNumber(object)), rownames(radiationInfo(object)))
      }
-     curMatch <- match(rownames(object@curation$radiation),rownames(radiationInfo(object)))
+     curMatch <- match(rownames(curation(object)$radiation),rownames(radiationInfo(object)))
    }
 
    if (dim(pertNumber(object))[[2]]>0){
@@ -1489,13 +1535,13 @@ updateRadId <- function(object, new.ids = vector("character")){
   # radiationn <- sort(unique(sensitivityInfo(object)[ , "radiation.type"]))
 
   ## consider all radiations
-  radiationn <- rownames(object@radiation)
+  radiationn <- rownames(radiationInfo(object))
 
   ## unique radiation identifiers
   # celln <- sort(unique(sensitivityInfo(object)[ , "cellid"]))
 
   ## consider all cell lines
-  celln <- rownames(object@cell)
+  celln <- rownames(cellInfo(object))
 
   sensitivity.info <- matrix(0, nrow=length(celln), ncol=length(radiationn), dimnames=list(celln, radiationn))
   radiation.types <- sensitivityInfo(object)[ , "radiation.type"]
@@ -1516,7 +1562,7 @@ updateRadId <- function(object, new.ids = vector("character")){
   mDT <- mDataNames(object)
 
   ## consider all cell lines
-  celln <- rownames(object@cell)
+  celln <- rownames(cellInfo(object))
 
   molecular.info <- matrix(0, nrow=length(celln), ncol=length(mDT), dimnames=list(celln, mDT))
 
@@ -1535,9 +1581,9 @@ updateRadId <- function(object, new.ids = vector("character")){
     stop ("Data type must be either perturbation or both")
   }
 
-  radiationn <- rownames(object@radiation)
+  radiationn <- rownames(radiationInfo(object))
 
-  celln <- rownames(object@cell)
+  celln <- rownames(cellInfo(object))
 
   perturbation.info <- array(0, dim=c(length(celln), length(radiationn), length(molecularProfilesSlot(object))), dimnames=list(celln, radiationn, names((molecularProfilesSlot(object)))))
 
@@ -1629,7 +1675,7 @@ checkRSetStructure <-
 
       # Check that all cellids from the object are included in molecularProfiles
       if("cellid" %in% colnames(rowData(profile))) {
-        if(!all(colData(profile)[,"cellid"] %in% rownames(object@cell))) {
+        if(!all(colData(profile)[,"cellid"] %in% rownames(cellInfo(object)))) {
           warning(sprintf("%s: not all the cell lines in this profile are in
                           cell lines slot", nn))
         }
@@ -1641,71 +1687,46 @@ checkRSetStructure <-
     ###
     # CHECKING CELL
     ###
-    if("tissueid" %in% colnames(object@cell)) {
-      if("unique.tissueid" %in% colnames(object@curation$tissue))
+    if("tissueid" %in% colnames(cellInfo(object))) {
+      if("unique.tissueid" %in% colnames(curation(object)$tissue))
       {
-        if(length(intersect(rownames(object@curation$tissue), rownames(object@cell))) != nrow(object@cell)) {
+        if(length(intersect(rownames(curation(object)$tissue), rownames(cellInfo(object)))) != nrow(cellInfo(object))) {
           message("rownames of curation tissue slot should be the same as cell slot (curated cell ids)")
         } else{
-          if(length(intersect(object@cell$tissueid, object@curation$tissue$unique.tissueid)) != length(table(object@cell$tissueid))){
+          if(length(intersect(cellInfo(object)$tissueid, curation(object)$tissue$unique.tissueid)) != length(table(cellInfo(object)$tissueid))){
             message("tissueid should be the same as unique tissue id from tissue curation slot")
           }
         }
       } else {
         message("unique.tissueid which is curated tissue id across data set should be a column of tissue curation slot")
       }
-      if(any(is.na(object@cell[,"tissueid"]) | object@cell[,"tissueid"]=="", na.rm=TRUE)){
-        message(sprintf("There is no tissue type for this cell line(s): %s", paste(rownames(object@cell)[which(is.na(object@cell[,"tissueid"]) | object@cell[,"tissueid"]=="")], collapse=" ")))
+      if(any(is.na(cellInfo(object)[,"tissueid"]) | cellInfo(object)[,"tissueid"]=="", na.rm=TRUE)){
+        message(sprintf("There is no tissue type for this cell line(s): %s", paste(rownames(cellInfo(object))[which(is.na(cellInfo(object)[,"tissueid"]) | cellInfo(object)[,"tissueid"]=="")], collapse=" ")))
       }
     } else {
       warning("tissueid does not exist in cell slot")
     }
 
-    if("unique.cellid" %in% colnames(object@curation$cell)) {
-      if(length(intersect(object@curation$cell$unique.cellid, rownames(object@cell))) != nrow(object@cell)) {
-        print("rownames of cell slot should be curated cell ids")
+    if("unique.cellid" %in% colnames(curation(object)$cell)) {
+      if(length(intersect(curation(object)$cell$unique.cellid, rownames(cellInfo(object)))) != nrow(cellInfo(object))) {
+        message("rownames of cell slot should be curated cell ids")
       }
     } else {
-      print("unique.cellid which is curated cell id across data set should be a column of cell curation slot")
-    }
-#     if("cellid" %in% colnames(object@cell)) {
-#       if(length(intersect(object@curation$cell$cellid, rownames(object@cell))) != nrow(object@cell)) {
-#         print("values of cellid column should be curated cell line ids")
-#       }
-#     } else {
-#       print("cellid which is curated cell id across data set should be a column of cell slot")
-#     }
-
-    if(length(intersect(rownames(object@curation$cell), rownames(object@cell))) != nrow(object@cell)) {
-      print("rownames of curation cell slot should be the same as cell slot (curated cell ids)")
+      message("unique.cellid which is curated cell id across data set should be a column of cell curation slot")
     }
 
-    ##TODO:: Determine if object@curation$radiation is intended to be defined in object objects
-    ## It is not currently defined in object class defintion of this package
-    #if("unique.radiation.type" %in% colnames(object@curation$radiation)) {
-    #  if(length(intersect(object@curation$radiation$unique.radiation.type, rownames(object@radiation))) != nrow(object@radiation)) {
-    #    print("rownames of radiation slot should be curated radiation ids")
-    #  }
-    #} else {
-    #  print("unique.radiation.type which is curated radiation id across data set should be a column of radiation curation slot")
-    #}
-
-#     if("radiation.type" %in% colnames(object@radiation)) {
-#       if(length(intersect(object@curation$radiation$radiation.type, rownames(object@radiation))) != nrow(object@radiation)) {
-#         print("values of radiation.type column should be curated radiation ids")
-#       }
-#     } else {
-#       print("radiation.type which is curated radiation id across data set should be a column of radiation slot")
-#     }
-
-    if(length(intersect(rownames(object@curation$cell), rownames(object@cell))) != nrow(object@cell)) {
-      print("rownames of curation radiation slot should be the same as radiation slot (curated radiation ids)")
+    if(length(intersect(rownames(curation(object)$cell), rownames(cellInfo(object)))) != nrow(cellInfo(object))) {
+      message("rownames of curation cell slot should be the same as cell slot (curated cell ids)")
     }
 
-    if(!is(object@cell, "data.frame")) {
+    if(length(intersect(rownames(curation(object)$cell), rownames(cellInfo(object)))) != nrow(cellInfo(object))) {
+      message("rownames of curation radiation slot should be the same as radiation slot (curated radiation ids)")
+    }
+
+    if(!is(cellInfo(object), "data.frame")) {
       warning("cell slot class type should be dataframe")
     }
-    if(!is(object@radiation, "data.frame")) {
+    if(!is(radiationInfo(object), "data.frame")) {
       warning("radiation slot class type should be dataframe")
     }
     if(datasetType(object) %in% c("sensitivity", "both"))
@@ -1714,7 +1735,7 @@ checkRSetStructure <-
         warning("sensitivity info slot class type should be dataframe")
       }
       if("cellid" %in% colnames(sensitivityInfo(object))) {
-        if(!all(sensitivityInfo(object)[,"cellid"] %in% rownames(object@cell))) {
+        if(!all(sensitivityInfo(object)[,"cellid"] %in% rownames(cellInfo(object)))) {
           warning("not all the cell lines in sensitivity data are in cell slot")
         }
       }else {
@@ -1727,8 +1748,8 @@ checkRSetStructure <-
       if("radiation.type" %in% colnames(sensitivityInfo(object))) {
         radiation.ids <- unique(sensitivityInfo(object)[,"radiation.type"])
         radiation.ids <- radiation.ids[grep("///",radiation.ids, invert=TRUE)]
-        if(!all(radiation.ids %in% rownames(object@radiation))) {
-          print("not all the radiations in sensitivity data are in radiation slot")
+        if(!all(radiation.ids %in% rownames(radiationInfo(object)))) {
+          message("not all the radiations in sensitivity data are in radiation slot")
         }
       }else {
         warning("radiation.type does not exist in sensitivity info")

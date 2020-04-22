@@ -41,7 +41,7 @@ plotCurve <- function(D, SF, pars, filename = "dose_response_plot.pdf", fit_curv
                               trunc = FALSE,
                               verbose = FALSE)
     }
-    print(paste0("A linear-quadratic curve was fit to the data with parameters alpha = ", pars[[1]], " and beta = ", pars[[2]], "."))
+    message(paste0("A linear-quadratic curve was fit to the data with parameters alpha = ", pars[[1]], " and beta = ", pars[[2]], "."))
     trendlineDs <- CoreGx::.getSupportVec(D)
     trendlineSFs <- .linearQuadratic(trendlineDs, pars = pars, SF_as_log = TRUE)
   }
@@ -94,7 +94,6 @@ plotCurve <- function(D, SF, pars, filename = "dose_response_plot.pdf", fit_curv
 
   ticks <- CoreGx::.getSupportVec(x=signif(ylim,1), 10)
   labels <- sapply(ticks, function(i) as.expression(bquote(10^ .(round(i, 2)))))
-  # labels <- sapply(ticks, function(i) return(sprintf("%0.1e", 10^i)))
   axis(2, at=ticks, labels=labels)
   dev.off()
 

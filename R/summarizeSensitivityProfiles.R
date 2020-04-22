@@ -63,7 +63,7 @@ summarizeSensitivityProfiles <- function(
   }
 
   pp <- sensitivityInfo(rSet)
-  ### NEEDED to deal with duplicated rownames!!!!!!!
+  ##FIXME: deal with duplicated rownames!
   ppRows <- which(pp$cellid %in% cell.lines & pp$radiation.type %in% radTypes)
   if(sensitivity.measure != "max.conc") {
     dd <- sensitivityProfiles(rSet)
@@ -116,7 +116,6 @@ summarizeSensitivityProfiles <- function(
   tt <- reshape2::acast(pp_dd, radiation.type~cellid,
                         fun.aggregate=summary.function,
                         value.var="sensitivity.measure")
- # tt <- tt[radTypes, cell.lines]
 
   result[rownames(tt), colnames(tt)] <- tt
 

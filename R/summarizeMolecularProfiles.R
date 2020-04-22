@@ -119,7 +119,7 @@ summarizeMolecularProfiles <- function(rSet,
   pp2 <- pp[match(ucell, pp[ , "cellid"]), , drop=FALSE]
   if (length(duplix) > 0) {
     if (verbose) {
-      message(sprintf("Summarizing %s molecular data for:\t%s", mDataType, rSet@annotation$name))
+      message(sprintf("Summarizing %s molecular data for:\t%s", mDataType, annotation(rSet)$name))
       total <- length(duplix)
       # create progress bar
       pb <- utils::txtProgressBar(min=0, max=total, style=3)

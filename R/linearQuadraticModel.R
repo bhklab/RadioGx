@@ -34,7 +34,6 @@ linearQuadraticModel <- function (D,
                                   scale = 5,
                                   family = c("normal", "Cauchy"),
                                   median_n = 1,
-                                  # SF_as_log = TRUE,
                                   trunc = FALSE,
                                   verbose = FALSE) {
   match.arg(family)

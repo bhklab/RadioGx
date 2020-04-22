@@ -25,9 +25,5 @@ computeSF2 <- function(pars) {
                          pars = pars,
                          SF_as_log = FALSE)
 
-  # if (!SF_as_log) {
-    # SF <- exp(SF)
-  # }
-
   return(SF)
 }

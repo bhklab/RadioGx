@@ -24,7 +24,6 @@ OERmodel <- function(oxygenConc) {
   ##FIXME:: Why write as character and convert to numeric?
   D <- as.numeric(c("0","1","2","3","4","5","6","8","10"))
   SF1 = exp(-0.3*D*OMF-(0.03*D*D*OMF))
-  #RadioGx::computeAUC(D,SF1)
   pdf("HyxpoxiaPlot.pdf")
   RadioGx::doseResponseCurve(Ds=list("Hypoxia" = D),
                               SFs=list("Hypoxia" = SF1), plot.type="Actual",

@@ -68,8 +68,6 @@ rankGeneDrugSensitivity <- function (data,
   res <- NULL
   ccix <- complete.cases(data, type, batch, drugpheno)
   nn <- sum(ccix)
-#  nc <- c("estimate", "se", "n", "tstat", "fstat", "pvalue", "fdr")
-#  nc <- c("estimate", "se", "n", "pvalue", "fdr")
   if(!any(unlist(lapply(drugpheno,is.factor)))){
      if(ncol(drugpheno)>1){
       ##### FIX NAMES!!!
@@ -96,11 +94,6 @@ rankGeneDrugSensitivity <- function (data,
 
   for (ll in seq_along(ltype)) {
     iix <- !is.na(type) & is.element(type, ltype[[ll]])
-    # ccix <- complete.cases(data[iix, , drop=FALSE], drugpheno[iix,,drop=FALSE], type[iix], batch[iix]) ### HACK???
-
-    # ccix <- sapply(seq_len(NROW(data[iix,,drop=FALSE])), function(x) {
-    #   return(any(!is.na(data[iix,,drop=FALSE][x,])) && any(!is.na(drugpheno[iix,,drop=FALSE][x,])) && any(!is.na(type[iix][x])) && any(!is.na(batch[iix][x])))
-    # })
 
     data.not.all.na <- apply(data[iix,,drop=FALSE], 1, function(x) {
       any(!is.na(x))
@@ -132,12 +125,9 @@ rankGeneDrugSensitivity <- function (data,
       }, data=data[iix, , drop=FALSE], type=type[iix], batch=batch[iix], drugpheno=drugpheno[iix,,drop=FALSE], standardize=standardize)
       rest <- do.call(rbind, mcres)
       rest <- cbind(rest, "fdr"=p.adjust(rest[ , "pvalue"], method="fdr"))
-      # rest <- rest[ , nc, drop=FALSE]
       res <- c(res, list(rest))
     }
   }
   names(res) <- names(ltype)
   return(res)
 }
-
-## End

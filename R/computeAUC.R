@@ -113,14 +113,6 @@ computeAUC <- function(D, SF, pars, lower, upper, trunc = TRUE,
           return((exp(-pars[[1]] * lower) - exp(-pars[[1]] * upper)) / pars[[1]])
         }
       } else {
-        # return(exp(pars[[1]] ^ 2 / 4 / pars[[2]]) *
-        #        sqrt(pi / pars[[2]]) *
-        #        (pnorm(sqrt(2 * pars[[2]]) * (upper + pars[[1]] / 2 / pars[[2]])) -
-        #         pnorm(sqrt(2 * pars[[2]]) * (lower + pars[[1]] / 2 / pars[[2]]))))
-        # return(sqrt(pi / pars[[2]]) *
-        #       (exp(pars[[1]] ^ 2 / 4 / pars[[2]] + pnorm(sqrt(2 * pars[[2]]) * (upper + pars[[1]] / 2 / pars[[2]]), log.p = TRUE))
-        #        -
-        #        exp(pars[[1]] ^ 2 / 4 / pars[[2]] + pnorm(sqrt(2 * pars[[2]]) * (lower + pars[[1]] / 2 / pars[[2]]), log.p = TRUE))))
         x <- CoreGx::.getSupportVec(x=D, output_length = 1000)
         y <- .linearQuadratic(D=x, pars=pars, SF_as_log=FALSE)
         return(caTools::trapz(x, y))
@@ -129,7 +121,6 @@ computeAUC <- function(D, SF, pars, lower, upper, trunc = TRUE,
     }
 
   } else if (area.type == "Actual") {
-    #print("Actual")
     if (missing(SF)) {
       stop("Please pass in SF-values.")
     } else {

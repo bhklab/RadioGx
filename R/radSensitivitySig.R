@@ -68,24 +68,27 @@ radSensitivitySig <- function(rSet,
   ### Run rankGeneDrugSens in parallel at the drug level
   ### Return matrix as we had before
 
-  #sensitivity.measure <- match.arg(sensitivity.measure)
   molecular.summary.stat <- match.arg(molecular.summary.stat)
   sensitivity.summary.stat <- match.arg(sensitivity.summary.stat)
   standardize <- match.arg(standardize)
 
+  # Set multicore options
+  op <- options()
+  options(mc.cores=nthread)
+  on.exit(options(op))
+
   dots <- list(...)
   ndots <- length(dots)
 
-
   if (!all(sensitivity.measure %in% colnames(sensitivityProfiles(rSet)))) {
     stop (sprintf("Invalid sensitivity measure for %s, choose among: %s",
-                  rSet@annotation$name, paste(colnames(sensitivityProfiles(rSet)),
+                  annotation(rSet)$name, paste(colnames(sensitivityProfiles(rSet)),
                                               collapse=", ")))
   }
 
   if (!(mDataType %in% names(molecularProfilesSlot(rSet)))) {
     stop (sprintf("Invalid mDataType for %s, choose among: %s",
-                  rSet@annotation$name, paste(names(molecularProfilesSlot(rSet)),
+                  annotation(rSet)$name, paste(names(molecularProfilesSlot(rSet)),
                                               collapse=", ")))
   }
   switch(S4Vectors::metadata(molecularProfilesSlot(rSet)[[mDataType]])$annotation,

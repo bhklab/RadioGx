@@ -79,7 +79,6 @@ setMethod("show", signature=signature(object='RadioSig'),
 #'
 #' @export
 showSigAnnot <- function(Sigs){
-
   print(attr(Sigs, 'Call'))
   print(attr(Sigs, 'SessionInfo'))
   return(invisible(NULL))

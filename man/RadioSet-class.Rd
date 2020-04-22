@@ -43,6 +43,8 @@
 \alias{sensNumber<-,RadioSet,matrix-method}
 \alias{annotation,RadioSet-method}
 \alias{annotation<-,RadioSet,list-method}
+\alias{curation,RadioSet-method}
+\alias{curation<-,RadioSet,list-method}
 \title{A Class to Contain RadioGenomic datasets together with their curations}
 \usage{
 \S4method{cellInfo}{RadioSet}(object)
@@ -122,6 +124,10 @@
 \S4method{annotation}{RadioSet}(object)
 
 \S4method{annotation}{RadioSet,list}(object) <- value
+
+\S4method{curation}{RadioSet}(object)
+
+\S4method{curation}{RadioSet,list}(object) <- value
 }
 \arguments{
 \item{object}{A \code{RadioSet}}
@@ -347,6 +353,10 @@ experiments
 \item \code{annotation}: Retrieve the annotations slot form an rSet
 
 \item \code{annotation<-}: Update the annotation slot of a tSet
+
+\item \code{curation}: Retrieve the curation slot form an rSet
+
+\item \code{curation<-}: Update the annotation slot of a tSet
 }}
 
 \section{Slots}{

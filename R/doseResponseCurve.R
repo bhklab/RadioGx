@@ -102,7 +102,7 @@ function(rad.type = "radiation",
   if(!all(legends.label %in% c("alpha", "beta","rsquared"))){
     stop(paste("Only", paste(c("'alpha'", "'beta'","'rsquared'"), collapse = ", "), "implemented for legend labels.", split = " "))
   }
-  ## XXX:: HACK
+  ##FIXME::
   if(!missing(rSets) && (missing(cellline))){
     stop("If you pass in a rSet then drug and cellline must be set") }
 
@@ -253,27 +253,17 @@ function(rad.type = "radiation",
     }
 
     if (missing(mycol)) {
-    # require(RColorBrewer) || stop("Library RColorBrewer is not available!")
       mycol <- RColorBrewer::brewer.pal(n=7, name="Set1")
     }
 
     dose.range <- c(10^100 , 0)
     viability.range <- c(1 , 1)
     for(i in seq_along(doses)) {
-      # dose.range <- c(min(dose.range[1], min(doses[[i]], na.rm=TRUE), na.rm=TRUE), max(dose.range[2], max(doses[[i]], na.rm=TRUE), na.rm=TRUE))
       dose.range <- c(0, max(dose.range[2], max(doses[[i]], na.rm=TRUE), na.rm=TRUE))
       viability.range <- c(min(viability.range[1], min(responses[[i]], na.rm=TRUE), na.rm=TRUE), 1)
     }
     x1 <- 10 ^ 10; x2 <- 0
 
-  # if(length(doses) > 1) {
-  #   common.ranges <- PharmacoGx::.getCommonConcentrationRange(doses)
-
-  #   for(i in seq_along(doses)) {
-  #     x1 <- min(x1, min(common.ranges[[i]]))
-  #     x2 <- max(x2, max(common.ranges[[i]]))
-  #   }
-  # }
     if (!missing(xlim)) {
       dose.range <- xlim
     }
@@ -281,16 +271,11 @@ function(rad.type = "radiation",
       viability.range <- ylim
     }
     if(missing(title)){
-    ## FIXME:: HACK
-    # if(!missing(drug)&&!missing(cellline)){
-    #   title <- sprintf("%s:%s", drug, cellline)
-    # } else {
       if (length(rSets)){
         title <- sprintf("Radiation Response Curve for: %s", cellline)
       } else {
         title <- "Radiation Response Curve"
       }
-    # }
     }
     plot(NA, xlab="Dose (Gy)", ylab="Survival Fraction", axes =FALSE, main=title, log="y", ylim=viability.range, xlim=dose.range, cex=cex, cex.main=cex.main)
     magicaxis::magaxis(side=seq_len(2), frame.plot=TRUE, tcl=-.3, majorn=c(5,5), minorn=c(5,3), label=c(TRUE,FALSE))
@@ -304,9 +289,6 @@ function(rad.type = "radiation",
     axis(2, at=ticks$labat,labels=ticks$exp)
     legends <- NULL
     legends.col <- NULL
-  # if (length(doses) > 1) {
-  #   rect(xleft=x1, xright=x2, ybottom=viability.range[1] , ytop=viability.range[2] , col=rgb(240, 240, 240, maxColorValue = 255), border=FALSE)
-  # }
 
     for (i in seq_along(doses)) {
       points(doses[[i]],responses[[i]],pch=20,col = mycol[i], cex=cex)
@@ -318,7 +300,6 @@ function(rad.type = "radiation",
         x_vals <- CoreGx::.getSupportVec(c(0,doses[[i]]))
         lines(x_vals, (.linearQuadratic(x_vals, pars=linQuad_params, SF_as_log=FALSE)),lty=1, lwd=lwd, col=mycol[i])
       },"Both"={
-      # lines(doses[[i]],responses[[i]],lty=1,lwd=lwd,col = mycol[i])
         linQuad_params <- linearQuadraticModel(D = doses[[i]], SF = responses[[i]])
         x_vals <- CoreGx::.getSupportVec(c(0,doses[[i]]))
         lines(x_vals, (.linearQuadratic(x_vals, pars=linQuad_params, SF_as_log=FALSE)),lty=1, lwd=lwd, col=mycol[i])
@@ -330,13 +311,7 @@ function(rad.type = "radiation",
       }
       legends.col <-  c(legends.col, mycol[i])
     }
-  # if (common.range.star) {
-  #   if (length(doses) > 1) {
-  #     for (i in seq_along(doses)) {
-  #       points(common.ranges[[i]], responses[[i]][names(common.ranges[[i]])], pch=8, col=mycol[i])
-  #     }
-  #   }
-  # }
+
     legend(legend.loc, legend=legends, col=legends.col, bty="n", cex=cex, pch=c(15,15))
     return(invisible(NULL))
   }
