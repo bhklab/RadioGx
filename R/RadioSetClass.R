@@ -1124,6 +1124,8 @@ setMethod('annotation', signature("RadioSet"), function(object) {
 #' @param value A \code{list} of annotations to add to the annotatiosn slot of
 #'   an rSet
 #'
+#' @return A copy of the \code{RadioSet} with the updated annotation slot
+#'
 #' @examples
 #' data(clevelandSmall)
 #' annotation(clevelandSmall) <- annotation(clevelandSmall)

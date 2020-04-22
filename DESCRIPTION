@@ -41,6 +41,7 @@ Imports:
     SummarizedExperiment,
     S4Vectors,
     Biobase,
+    parallel,
     BiocParallel,
     RColorBrewer, 
     caTools, 
