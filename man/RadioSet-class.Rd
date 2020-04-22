@@ -41,6 +41,8 @@
 \alias{sensNumber,RadioSet-method}
 \alias{pertNumber<-,RadioSet,array-method}
 \alias{sensNumber<-,RadioSet,matrix-method}
+\alias{annotation,RadioSet-method}
+\alias{annotation<-,RadioSet,list-method}
 \title{A Class to Contain RadioGenomic datasets together with their curations}
 \usage{
 \S4method{cellInfo}{RadioSet}(object)
@@ -116,6 +118,10 @@
 \S4method{pertNumber}{RadioSet,array}(object) <- value
 
 \S4method{sensNumber}{RadioSet,matrix}(object) <- value
+
+\S4method{annotation}{RadioSet}(object)
+
+\S4method{annotation}{RadioSet,list}(object) <- value
 }
 \arguments{
 \item{object}{A \code{RadioSet}}
@@ -144,7 +150,7 @@ Updated \code{RadioSet}
 
 A \code{list} containing the molecularProfiles from a cSet
 
-A copy of the \code{CoreSet} with the molecularProfiles slot updated
+A copy of the \code{RadioSet} with the molecularProfiles slot updated
 
 A \code{DataFrame} containing the feature information
 
@@ -337,6 +343,10 @@ experiments
 
 \item \code{sensNumber<-}: Update the summary of available sensitivity
 experiments
+
+\item \code{annotation}: Retrieve the annotations slot form an rSet
+
+\item \code{annotation<-}: Update the annotation slot of a tSet
 }}
 
 \section{Slots}{

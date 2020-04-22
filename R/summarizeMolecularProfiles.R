@@ -35,7 +35,7 @@
 #' @importFrom utils setTxtProgressBar txtProgressBar
 #' @importFrom SummarizedExperiment SummarizedExperiment rowData rowData<- colData colData<- assays assays<- assayNames assayNames<-
 #' @importFrom Biobase AnnotatedDataFrame
-#' @importFrom matrixStats rowMeans rowMedians
+#' @importFrom matrixStats rowMeans2 rowMedians
 #' @export
 ##TODO:: Add features parameter
 summarizeMolecularProfiles <- function(rSet,
@@ -138,7 +138,7 @@ summarizeMolecularProfiles <- function(rSet,
       myx <- which(!is.na(pp[ , "cellid"]) & is.element(pp[ , "cellid"], x))
       switch(summary.stat,
         "mean" = {
-          ddt <- rowMeans(dd[ , myx, drop=FALSE])
+          ddt <- rowMeans2(dd[ , myx, drop=FALSE])
         },
         "median"={
           ddt <- rowMedians(dd[ , myx, drop=FALSE])

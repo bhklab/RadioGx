@@ -9,9 +9,11 @@
 #
 #' @importFrom SummarizedExperiment assay assays assayNames
 #' @importClassesFrom SummarizedExperiment SummarizedExperiment Assays
-#' @importFrom Biobase exprs fData pData annotation protocolData
+#' @importFrom Biobase exprs fData pData annotation protocolData assayData experimentData
 #' @importFrom S4Vectors SimpleList DataFrame
 #' @importFrom stats setNames
+#' @export
+#' @keywords internal
 .convertRsetMolecularProfilesToSE <- function(rSet) {
 
   eSets <- molecularProfilesSlot(rSet) # Extract eSet data
@@ -64,8 +66,10 @@
 ## @return \code{message} Any slots which are not the same
 ##
 #' @importFrom assertthat are_equal
-#' @import SummarizedExperiment
-#' @import Biobase
+#' @importFrom SummarizedExperiment SummarizedExperiment Assays assay
+#'   assayNames assayNames<-
+#' @importFrom Biobase exprs fData pData annotation protocolData
+#'   assayDataElementNames experimentData assayData
 #' @keywords internal
 .validateRsetMolecularProfilesToSEConversion <- function(rSet_old, rSet_new) {
 
@@ -171,8 +175,8 @@
 # @return \code{none} Works by side effects alone to resave all example
 #   datasets in a package to have SummarizedExperiments for molecularProfiles
 #
-# @export
-# @keywords internal
+#' @export
+#' @keywords internal
 .resaveAllExampleDatasets <- function(datasets) {
   for (dataset in datasets) {
     dataDir <- paste0(grep('data', list.dirs(), value=TRUE))

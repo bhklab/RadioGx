@@ -424,11 +424,10 @@ setMethod("molecularProfilesSlot", signature("RadioSet"), function(object) {
 #' @param object A \code{RadioSet} object for which values will be replaced
 #' @param value A \code{list} containing molecular profiles as SummarizedExperiments
 #'
-#' @return A copy of the \code{CoreSet} with the molecularProfiles slot updated
+#' @return A copy of the \code{RadioSet} with the molecularProfiles slot updated
 #'
 #' @importFrom CoreGx molecularProfilesSlot<-
 #' @importFrom methods callNextMethod
-
 #' @export
 setReplaceMethod("molecularProfilesSlot", signature("RadioSet"),
                  function(object, value){
@@ -555,6 +554,7 @@ setGeneric("sensitivityRaw<-", function(object, ..., value) standardGeneric("sen
 setReplaceMethod("sensitivityRaw", signature("RadioSet", "array"),
                  function(object, value) {
   object@sensitivity$raw <- value
+  object
 })
 
 ##TODO:: Migrate this to CoreGx
@@ -595,12 +595,13 @@ setMethod("sensitivitySlot", signature("RadioSet"), function(object) {
 setGeneric("sensitivitySlot<-", function(object, ..., value) standardGeneric("sensitivitySlot<-"))
 #' @describeIn RadioSet Set the raw dose and viability data for an rSet and return
 #'   and updated copty
-#' @inheritParams sensitivityRaw<-
+#' @inheritParams sensitivitySlot<-
 #' @export
 setReplaceMethod("sensitivitySlot", signature("RadioSet", "list"),
                  function(object, value) {
                    ##TODO:: Implement error handinlg for this slot
                    object@sensitivity <- value
+                   object
                  })
 
 
@@ -915,6 +916,7 @@ setGeneric("datasetType<-",  function(object, value) standardGeneric("datasetTyp
 setReplaceMethod("datasetType", signature("RadioSet"), function(object, value) {
   ##TODO:: Add error handling to this function
   object@datasetType <- value
+  object
 })
 
 #' name Getter
@@ -1091,32 +1093,49 @@ setMethod(
     callNextMethod(object)
 })
 
+##TODO:: Export to CoreGx
+##FIXME:: How do I import generics from BiocGenerics?
 #' annotation Slot Getter
 #'
-#' @inheritParams BiocGenerics::annotation
+#' @param object A \code{RadioSet}
+#' @param ... A \code{list} to allow definition of new parameters on this generic
+#'
+#' @return A \code{list} of named annotaiton
 #'
 #' @examples
 #' data(clevelandSmall)
 #' annotation(clevelandSmall)
 #'
-#' @importFrom BiocGenerics annotation
+#' @export
+setGeneric("annotation", function(object, ...) standardGeneric("annotation"))
+#' @describeIn RadioSet Retrieve the annotations slot form an rSet
+#' @inheritParams annotation<-
 #' @export
 setMethod('annotation', signature("RadioSet"), function(object) {
   object@annotation
 })
 
+##TODO:: Export to CoreGx
+##FIXME:: How do I import generics from BiocGenerics?
 #' annotation<- Slot Setter
 #'
-#' @inheritParams BiocGenerics::`annotation<-`
+#' @param object A \code{RadioSet}
+#' @param ... A \code{list} to allow definition of new parameters on this generic
+#' @param value A \code{list} of annotations to add to the annotatiosn slot of
+#'   an rSet
 #'
 #' @examples
 #' data(clevelandSmall)
 #' annotation(clevelandSmall) <- annotation(clevelandSmall)
 #'
-#' @importFrom BiocGenerics `annotation<-`
 #' @export
-setReplaceMethod("annotation", signature("RadioSet"), function(object, value) {
+setGeneric("annotation<-", function(object, ..., value) standardGeneric("annotation<-"))
+#' @describeIn RadioSet Update the annotation slot of a tSet
+#' @inheritParams annotation<-
+#' @export
+setReplaceMethod("annotation", signature("RadioSet", "list"), function(object, value) {
   object@annotation <- value
+  object
 })
 
 #' `[`
@@ -1188,8 +1207,6 @@ setMethod("dim", signature=signature(x="RadioSet"), function(x){
 #' @return A RadioSet with only the selected radiation types and cells
 #' @importFrom CoreGx .unionList
 #' @export
-# subsetTo <- function(object, cells=NULL, radiationTypes=NULL, exps=NULL,
-# molecular.data.cells=NULL, keep.controls=TRUE) {
 subsetTo <- function(object,
                      cells=NULL,
                      radiationTypes=NULL,
@@ -1255,9 +1272,6 @@ subsetTo <- function(object,
         stop("Some of the cell names passed to function did not match to names in the RadoSet. Please ensure you are using cell names as returned by the cellNames function")
       }
       cell_line_index <- which(SummarizedExperiment::colData(SE)[["cellid"]] %in% cells)
-      # if (length(na.omit(cell_line_index))==0){
-      #       stop("No cell lines matched")
-      #     }
     }
     radiationTypes_index <- NULL
     if(datasetType(object)=="perturbation" || datasetType(object)=="both"){
@@ -1268,9 +1282,6 @@ subsetTo <- function(object,
                names as returned by the radiations function")
         }
         radiationTypes_index <- which(SummarizedExperiment::colData(SE)[["radiation.type"]] %in% radiationTypes)
-        # if (length(radiationTypes_index)==0){
-        #         stop("No radiationTypes matched")
-        #       }
         if(keep.controls) {
           control_indices <- which(SummarizedExperiment::colData(SE)[["xptype"]]=="control")
           radiationTypes_index <- c(radiationTypes_index, control_indices)
@@ -1371,6 +1382,8 @@ subsetTo <- function(object,
     }
       return(object)
 }
+
+
 ### TODO:: Add updating of sensitivity Number tables
 #' @importFrom CoreGx updateCellId
 updateCellId <- function(object, new.ids = vector("character")){
@@ -1458,7 +1471,6 @@ updateRadId <- function(object, new.ids = vector("character")){
    if (ncol(sensNumber(object))>0){
      colnames(sensNumber(object)) <- new.ids[sensMatch]
    }
-   #rownames(object@curation$radiation) <- new.ids[curMatch]
    rownames(radiationInfo(object)) <- new.ids
 
 

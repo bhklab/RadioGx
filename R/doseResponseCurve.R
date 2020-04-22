@@ -66,7 +66,7 @@
 #' @importFrom graphics plot rect axis points lines legend
 #' @importFrom grDevices rgb
 #' @importFrom magicaxis magaxis
-#' @importFrom matrixStats colMedians colMeans
+#' @importFrom matrixStats colMedians colMeans2
 #'
 #' @export
 doseResponseCurve <-

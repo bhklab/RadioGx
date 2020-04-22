@@ -42,7 +42,6 @@ Imports:
     S4Vectors,
     Biobase,
     BiocParallel,
-    BiocGenerics,
     RColorBrewer, 
     caTools, 
     magicaxis, 
