@@ -114,7 +114,7 @@
         all(
           as(rSet_old@molecularProfiles[[i]]@featureData, "data.frame") ==
             as.data.frame(molecularProfilesSlot(rSet_new)[[i]]@elementMetadata[
-              seq_len(length(molecularProfilesSlot(rSet_new)[[i]]@elementMetadata) -1)]),
+              seq_len(length(molecularProfilesSlot(rSet_new)[[i]]@elementMetadata) - 1)]),
           na.rm = TRUE)
       } else { FALSE })
     ) message("The featureData is not equivalent")

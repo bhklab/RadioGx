@@ -284,8 +284,8 @@ function(rad.type = "radiation",
     } else {
       ticks <- magicaxis::maglab(viability.range, exptext = TRUE, log=TRUE)
     }
-    ticks$exp <- sapply(ticks$exp, function(x)
-      return(as.expression(bquote(10^ .(round(log10(eval(x)), 2))))))
+    ticks$exp <- unlist(lapply(ticks$exp, function(x)
+      return(as.expression(bquote(10^ .(round(log10(eval(x)), 2)))))))
     axis(2, at=ticks$labat,labels=ticks$exp)
     legends <- NULL
     legends.col <- NULL
@@ -295,7 +295,7 @@ function(rad.type = "radiation",
 
       switch(plot.type , "Actual"={
         lines(doses[[i]], responses[[i]], lty=1, lwd=lwd, col=mycol[i])
-      }, "Fitted"={
+      }, "Fitted"= {
         linQuad_params <- linearQuadraticModel(D = doses[[i]], SF = responses[[i]])
         x_vals <- CoreGx::.getSupportVec(c(0,doses[[i]]))
         lines(x_vals, (.linearQuadratic(x_vals, pars=linQuad_params, SF_as_log=FALSE)),lty=1, lwd=lwd, col=mycol[i])

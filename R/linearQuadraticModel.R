@@ -39,12 +39,12 @@ linearQuadraticModel <- function (D,
   match.arg(family)
 
   CoreGx::.sanitizeInput(x = D,
-                          y = SF,
-                          x_as_log = FALSE,
-                          y_as_log = FALSE,
-                          y_as_pct = FALSE,
-                          trunc = trunc,
-                          verbose = verbose)
+                         y = SF,
+                         x_as_log = FALSE,
+                         y_as_log = FALSE,
+                         y_as_pct = FALSE,
+                         trunc = trunc,
+                         verbose = verbose)
 
   DSF <- CoreGx::.reformatData(x = D,
                                y = SF,
@@ -65,7 +65,7 @@ linearQuadraticModel <- function (D,
     stop ("All lower bounds must be less than the corresponding upper_bounds.")
   }
 
-  if(!((0 %in% D) || SF[D==0] == 0)){
+  if(!(0 %in% D) || SF[D==0] != 0) {
     D <- c(0,D)
     SF <- c(0,SF)
   }

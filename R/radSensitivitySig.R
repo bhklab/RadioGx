@@ -192,7 +192,7 @@ radSensitivitySig <- function(rSet,
     }
 
     splitix <- parallel::splitIndices(nx = length(drugn), ncl = 1)
-    splitix <- splitix[sapply(splitix, length) > 0]
+    splitix <- splitix[vapply(splitix, length, numeric(1)) > 0]
     mcres <-  BiocParallel::bplapply(splitix, function(x, drugn, expr, drugpheno, type, batch, standardize, nthread) {
       res <- NULL
       for(i in drugn[x]) {
@@ -211,19 +211,19 @@ radSensitivitySig <- function(rSet,
     }, drugn=drugn, expr=t(molecularProfiles(rSet, mDataType)[features, , drop=FALSE]), drugpheno=drugpheno.all, type=type, batch=batch, nthread=nthread, standardize=standardize)
 
     res <- do.call(c, mcres)
-    res <- res[!sapply(res, is.null)]
+    res <- res[!vapply(res, is.null, logical(1))]
     drug.sensitivity <- array(NA,
       dim = c(nrow(featureInfo(rSet, mDataType)[features,, drop=FALSE]),
         length(res), ncol(res[[1]])),
       dimnames = list(rownames(featureInfo(rSet, mDataType)[features,]), names(res), colnames(res[[1]])))
     for(j in seq_len(ncol(res[[1]]))) {
-      ttt <- sapply(res, function(x, j, k) {
+      ttt <- unlist(lapply(res, function(x, j, k) {
         xx <- array(NA, dim = length(k), dimnames = list(k))
         xx[rownames(x)] <- x[ , j, drop=FALSE]
         return (xx)
       },
       j = j,
-      k = rownames(featureInfo(rSet, mDataType)[features,, drop = FALSE]))
+      k = rownames(featureInfo(rSet, mDataType)[features,, drop = FALSE])))
       drug.sensitivity[rownames(featureInfo(rSet, mDataType)[features,, drop = FALSE]), names(res), j] <- ttt
     }
 

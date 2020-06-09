@@ -91,8 +91,8 @@
   names(SF2) <- dimnames(raw.sensitivity)[[1]]
   names(D10) <- dimnames(raw.sensitivity)[[1]]
 
-  alpha <- sapply(pars, function(x) return(x[1]))
-  beta <- sapply(pars, function(x) return(x[2]))
+  alpha <- vapply(pars, function(x) return(x[1]), numeric(1))
+  beta <- vapply(pars, function(x) return(x[2]), numeric(1))
 
 
   return(list("AUC"=AUC, "SF2"=SF2, "D10"=D10 ,"alpha"=alpha, "beta"=beta))
