@@ -101,16 +101,10 @@ rankGeneDrugSensitivity <- function (data,
     drugpheno.not.all.na <- apply(drugpheno[iix,,drop=FALSE], 1, function(x) {
       any(!is.na(x))
     })
-    type.not.all.na <- sapply(type[iix], function(x) {
-      !is.na(x)
-    })
-    batch.not.all.na <- sapply(batch[iix], function(x) {
-      !is.na(x)
-    })
+    type.not.all.na <- vapply(type[iix], is.na, logical(1))
+    batch.not.all.na <- vapply(batch[iix], is.na, logical(1))
 
     ccix <- data.not.all.na & drugpheno.not.all.na & type.not.all.na & batch.not.all.na
-
-
 
     if (sum(ccix) < 3) {
       ## not enough experiments
@@ -118,7 +112,7 @@ rankGeneDrugSensitivity <- function (data,
       res <- c(res, rest)
     } else {
       splitix <- parallel::splitIndices(nx=ncol(data), ncl=nthread)
-      splitix <- splitix[sapply(splitix, length) > 0]
+      splitix <- splitix[vapply(splitix, length, numeric(1)) > 0]
       mcres <- BiocParallel::bplapply(splitix, function(x, data, type, batch, drugpheno, standardize) {
         res <- t(apply(data[ , x, drop=FALSE], 2, geneDrugSensitivity, type=type, batch=batch, drugpheno=drugpheno, verbose=verbose, standardize=standardize))
         return(res)

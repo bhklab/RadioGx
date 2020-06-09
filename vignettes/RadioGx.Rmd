@@ -75,13 +75,13 @@ sensitivity.
 
 ```{r molecProf}
 # Get the phenotype annotations for cancer cell lines with RNA sequencing data
-phenoInfo(clevelandSmall, mDataType="rna")[1:5, ]
+phenoInfo(clevelandSmall, mDataType="rna")[1:5, 1:5]
 
 # Set the phenotype annotations for cancer cell lines with RNA sequencing data
 phenoInfo(clevelandSmall, mDataType="rna") <- phenoInfo(clevelandSmall, mDataType="rna")
 
 # Get the RNA sequencing molecular profile data for the cancer cell lines
-molecularProfiles(clevelandSmall, "rna")[1:5, ]
+molecularProfiles(clevelandSmall, "rna")[1:5, 1:5]
 
 # Set the RNA sequencing molecular profile data for the cancer cell lines
 molecularProfiles(clevelandSmall, "rna") <- molecularProfiles(clevelandSmall, "rna")
@@ -132,24 +132,110 @@ cellInfo(clevelandSmall)[1:5, ]
 cellInfo(clevelandSmall) <- cellInfo(clevelandSmall)
 ```
 
-### Other
+## Analyzing Dose-Response Experiments
 
-For documentation of all available setter and getter methods for the RadioGx
-package please see the included documentation for 'RadioSet-class'.
+### Fitting Linear Quadratic Models
 
-## Plotting Functions:
+RadioGx provides a number of functions for analyzing dose response experiments.
+To use these functions, we must first fit a statistical model to the dose 
+response data. This package provides a function for fitting linear-quadratic
+models to dose response data. The functions can be used with data contained in
+a RadioSet or with raw data.
 
-Create a dose response curve for data in a radiation sensitivity experiment.
+```{r fitting_linear_quadric_model}
+# Extract raw sensitvity data from the RadioSet
+sensRaw <- sensitivityRaw(clevelandSmall)
+
+# Find a cancer cell-line of interest
+cancerCellLine <- sensitivityInfo(clevelandSmall)$cellid[1]
+print(cancerCellLine)
+
+# Get the radiation doses and associated survival data from clevelandSmall
+radiationDoses <- sensRaw[1, , 'Dose']
+survivalFractions <- sensRaw[1, , 'Viability']
+
+LQmodel <- linearQuadraticModel(D=radiationDoses,
+                                SF=survivalFractions)
+LQmodel
+```
+
+Above we see that LQmodel contains the alpha and beta coefficients for the dose
+response curve fit to the dose and viability data for the IMR-32 cancer cell-line. 
+Based on the "Rsquare" attribute we can see that the model fit for this data is 
+good, with over 90% of observed variance explained by the model.
+
+### Computing Common Does-Response Metrics
+
+The RadioGx provides a number of functions for calculating common dose response
+metrics such as survival fraction (SF), area under the curve (AUC) and dose at
+which only 10% of cancer cells survive (D10).
+
+Some of these functions require the alpha and beta coefficients, as calculated
+above using the `linearQuadraticModel` function.
+
+```{r metrics_computed_from_fit_parameters}
+survFracAfter2Units <- computeSF2(pars=LQmodel)
+print(survFracAfter2Units)
+
+dose10PercentSurv <- computeD10(pars=LQmodel)
+print(dose10PercentSurv)
+```
+
+We see from the above cell that after two units of radiation, approximately
+20% of cancer cells remain relative to the initial population. Conversely,
+using `computeD10` we see that on average 2.8 units of radiation need to be 
+administered to result in 10% cell-line survival (i.e., 90% of cancer cells
+are killed).
+
+Other dose-response metrics can be computed directly using the radiation dose
+and cancer cell viability data.
+
+```{r metrics_computed_from_dose_response_data}
+areaUnderDoseRespCurve <- computeAUC(D=radiationDoses, pars=LQmodel, lower=0,
+                                     upper=1)
+print(areaUnderDoseRespCurve)
+
+survFrac <- 1 - areaUnderDoseRespCurve
+print(survFrac)
+```
+
+In the above code block we compute the AUC for a dose-response curve between a
+dose of 0 to 1 Gy. This area can be interpreted as the proportion of cells
+killed during the administration of 1 Gy of radiation, therefore the survival
+fraction is equal to 1 - AUC. We see that 1 Gy of radiation killed ~70% of 
+cancer cell-line colonies, thus 30% 
+
+### Visualizing dose response curves
+
+The `doseResponseCurve` function can be used to generate graphs of survival
+fraction vs dose for radiation sensitivity experiemnts. In this example 
+we provide raw data values to create the plot. When the `plot.type` is set to
+"Both", a linear-quadratic model will also be fit toe the supplied dose response
+values.
 
 ```{r plotting}
 doseResponseCurve(
   Ds=list("Experiment 1" = c(0, 2, 4, 6)),
-  SFs=list("Experiment 1" = c(1,.6,.4,.2)), 
+  SFs=list("Experiment 1" = c(1,.6,.4,.2)),
   plot.type="Both"
   )
 ```
 
-## Sample Analyses
+Additionally, `doseResponseCurve` can be used to create dose response curves
+directly from a curated RadioSet object. When utilizing this feature, a 
+cell-line must be selected from the RadioSet. This can be done by name
+if you know which cell-line you are looking for. If you, the available
+cell-lines can be explored using the `cellInfo` function.
 
-Additional vignettes detailing the basic analysis workflow for the RadioGx 
-package will be added in the coming months.
+```{r plotting_rSet}
+doseResponseCurve(
+  rSets=list(clevelandSmall),
+  cellline=cellInfo(clevelandSmall)$cellid[3]
+)
+```
+
+## Radiation Response and Molecular Profiles
+
+This section will be expanded in the coming months to include examples of how 
+RadioGx can be used to explore molecular signatures for radiation response in
+cancer cell-lines.

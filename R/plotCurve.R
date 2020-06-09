@@ -93,7 +93,7 @@ plotCurve <- function(D, SF, pars, filename = "dose_response_plot.pdf", fit_curv
   }
 
   ticks <- CoreGx::.getSupportVec(x=signif(ylim,1), 10)
-  labels <- sapply(ticks, function(i) as.expression(bquote(10^ .(round(i, 2)))))
+  labels <- unlist(lapply(ticks, function(i) as.expression(bquote(10^ .(round(i, 2))))))
   axis(2, at=ticks, labels=labels)
   dev.off()
 

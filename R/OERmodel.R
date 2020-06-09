@@ -21,8 +21,7 @@ OERmodel <- function(oxygenConc) {
   a = ((OER_m*pO2)+K_m)/(pO2+K_m)
   OMF = (1/OER_m)*a
 
-  ##FIXME:: Why write as character and convert to numeric?
-  D <- as.numeric(c("0","1","2","3","4","5","6","8","10"))
+  D <- seq(0, 10, 1)
   SF1 = exp(-0.3*D*OMF-(0.03*D*D*OMF))
   pdf("HyxpoxiaPlot.pdf")
   RadioGx::doseResponseCurve(Ds=list("Hypoxia" = D),

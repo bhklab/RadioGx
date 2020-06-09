@@ -26,8 +26,8 @@
 #'   In case molecular data type is mutation or fusion "and" and "or" choices are available
 #' @param fill.missing \code{boolean} should the missing cell lines not in the
 #'   molecular data object be filled in with missing values?
-#' @param summarize A flag which when set to FALSE (defaults to TRUE) disables summarizing and
-#'   returns the data unchanged as a ExpressionSet
+#' @param summarize A flag which when set to FALSE (defaults to TRUE) disables 
+#'   summarizing and returns the data unchanged as a ExpressionSet
 #' @param verbose \code{boolean} should messages be printed
 #' @return \code{matrix} An updated RadioSet with the molecular data summarized
 #'   per cell line.
