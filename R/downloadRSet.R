@@ -1,6 +1,6 @@
-#' Return a table of ToxicoSets available for download
+#' Return a table of RadioSets available for download
 #'
-#' The function fetches a table of all ToxicoSets available for download from
+#' The function fetches a table of all RadioSets available for download from
 #' the PharmacoGx server. The table includes the names of the PharamcoSet, the
 #' types of data available in the object, and the date of last update.
 #'
@@ -9,79 +9,79 @@
 #' availableRSets()
 #' }
 #'
-#' @param saveDir \code{character} Directory to save the table of tSets
-#' @param fileName \code{character} The filename for the table of tSets
+#' @param saveDir \code{character} Directory to save the table of rSets
+#' @param fileName \code{character} The filename for the table of rSets
 #' @param verbose \code{bool} Should status messages be printed during download.
-#' @return A data.frame with details about the available ToxicoSet objects
+#' @return A data.frame with details about the available RadioSet objects
 #' @export
 #' @import downloader
 #' @importFrom utils read.table write.table
-availableRSets <- function(saveDir=tempdir(), fileName="availableRadioSets.csv", verbose=TRUE){
+availableRSets <- function(saveDir=tempdir(), fileName="availableRadioSets.csv", verbose=TRUE) {
+
+    if (missing(saveDir) && verbose) {
+        message("Downloading to temporary folder... Use saveDir parameter to
+                save to a specific path")
+        }
 
     if (!file.exists(saveDir)) {
         dir.create(saveDir, recursive = TRUE)
     }
 
-    downloader::download("https://zenodo.org/record/3766914/files/availableTSets.csv?download=1",
-                         destfile = file.path(saveDir, myfn),
+    downloader::download("https://zenodo.org/record/3897599/files/availableRSets.csv?download=1",
+                         destfile = file.path(saveDir, fileName),
                          quiet = !verbose)
 
-    tSetTable <- read.csv(file.path(saveDir, myfn), header = TRUE, stringsAsFactors = FALSE)
-    return(tSetTable)
+    rSetTable <- read.csv(file.path(saveDir, fileName), header = TRUE, stringsAsFactors = FALSE)
+    return(rSetTable)
 }
 
-#' Download a ToxicoSet object
+#' Download a RadioSet object
 #'
-#' This function allows you to download a \code{ToxicoSet} object for use with this
-#' package. The \code{ToxicoSets} have been extensively curated and organised within
+#' This function allows you to download a \code{RadioSet} object for use with this
+#' package. The \code{RadioSets} have been extensively curated and organized within
 #' a PharacoSet class, enabling use with all the analysis tools provided in
 #' \code{PharmacoGx}.
 #'
 #' @examples
 #' if (interactive()) {
-#' drugMatrix_rat <- downloadtSet("drugMatrix_rat")
+#' drugMatrix_rat <- downloadRSet("Cleveland")
 #' }
 #'
 #' @param name \code{Character} string, the name of the PhamracoSet to download.
 #' @param saveDir \code{Character} string with the folder path where the
-#'     ToxicoSet should be saved. Defaults to \code{'./tSets/'}. Will create
+#'     RadioSet should be saved. Defaults to \code{'./rSets/'}. Will create
 #'     directory if it does not exist.
-#' @param tSetFileName \code{character} string, the file name to save the dataset under
+#' @param rSetFileName \code{character} string, the file name to save the dataset under
 #' @param verbose \code{bool} Should status messages be printed during download.
 #'   Defaults to TRUE.
-#' @return A tSet object with the dataset, downloaded from our server
+#' @return A rSet object with the dataset, downloaded from our server
 #' @export
 #' @import downloader
-downloadTSet <- function(name, saveDir = tempdir(), tSetFileName = NULL, verbose = TRUE) {
+downloadRSet <- function(name, saveDir = tempdir(), rSetFileName = NULL, verbose = TRUE) {
 
     if (missing(saveDir)) {message("Downloading to temporary folder... Use saveDir parameter to save to a specific path")}
-    tSetTable <- availableTSets(saveDir = saveDir)
+    rSetTable <- availableRSets(saveDir = saveDir)
 
-    whichx <- match(name, tSetTable[, 1])
+    whichx <- match(name, rSetTable[, 1])
     if (is.na(whichx)) {
-        stop('Unknown Dataset. Please use the availabletSets() function for the
-         table of available PharamcoSets.')
+        stop('Unknown Dataset. Please use the availableRSets() function for the
+         table of available RadicoSets.')
     }
 
     if (!file.exists(saveDir)) {
         dir.create(saveDir, recursive = TRUE)
     }
 
-    if (is.null(tSetFileName)) {
-        tSetFileName <- paste0(tSetTable[whichx,"ToxicoSet.Name"], ".rds")
+    if (is.null(rSetFileName)) {
+        rSetFileName <- paste0(rSetTable[whichx,"RadioSet_name"], ".rds")
     }
-    if (!file.exists(file.path(saveDir, tSetFileName))) {
-        downloader::download(url = as.character(tSetTable[whichx,"URL"]),
-                             destfile = file.path(saveDir, tSetFileName),
+    if (!file.exists(file.path(saveDir, rSetFileName))) {
+        downloader::download(url = as.character(rSetTable[whichx, "URL"]),
+                             destfile = file.path(saveDir, rSetFileName),
                              quiet = !verbose, mode='wb')
     }
 
-    tSet <- readRDS(file.path(saveDir, tSetFileName))
+    rSet <- readRDS(file.path(saveDir, rSetFileName))
 
-    ##FIXME:: Remove this conversion once updated tSets are published
-    if (!is(molecularProfilesSlot(tSet)[[1]], 'SummarizedExperiment')) {
-        tSet <- .convertTsetMolecularProfilesToSE(tSet)
-        saveRDS(tSet, file.path(saveDir, tSetFileName))
-    }
-    return(tSet)
+    return(rSet)
 }
