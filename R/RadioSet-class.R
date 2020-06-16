@@ -80,7 +80,7 @@
 #'   the names for radiations, cells and tissues used in the data set to universal
 #'   identifiers used between different RadioSet objects
 #' @param datasetType A \code{character} string of 'sensitivity',
-#'   'preturbation', or both detailing what type of data can be found in the
+#'   'perturbation', or both detailing what type of data can be found in the
 #'   RadioSet, for proper processing of the data
 #' @param verify \code{boolean} Should the function verify the RadioSet and
 #'   print out any errors it finds after construction?
