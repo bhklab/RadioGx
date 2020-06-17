@@ -61,10 +61,10 @@ availableRSets <- function(saveDir=tempdir(), fileName="availableRadioSets.csv",
 #'
 #' @export
 #' @import downloader
-downloadRSet <- function(name, saveDir = tempdir(), rSetFileName = NULL, verbose = TRUE) {
+downloadRSet <- function(name, saveDir=tempdir(), rSetFileName=NULL, verbose=TRUE) {
 
     if (missing(saveDir)) {message("Downloading to temporary folder... Use saveDir parameter to save to a specific path")}
-    rSetTable <- availableRSets(saveDir = saveDir)
+    rSetTable <- availableRSets(saveDir = saveDir, verbose=FALSE)
 
     whichx <- match(name, rSetTable[, 1])
     if (is.na(whichx)) {

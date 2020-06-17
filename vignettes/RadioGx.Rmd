@@ -32,7 +32,7 @@ storing highly curated Pharmacogenomic experiments.
 
 On top of the S4 RadioSet class, this package also provides a standard API 
 to access functions related to fitting dose response curves, calculating survival
-fraction and fitting various linear models. Additional functions for calculating
+fraction and fitting linear-quadratic models. Additional functions for calculating
 the correlation between radiation dose and radiation response allow
 for characterization of the radiation sensitivity of myriad cancer cell lines
 representing a diverse set of cancer phenotypes.
@@ -122,7 +122,7 @@ sensitivityProfiles(clevelandSmall) <- sensitivityProfiles(clevelandSmall)
 ### Cell
 
 The cell slot contains annotations for the various cancer cell lines tested
-in a  given RadioSet object.
+in a given RadioSet object.
 
 ```{r cell}
 # Get the annotations for cell lines in a RadioSet
@@ -166,7 +166,7 @@ good, with over 90% of observed variance explained by the model.
 
 ### Computing Common Does-Response Metrics
 
-The RadioGx provides a number of functions for calculating common dose response
+RadioGx provides a number of functions for calculating common dose response
 metrics such as survival fraction (SF), area under the curve (AUC) and dose at
 which only 10% of cancer cells survive (D10).
 
@@ -203,12 +203,12 @@ In the above code block we compute the AUC for a dose-response curve between a
 dose of 0 to 1 Gy. This area can be interpreted as the proportion of cells
 killed during the administration of 1 Gy of radiation, therefore the survival
 fraction is equal to 1 - AUC. We see that 1 Gy of radiation killed ~70% of 
-cancer cell-line colonies, thus 30% 
+cancer cell-line colonies, thus our survival fraction is ~30% or 0.3.
 
 ### Visualizing dose response curves
 
 The `doseResponseCurve` function can be used to generate graphs of survival
-fraction vs dose for radiation sensitivity experiemnts. In this example 
+fraction vs dose for radiation sensitivity experiments. In this example
 we provide raw data values to create the plot. When the `plot.type` is set to
 "Both", a linear-quadratic model will also be fit toe the supplied dose response
 values.
@@ -227,7 +227,7 @@ cell-line must be selected from the RadioSet. This can be done by name
 if you know which cell-line you are looking for. If you, the available
 cell-lines can be explored using the `cellInfo` function.
 
-```{r plotting_rSet}
+```{r plotting_rset}
 doseResponseCurve(
   rSets=list(clevelandSmall),
   cellline=cellInfo(clevelandSmall)$cellid[3]
