@@ -12,7 +12,9 @@
 #' @param saveDir \code{character} Directory to save the table of rSets
 #' @param fileName \code{character} The filename for the table of rSets
 #' @param verbose \code{bool} Should status messages be printed during download.
+#'
 #' @return A data.frame with details about the available RadioSet objects
+#'
 #' @export
 #' @import downloader
 #' @importFrom utils read.table write.table
@@ -54,7 +56,9 @@ availableRSets <- function(saveDir=tempdir(), fileName="availableRadioSets.csv",
 #' @param rSetFileName \code{character} string, the file name to save the dataset under
 #' @param verbose \code{bool} Should status messages be printed during download.
 #'   Defaults to TRUE.
+#'
 #' @return A rSet object with the dataset, downloaded from our server
+#'
 #' @export
 #' @import downloader
 downloadRSet <- function(name, saveDir = tempdir(), rSetFileName = NULL, verbose = TRUE) {
