@@ -29,7 +29,7 @@ availableRSets <- function(saveDir=tempdir(), fileName="availableRadioSets.csv",
         dir.create(saveDir, recursive = TRUE)
     }
 
-    downloader::download("https://zenodo.org/record/3897599/files/availableRSets.csv?download=1",
+    downloader::download("https://zenodo.org/record/3899568/files/availableRadioSets.csv?download=1",
                          destfile = file.path(saveDir, fileName),
                          quiet = !verbose)
 
