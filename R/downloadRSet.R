@@ -17,7 +17,7 @@
 #'
 #' @export
 #' @import downloader
-#' @importFrom utils read.table write.table
+#' @importFrom utils read.csv write.table
 availableRSets <- function(saveDir=tempdir(), fileName="availableRadioSets.csv", verbose=TRUE) {
 
     if (missing(saveDir) && verbose) {
