@@ -2,8 +2,8 @@
 #' other molecular profile) and radiation dose response, for use in radiation sensitivity
 #' analysis.
 #'
-#' Given a RadioSet of the sensitivity experiment type, and a list of drugs,
-#' the function will compute a signature for the effect gene expression on the
+#' Given a RadioSet of the sensitivity experiment type, and a list of radiation types,
+#' the function will compute a signature for the effect of gene expression on the
 #' molecular profile of a cell. The function returns the estimated coefficient,
 #' the t-stat, the p-value and the false discovery rate associated with that
 #' coefficient, in a 3 dimensional array, with genes in the first direction,
