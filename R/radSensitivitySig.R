@@ -56,14 +56,15 @@ radSensitivitySig <- function(rSet,
  molecular.summary.stat = c("mean", "median", "first", "last", "or", "and"),
  sensitivity.summary.stat = c("mean", "median", "first", "last"),
  returnValues = c("estimate", "pvalue", "fdr"),
- sensitivity.cutoff,
+ sensitivity.cutoff=NA,
  standardize = c("SD", "rescale", "none"),
  nthread = 1,
  verbose=TRUE, ...) {
 
   ### This function needs to: Get a table of AUC values per cell line / drug
   ### Be able to recompute those values on the fly from raw data if needed to change concentration
-  ### Be able to choose different summary methods on fly if needed (need to add annotation to table to tell what summary method previously used)
+  ### Be able to choose different summary methods on fly if needed (need to add annotation to table to tell what summary
+  #   method previously used)
   ### Be able to extract genomic data
   ### Run rankGeneDrugSens in parallel at the drug level
   ### Return matrix as we had before
@@ -123,14 +124,10 @@ radSensitivitySig <- function(rSet,
     stop ("Sensitivity summary statistic for sensitivity must be either 'mean', 'median', 'first' or 'last'")
   }
 
-  if (missing(sensitivity.cutoff)) {
-    sensitivity.cutoff <- NA
-  }
   if (missing(radiation.types)){
-    drugn <- radiationTypes(rSet)
-  } else {
-    drugn <- radiation.types
+    radiation.types <- radiationTypes(rSet)
   }
+
   availcore <- parallel::detectCores()
   if ( nthread > availcore) {
     nthread <- availcore
@@ -159,21 +156,21 @@ radSensitivitySig <- function(rSet,
       drugpheno.all <- list(t(sProfiles))
     }
 
-    dix <- is.element(drugn, do.call(colnames, drugpheno.all))
+    dix <- is.element(radiation.types, do.call(colnames, drugpheno.all))
     if (verbose && !all(dix)) {
-      warning (sprintf("Only %i/%i radiation types can be found", sum(dix), length(drugn)))
+      warning (sprintf("Only %i/%i radiation types can be found", sum(dix), length(radiation.types)))
     }
     if (!any(dix)) {
       stop("None of the chosen radiation types were found in the dataset")
     }
-    drugn <- drugn[dix]
+    radiation.types <- radiation.types[dix]
 
     molecularProfilesSlot(rSet)[[mDataType]] <- summarizeMolecularProfiles(rSet = rSet,
       mDataType = mDataType,
       summary.stat = molecular.summary.stat,
       verbose = verbose)[features, ]
 
-    if(!is.null(dots[["mProfiles"]])){
+    if(!is.null(dots[["mProfiles"]])) {
       mProfiles <- dots[["mProfiles"]]
       SummarizedExperiment::assay(molecularProfilesSlot(rSet)[[mDataType]]) <- mProfiles[features, colnames(molecularProfilesSlot(rSet)[[mDataType]]), drop = FALSE]
 
@@ -191,24 +188,22 @@ radSensitivitySig <- function(rSet,
       message("Computing radiation sensitivity signatures...")
     }
 
-    splitix <- parallel::splitIndices(nx = length(drugn), ncl = 1)
-    splitix <- splitix[vapply(splitix, length, numeric(1)) > 0]
-    mcres <-  BiocParallel::bplapply(splitix, function(x, drugn, expr, drugpheno, type, batch, standardize, nthread) {
-      res <- NULL
-      for(i in drugn[x]) {
-        ## using a linear model (x ~ concentration + cell + batch)
-        dd <- lapply(drugpheno, function(x) x[,i])
-        dd <- do.call(cbind, dd)
-        colnames(dd) <- seq_len(ncol(dd))
-        if(!is.na(sensitivity.cutoff)) {
-          dd <- factor(ifelse(dd > sensitivity.cutoff, 1, 0), levels=c(0, 1))
-        }
-        rr <- rankGeneDrugSensitivity(data=expr, drugpheno=dd, type=type, batch=batch, single.type=FALSE, standardize=standardize, nthread=nthread, verbose=verbose)
-        res <- c(res, list(rr$all))
-      }
-      names(res) <- drugn[x]
-      return(res)
-    }, drugn=drugn, expr=t(molecularProfiles(rSet, mDataType)[features, , drop=FALSE]), drugpheno=drugpheno.all, type=type, batch=batch, nthread=nthread, standardize=standardize)
+    mcres <-  lapply(radiation.types, function(radiation.type, expr, drugpheno, type, batch, standardize, nthread) {
+     res <- NULL
+     for(i in radiation.type) {
+       ## using a linear model (x ~ concentration + cell + batch)
+       dd <- lapply(drugpheno, function(rad) rad[, i])
+       dd <- do.call(cbind, dd)
+       colnames(dd) <- seq_len(ncol(dd))
+       if(!is.na(sensitivity.cutoff)) {
+         dd <- factor(ifelse(dd > sensitivity.cutoff, 1, 0), levels=c(0, 1))
+       }
+       rr <- rankGeneRadSensitivity(data=expr, drugpheno=dd, type=type, batch=batch, single.type=FALSE, standardize=standardize, nthread=nthread, verbose=verbose)
+       res <- c(res, list(rr$all))
+     }
+     names(res) <- radiation.type
+     return(res)
+    }, expr=t(molecularProfiles(rSet, mDataType)[features, , drop=FALSE]), drugpheno=drugpheno.all, type=type, batch=batch, nthread=nthread, standardize=standardize)
 
     res <- do.call(c, mcres)
     res <- res[!vapply(res, is.null, logical(1))]
@@ -231,3 +226,4 @@ radSensitivitySig <- function(rSet,
 
     return(drug.sensitivity)
   }
+

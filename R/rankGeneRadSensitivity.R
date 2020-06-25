@@ -1,7 +1,4 @@
-#' Rank genes based on drug effect in the Connectivity Map
-#'
-#' @details duration is not taken into account as only 4 perturbations lasted
-#'   12h, the other 6096 lasted 6h
+#' Rank genes based on radiation effect in the Connectivity Map
 #'
 #' @param data gene expression data matrix
 #' @param drugpheno sensititivity values fo thr drug of interest
@@ -20,7 +17,7 @@
 #' @importFrom stats p.adjust
 #'
 #' @export
-rankGeneDrugSensitivity <- function (data,
+rankGeneRadSensitivity <- function(data,
                                      drugpheno,
                                      type, batch,
                                      single.type=FALSE,
@@ -40,9 +37,7 @@ rankGeneDrugSensitivity <- function (data,
   on.exit(options(op))
 
   if(is.null(dim(drugpheno))){
-
     drugpheno <- data.frame(drugpheno)
-
   } else if(!is(drugpheno, "data.frame")) {
     drugpheno <- as.data.frame(drugpheno)
   }
@@ -90,8 +85,6 @@ rankGeneDrugSensitivity <- function (data,
     nc  <- c("estimate", "se", "n", "pvalue", "fdr")
   }
 
-
-
   for (ll in seq_along(ltype)) {
     iix <- !is.na(type) & is.element(type, ltype[[ll]])
 
@@ -101,10 +94,10 @@ rankGeneDrugSensitivity <- function (data,
     drugpheno.not.all.na <- apply(drugpheno[iix,,drop=FALSE], 1, function(x) {
       any(!is.na(x))
     })
-    type.not.all.na <- vapply(type[iix], is.na, logical(1))
-    batch.not.all.na <- vapply(batch[iix], is.na, logical(1))
+    type.not.na <- !is.na(type[iix])
+    batch.not.na <- !is.na(batch[iix])
 
-    ccix <- data.not.all.na & drugpheno.not.all.na & type.not.all.na & batch.not.all.na
+    ccix <- data.not.all.na & drugpheno.not.all.na & type.not.na & batch.not.na
 
     if (sum(ccix) < 3) {
       ## not enough experiments

@@ -55,8 +55,7 @@ a related data structure.
 To install the `r BiocStyle::Biocpkg('RadioGx')` package, run:
 
 ```{r install_radiogx, eval=FALSE, message=FALSE}
-devtools::install_github('bhklab/RadioGx')
-# BiocManager::install('RadioGx', version='devel') # Waiting on issue with Bioconductor credentials to be resolved so I can push updates
+BiocManager::install('RadioGx', version='devel')
 ```
 
 ```{r load_package, message=FALSE}
@@ -206,7 +205,7 @@ sensRaw <- sensitivityRaw(Cleveland)
 sensProf <- sensitivityProfiles(Cleveland)
 ```
 
-``{r }
+```{r }
 # Get sensitivity info
 sensInfo <- sensitivityInfo(Cleveland)
 ```
@@ -324,7 +323,7 @@ cell-lines can be explored using the `cellInfo` function.
 ```{r plotting_rad_dose_resp_rSet, fig.small=TRUE}
 doseResponseCurve(
   rSets=list(clevelandSmall),
-  cellline=cellInfo(clevelandSmall)$cellid[3]
+  cellline=cellInfo(clevelandSmall)$cellid[5]
 )
 ```
 
@@ -352,6 +351,7 @@ mprofSummary <- RadioGx::summarizeMolecularProfiles(Cleveland, mDataType='rna', 
 ```{r show_summarized_sensitivity}
 mprofSummary
 ```
+
 Due to a lack of replicates in the Cleveland `RSet`, the returned `SummarizedExperiment` object contains the same information as
 the original. For other experiments with replicates, however, the result should contain one column per unique cell-line id. For
 ease of interoperability with the response data contained in an `RSet`, if `fill.missing` is `r FALSE` empty columns for the
@@ -372,7 +372,6 @@ can be found, potentially synergistically increasing the overall effectiveness o
 ```{r compute_molecular_signature}
 radSensSig <- radSensitivitySig(Cleveland, mDataType='rna', features=fNames(Cleveland, 'rna')[2:5], nthread=15)
 ```
-
 
 ```{r exploring_molecular_signature}
 radSensSig@.Data

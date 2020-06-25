@@ -15,7 +15,7 @@ radSensitivitySig(
   molecular.summary.stat = c("mean", "median", "first", "last", "or", "and"),
   sensitivity.summary.stat = c("mean", "median", "first", "last"),
   returnValues = c("estimate", "pvalue", "fdr"),
-  sensitivity.cutoff,
+  sensitivity.cutoff = NA,
   standardize = c("SD", "rescale", "none"),
   nthread = 1,
   verbose = TRUE,
@@ -67,8 +67,8 @@ should the computation be parallelized over?}
   second, and return values in the third.
 }
 \description{
-Given a RadioSet of the sensitivity experiment type, and a list of drugs,
-the function will compute a signature for the effect gene expression on the
+Given a RadioSet of the sensitivity experiment type, and a list of radiation types,
+the function will compute a signature for the effect of gene expression on the
 molecular profile of a cell. The function returns the estimated coefficient,
 the t-stat, the p-value and the false discovery rate associated with that
 coefficient, in a 3 dimensional array, with genes in the first direction,
