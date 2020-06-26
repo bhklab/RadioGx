@@ -9,18 +9,18 @@
 #' data(clevelandSmall)
 #' GDSCauc <- summarizeSensitivityProfiles(clevelandSmall, sensitivity.measure='AUC_published')
 #'
-#' @param rSet [RadioSet] The RadioSet from which to extract the data
-#' @param sensitivity.measure [character] which sensitivity sensitivity.measure to use? Use the
+#' @param object [`RadioSet`] The RadioSet from which to extract the data
+#' @param sensitivity.measure [`character`] which sensitivity sensitivity.measure to use? Use the
 #'   sensitivityMeasures function to find out what measures are available for each PSet.
-#' @param cell.lines \code{character} The cell lines to be summarized.
+#' @param cell.lines [`character`] The cell lines to be summarized.
 #'    If any cell lines has no data, it will be filled with
 #'   missing values
-#' @param radiation.types \code{character} The radiation types to be summarized.
+#' @param radiation.types [`character`] The radiation types to be summarized.
 #'   If any radiation type has no data, it will be filled with
 #'   missing values
-#' @param summary.stat \code{character} which summary method to use if there are repeated
+#' @param summary.stat [`character`] which summary method to use if there are repeated
 #'   cell line-drug experiments? Choices are "mean", "median", "first", or "last"
-#' @param fill.missing \code{boolean} should the missing cell lines not in the
+#' @param fill.missing [`boolean`] should the missing cell lines not in the
 #'   molecular data object be filled in with missing values?
 #' @param verbose Should the function print progress messages?
 #'
@@ -31,8 +31,51 @@
 #' @importFrom stats median
 #' @importFrom reshape2 acast
 #' @export
-summarizeSensitivityProfiles <- function(
-  rSet,
+setMethod('summarizeSensitivityProfiles',
+          signature(object="RadioSet"),
+          function(object, sensitivity.measure="AUC_recomputed", cell.lines, radiation.types,
+                   summary.stat=c("mean", "median", "first", "last", "max", "min"), fill.missing=TRUE,
+                   verbose=TRUE) {
+            .summarizeSensitivityProfiles-RadioSet(
+              object, sensitivity.measure, cell.lines, radiation.types, summary.stat, fill.missing, verbose
+            )
+          })
+
+# Takes the sensitivity data from a RadioSet, and summarises them into a
+# drug vs cell line table
+#
+# This function creates a table with cell lines as rows and radiation types as columns,
+# summarising the drug senstitivity data of a RadioSet into drug-cell line
+# pairs
+#
+# @examples
+# data(clevelandSmall)
+# GDSCauc <- summarizeSensitivityProfiles(clevelandSmall, sensitivity.measure='AUC_published')
+#
+# @param object [RadioSet] The RadioSet from which to extract the data
+# @param sensitivity.measure [character] which sensitivity sensitivity.measure to use? Use the
+#   sensitivityMeasures function to find out what measures are available for each PSet.
+# @param cell.lines \code{character} The cell lines to be summarized.
+#    If any cell lines has no data, it will be filled with
+#   missing values
+# @param radiation.types \code{character} The radiation types to be summarized.
+#   If any radiation type has no data, it will be filled with
+#   missing values
+# @param summary.stat \code{character} which summary method to use if there are repeated
+#   cell line-drug experiments? Choices are "mean", "median", "first", or "last"
+# @param fill.missing \code{boolean} should the missing cell lines not in the
+#   molecular data object be filled in with missing values?
+# @param verbose Should the function print progress messages?
+#
+# @return [matrix] A matrix with cell lines going down the rows, radiation types across
+#   the columns, with the selected sensitivity statistic for each pair.
+#
+#' @importFrom utils setTxtProgressBar txtProgressBar
+#' @importFrom stats median
+#' @importFrom reshape2 acast
+#' @keywords internal
+.summarizeSensitivityProfiles-RadioSet <- function(
+  object,
   sensitivity.measure="AUC_recomputed",
   cell.lines,
   radiation.types,

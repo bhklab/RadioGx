@@ -124,13 +124,13 @@ setMethod('computeAUC',
   if (!missing(lower) && !missing(upper)) {
     ###TODO:: Check if this function still works correctly
     CoreGx::.sanitizeInput(pars = pars, # Added this line to resolve error returned from CoreGx
-                            lower = lower,
-                            upper = upper,
-                            x_as_log = FALSE,
-                            y_as_log = FALSE,
-                            y_as_pct = FALSE,
-                            trunc = trunc,
-                            verbose = verbose)
+                           lower = lower,
+                           upper = upper,
+                           x_as_log = FALSE,
+                           y_as_log = FALSE,
+                           y_as_pct = FALSE,
+                           trunc = trunc,
+                           verbose = verbose)
   }
 
   if (area.type == "Fitted") {

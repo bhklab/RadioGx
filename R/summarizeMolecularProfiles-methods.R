@@ -14,7 +14,7 @@
 #'                     summary.stat = 'median', fill.missing = TRUE, verbose=TRUE)
 #' clevelandSmall
 #'
-#' @param rSet \code{RadioSet} The RadioSet to summarize
+#' @param object \code{RadioSet} The RadioSet to summarize
 #' @param mDataType \code{character} which one of the molecular data types
 #' to use in the analysis, out of all the molecular data types available for the rSet
 #' for example: rna, rnaseq, snp
@@ -26,7 +26,7 @@
 #'   In case molecular data type is mutation or fusion "and" and "or" choices are available
 #' @param fill.missing \code{boolean} should the missing cell lines not in the
 #'   molecular data object be filled in with missing values?
-#' @param summarize A flag which when set to FALSE (defaults to TRUE) disables 
+#' @param summarize A flag which when set to FALSE (defaults to TRUE) disables
 #'   summarizing and returns the data unchanged as a ExpressionSet
 #' @param verbose \code{boolean} should messages be printed
 #' @return \code{matrix} An updated RadioSet with the molecular data summarized
@@ -37,8 +37,55 @@
 #' @importFrom Biobase AnnotatedDataFrame
 #' @importFrom matrixStats rowMeans2 rowMedians
 #' @export
-##TODO:: Add features parameter
-summarizeMolecularProfiles <- function(rSet,
+setMethod('summarizeMolecularProfiles',
+          sigature(object='RadioSet'),
+          function(object, mDataType, cell.lines, features, summary.stat=c("mean", "median", "first", "last", "and", "or"),
+                   fill.missing=TRUE, summarize=TRUE, verbose=TRUE) {
+              .summarizeMolecularProfiles-RadioSet(object=object, mDataTye=mDataType, cell.lines=cell.lines,
+                                                   features=features, summary.stat=summary.stat,
+                                                   fill.missing=fill.missing, summarize=summarize, verbose=verbose)
+          })
+
+# Takes molecular data from a RadioSet, and summarises them
+# into one entry per drug
+#
+# Given a RadioSet with molecular data, this function will summarize
+# the data into one profile per cell line, using the chosed summary.stat. Note
+# that this does not really make sense with perturbation type data, and will
+# combine experiments and controls when doing the summary if run on a
+# perturbation dataset.
+#
+# @examples
+# data(clevelandSmall)
+# clevelandSmall <- summarizeMolecularProfiles(clevelandSmall,
+#                     mDataType = "rna", cell.lines=cellNames(clevelandSmall),
+#                     summary.stat = 'median', fill.missing = TRUE, verbose=TRUE)
+# clevelandSmall
+#
+# @param object \code{RadioSet} The RadioSet to summarize
+# @param mDataType \code{character} which one of the molecular data types
+# to use in the analysis, out of all the molecular data types available for the rSet
+# for example: rna, rnaseq, snp
+# @param cell.lines \code{character} The cell lines to be summarized.
+#   If any cell.line has no data, missing values will be created
+# @param features \code{caracter} A vector of the feature names to include in the summary
+# @param summary.stat \code{character} which summary method to use if there are repeated
+#   cell.lines? Choices are "mean", "median", "first", or "last"
+#   In case molecular data type is mutation or fusion "and" and "or" choices are available
+# @param fill.missing \code{boolean} should the missing cell lines not in the
+#   molecular data object be filled in with missing values?
+# @param summarize A flag which when set to FALSE (defaults to TRUE) disables
+#   summarizing and returns the data unchanged as a ExpressionSet
+# @param verbose \code{boolean} should messages be printed
+# @return \code{matrix} An updated RadioSet with the molecular data summarized
+#   per cell line.
+#
+#' @importFrom utils setTxtProgressBar txtProgressBar
+#' @importFrom SummarizedExperiment SummarizedExperiment rowData rowData<- colData colData<- assays assays<- assayNames assayNames<-
+#' @importFrom Biobase AnnotatedDataFrame
+#' @importFrom matrixStats rowMeans2 rowMedians
+#' @keywords internal
+.summarizeMolecularProfiles-RadioSet <- function(object,
                                        mDataType,
                                        cell.lines,
                                        features,
