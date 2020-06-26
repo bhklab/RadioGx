@@ -33,52 +33,8 @@
 #' @importFrom stats pnorm
 #' @importFrom caTools trapz
 #' @keywords internals
-setMethod('computeAUC',
-          signature(object="RadioSet"),
-          function(D, SF, pars, lower, upper, trunc = TRUE,
-                   SF_as_log = FALSE, area.type = c("Fitted", "Actual"),
-                   verbose = TRUE){
-            .computeAUC-RadioSet(D, SF, lower, upper, pars, trunc, SF_as_log, area.type, verbose)
-          })
-
-
-# computeAUC: computes AUC
-#
-# This function computes the area under a dose-response curve of
-#   the form survival fraction SF = exp(-alpha * D - beta * D ^ 2).
-#
-# @examples
-# computeAUC(D=c(0.1, 0.5, 0.7, 0.9), pars=c(0.2, 0.1), lower = 0,
-#  upper = 1) # Returns 0.7039296
-#
-# @param D vector of dosages
-# @param SF vector of survival fractions
-# @param pars parameters (alpha, beta) in equation
-#   y = exp(-alpha * x - beta * x ^ 2)
-# @param lower lower bound of dose region to compute AUC over
-# @param upper upper bound of dose region to compute AUC over
-# @param trunc should survival fractions be truncated downward to 1 if they
-#   exceed 1?
-# @param SF_as_log A boolean indicating whether survival fraction is displayed
-#   on a log axis. Defaults to FALSE
-# @param area.type should the AUC of the raw (D, SF) points be returned, or
-#   should the AUC of a curve fit to said points be returned instead?
-# @param verbose how detailed should error and warning messages be?
-#   See details.
-#
-# @return \code{numeric} The area under the ROC curve
-#
-# @details If lower and/or upper are missing, the function assumes their values
-#   to be the minimum and maximum D-values, respectively. For all warnings to
-#   be silent, set trunc = FALSE. For warnings to be output, set trunc = TRUE.
-#   For warnings to be output along with the arguments that triggered them,
-#   set trunc = 2.
-#
-#' @importFrom stats pnorm
-#' @importFrom caTools trapz
-#' @keywords internals
 # Added SF_as_log argument with default as false to match condition on line 93
-.computeAUC-RadioSet <- function(D, SF, pars, lower, upper, trunc = TRUE,
+computeAUC <- function(D, SF, pars, lower, upper, trunc = TRUE,
                        SF_as_log = FALSE,
                        area.type = c("Fitted", "Actual"),
                        verbose = TRUE)

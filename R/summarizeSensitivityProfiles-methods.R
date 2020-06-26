@@ -27,9 +27,7 @@
 #' @return [matrix] A matrix with cell lines going down the rows, radiation types across
 #'   the columns, with the selected sensitivity statistic for each pair.
 #'
-#' @importFrom utils setTxtProgressBar txtProgressBar
-#' @importFrom stats median
-#' @importFrom reshape2 acast
+#' @importMethodsFrom CoreGx summarizeSensitivityProfiles
 #' @export
 setMethod('summarizeSensitivityProfiles',
           signature(object="RadioSet"),

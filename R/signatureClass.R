@@ -38,7 +38,6 @@ return(.RadioSig(Data,
                  Call=Call))
 }
 
-
 #' Show RadioGx Signatures
 #'
 #' @examples
@@ -72,21 +71,22 @@ setMethod("show", signature=signature(object='RadioSig'),
 #'              nthread=1, features = fNames(clevelandSmall, "rna")[1])
 #' showSigAnnot(rad.sensitivity)
 #'
-#' @param Sigs An object of the \code{RadioSig} Class, as
+#' @param object An object of the \code{RadioSig} Class, as
 #' returned by \code{radPerturbationSig} or \code{radSensitivitySig}
 #'
 #' @return Prints the RadioGx Signatures annotations to the output stream, and returns invisible NULL.
 #'
+#' @importMethodsFrom CoreGx showSigAnnot
 #' @export
-setMethod("showSigAnnot", signature(Sigs='RadioSig'), function(Sigs) {
-  .showSigAnnot-RadioSig(Sigs)
+setMethod("showSigAnnot", signature(object='RadioSig'), function(object) {
+  .showSigAnnot-RadioSig(object)
 })
 
 
 #' @keywords internal
-.showSigAnnot-RadioSig <- function(Sigs) {
-  print(attr(Sigs, 'Call'))
-  print(attr(Sigs, 'SessionInfo'))
+.showSigAnnot-RadioSig <- function(object) {
+  print(attr(object, 'Call'))
+  print(attr(object, 'SessionInfo'))
   return(invisible(NULL))
 }
 

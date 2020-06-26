@@ -32,10 +32,7 @@
 #' @return \code{matrix} An updated RadioSet with the molecular data summarized
 #'   per cell line.
 #'
-#' @importFrom utils setTxtProgressBar txtProgressBar
-#' @importFrom SummarizedExperiment SummarizedExperiment rowData rowData<- colData colData<- assays assays<- assayNames assayNames<-
-#' @importFrom Biobase AnnotatedDataFrame
-#' @importFrom matrixStats rowMeans2 rowMedians
+#' @importMethodsFrom CoreGx summarizeMolecularProfiles
 #' @export
 setMethod('summarizeMolecularProfiles',
           sigature(object='RadioSet'),

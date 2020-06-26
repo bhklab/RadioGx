@@ -53,8 +53,7 @@ setMethod(`[`, "RadioSet", function(x, i, j, ..., drop = FALSE) {
 #'
 #' @return A RadioSet with only the selected radiation types and cells
 #'
-#' @importFrom CoreGx .unionList
-#'
+#' @importMethodsFrom CoreGx subsetTo
 #' @exprot
 setMethod("subsetTo",
           signature(object="RadioSet"),
