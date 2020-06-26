@@ -7,7 +7,7 @@
 #' @param drop A boolean flag of whether to drop single dimensions or not
 #' @return Returns the subsetted RSet
 #' @export
-setMethod(`[`, "RadioSet", function(x, i, j, ..., drop = FALSE){
+setMethod(`[`, "RadioSet", function(x, i, j, ..., drop = FALSE) {
     if(is.character(i)&&is.character(j)){
         return(subsetTo(x, cells=i, radiations=j,  molecular.data.cells=i))
     }
@@ -51,10 +51,34 @@ setMethod(`[`, "RadioSet", function(x, i, j, ..., drop = FALSE){
 #' @param keep.controls If the dataset has perturbation type experiments, should
 #'   the controls be kept in the dataset? Defaults to true.
 #' @param ... Other arguments passed by other function within the package
+#'
 #' @return A RadioSet with only the selected radiation types and cells
+#'
 #' @importFrom CoreGx .unionList
-#' @export
-subsetTo <- function(object,
+#'
+#' @exprot
+setMethod("subsetTo",
+          signature(object="RadioSet"),
+          function(object , cells=NULL, radiationTypes=NULL, molecular.data.cells=NULL, keep.controls=TRUE, ...){
+              .subsetTo-RadioSet(object, cells, radiationTypes, molecular.data.cells, keep.controls, ...)
+          })
+
+# @param object A \code{RadioSet} to be subsetted
+# @param cells A list or vector of cell names as used in the dataset to which
+#   the object will be subsetted. If left blank, then all cells will be left in
+#   the dataset.
+# @param radiationTypes A list or vector of radiation names as used in the
+#   dataset to which the object will be subsetted. If left blank, then all
+#   radiationTypes will be left in the dataset.
+# @param molecular.data.cells A list or vector of cell names to keep in the
+#   molecular data
+# @param keep.controls If the dataset has perturbation type experiments, should
+#   the controls be kept in the dataset? Defaults to true.
+# @param ... Other arguments passed by other function within the package
+# @return A RadioSet with only the selected radiation types and cells
+#' @importFrom CoreGx .unionList
+#' @keywords internals
+.subsetTo-RadioSet <- function(object,
                      cells=NULL,
                      radiationTypes=NULL,
                      molecular.data.cells=NULL,
