@@ -83,39 +83,39 @@ setMethod('summarizeSensitivityProfiles',
 {
 	summary.stat <- match.arg(summary.stat)
   #sensitivity.measure <- match.arg(sensitivity.measure)
-  if (!(sensitivity.measure %in% c(colnames(sensitivityProfiles(rSet)),"max.conc"))) {
+  if (!(sensitivity.measure %in% c(colnames(sensitivityProfiles(object)),"max.conc"))) {
     stop (sprintf("Invalid sensitivity measure for %s, choose among: %s",
-                  annotation(rSet)$name,
-                  paste(colnames(sensitivityProfiles(rSet)),
+                  annotation(object)$name,
+                  paste(colnames(sensitivityProfiles(object)),
                         collapse=", ")))
   }
   if (missing(cell.lines)) {
-    cell.lines <- cellNames(rSet)
+    cell.lines <- cellNames(object)
   }
   if (missing(radiation.types)) {
     if (sensitivity.measure != "Synergy_score")
     {
-      radTypes <- radiationTypes(rSet)
+      radTypes <- radiationTypes(object)
     }else{
-      radTypes <- sensitivityInfo(rSet)[grep("///",
-                                             sensitivityInfo(rSet)$radiation.type),
+      radTypes <- sensitivityInfo(object)[grep("///",
+                                             sensitivityInfo(object)$radiation.type),
                                         "radiation.type"]
     }
   }
 
-  pp <- sensitivityInfo(rSet)
+  pp <- sensitivityInfo(object)
   ##FIXME: deal with duplicated rownames!
   ppRows <- which(pp$cellid %in% cell.lines & pp$radiation.type %in% radTypes)
   if(sensitivity.measure != "max.conc") {
-    dd <- sensitivityProfiles(rSet)
+    dd <- sensitivityProfiles(object)
   } else {
 
-    if(!"max.conc"%in% colnames(sensitivityInfo(rSet))){
+    if(!"max.conc"%in% colnames(sensitivityInfo(object))){
 
-      rSet <- updateMaxConc(rSet)
+      object <- updateMaxConc(object)
 
     }
-    dd <- sensitivityInfo(rSet)
+    dd <- sensitivityInfo(object)
 
   }
 

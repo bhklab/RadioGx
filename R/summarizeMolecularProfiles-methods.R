@@ -38,7 +38,7 @@ setMethod('summarizeMolecularProfiles',
           signature(object='RadioSet'),
           function(object, mDataType, cell.lines, features, summary.stat=c("mean", "median", "first", "last", "and", "or"),
                    fill.missing=TRUE, summarize=TRUE, verbose=TRUE) {
-              .summarizeMolecularProfilesRadioSet(object=object, mDataTye=mDataType, cell.lines=cell.lines,
+              .summarizeMolecularProfilesRadioSet(object=object, mDataType=mDataType, cell.lines=cell.lines,
                                                    features=features, summary.stat=summary.stat,
                                                    fill.missing=fill.missing, summarize=summarize, verbose=verbose)
           })
@@ -92,20 +92,20 @@ setMethod('summarizeMolecularProfiles',
                                        verbose=TRUE) {
 
 
-  ### Placed here to make sure the rSet argument gets checked first by R.
-  mDataTypes <- names(molecularProfilesSlot(rSet))
+  ### Placed here to make sure the object argument gets checked first by R.
+  mDataTypes <- names(molecularProfilesSlot(object))
   if (!(mDataType %in% mDataTypes)) {
-    stop (sprintf("Invalid mDataType, choose among: %s", paste(names(molecularProfilesSlot(rSet)), collapse=", ")))
+    stop (sprintf("Invalid mDataType, choose among: %s", paste(names(molecularProfilesSlot(object)), collapse=", ")))
   }
 
   if(summarize==FALSE){
-    return(molecularProfilesSlot(rSet)[[mDataType]])
+    return(molecularProfilesSlot(object)[[mDataType]])
   }
 
   if (missing(features)) {
-    features <- rownames(featureInfo(rSet, mDataType))
+    features <- rownames(featureInfo(object, mDataType))
   } else {
-    fix <- is.element(features, rownames(featureInfo(rSet, mDataType)))
+    fix <- is.element(features, rownames(featureInfo(object, mDataType)))
     if (verbose && !all(fix)) {
       warning (sprintf("Only %i/%i features can be found", sum(fix), length(features)))
     }
@@ -113,21 +113,21 @@ setMethod('summarizeMolecularProfiles',
   }
 
   summary.stat <- match.arg(summary.stat)
-  if((!S4Vectors::metadata(molecularProfilesSlot(rSet)[[mDataType]])$annotation %in% c("mutation","fusion")) & (!summary.stat %in% c("mean", "median", "first", "last"))) {
+  if((!S4Vectors::metadata(molecularProfilesSlot(object)[[mDataType]])$annotation %in% c("mutation","fusion")) & (!summary.stat %in% c("mean", "median", "first", "last"))) {
     stop ("Invalid summary.stat, choose among: mean, median, first, last" )
   }
-  if((S4Vectors::metadata(molecularProfilesSlot(rSet)[[mDataType]])$annotation %in% c("mutation","fusion")) & (!summary.stat %in% c("and", "or"))) {
+  if((S4Vectors::metadata(molecularProfilesSlot(object)[[mDataType]])$annotation %in% c("mutation","fusion")) & (!summary.stat %in% c("and", "or"))) {
     stop ("Invalid summary.stat, choose among: and, or" )
   }
 
   if (missing(cell.lines)) {
-    cell.lines <- cellNames(rSet)
+    cell.lines <- cellNames(object)
   }
 
-  dd <- molecularProfiles(rSet, mDataType)
-  pp <- phenoInfo(rSet, mDataType)
+  dd <- molecularProfiles(object, mDataType)
+  pp <- phenoInfo(object, mDataType)
 
-  if(S4Vectors::metadata(molecularProfilesSlot(rSet)[[mDataType]])$annotation == "mutation") {
+  if(S4Vectors::metadata(molecularProfilesSlot(object)[[mDataType]])$annotation == "mutation") {
     tt <- dd
     tt[which(!is.na(dd) & dd =="wt")] <- FALSE
     tt[which(!is.na(dd) & dd !="wt")] <- TRUE
@@ -135,7 +135,7 @@ setMethod('summarizeMolecularProfiles',
     dimnames(tt) <- dimnames(dd)
     dd <- tt
   }
-  if(S4Vectors::metadata(molecularProfilesSlot(rSet)[[mDataType]])$annotation == "fusion") {
+  if(S4Vectors::metadata(molecularProfilesSlot(object)[[mDataType]])$annotation == "fusion") {
     tt <- dd
     tt[which(!is.na(dd) & dd =="0")] <- FALSE
     tt[which(!is.na(dd) & dd !="0")] <- TRUE
@@ -163,7 +163,7 @@ setMethod('summarizeMolecularProfiles',
   pp2 <- pp[match(ucell, pp[ , "cellid"]), , drop=FALSE]
   if (length(duplix) > 0) {
     if (verbose) {
-      message(sprintf("Summarizing %s molecular data for:\t%s", mDataType, annotation(rSet)$name))
+      message(sprintf("Summarizing %s molecular data for:\t%s", mDataType, annotation(object)$name))
       total <- length(duplix)
       # create progress bar
       pb <- utils::txtProgressBar(min=0, max=total, style=3)
@@ -222,8 +222,8 @@ setMethod('summarizeMolecularProfiles',
   dd2 <- dd2[ , cell.lines, drop=FALSE]
   pp2 <- pp2[cell.lines, , drop=FALSE]
   pp2[ , "cellid"] <- cell.lines
-  res <- molecularProfilesSlot(rSet)[[mDataType]]
-  if(S4Vectors::metadata(molecularProfilesSlot(rSet)[[mDataType]])$annotation %in% c("mutation", "fusion")) {
+  res <- molecularProfilesSlot(object)[[mDataType]]
+  if(S4Vectors::metadata(molecularProfilesSlot(object)[[mDataType]])$annotation %in% c("mutation", "fusion")) {
     tt <- dd2
     tt[which(!is.na(dd2) & dd2)] <- "1"
     tt[which(!is.na(dd2) & !dd2)] <- "0"
@@ -231,9 +231,9 @@ setMethod('summarizeMolecularProfiles',
   }
   res <- SummarizedExperiment::SummarizedExperiment(dd2)
   pp2 <- S4Vectors::DataFrame(pp2, row.names=rownames(pp2))
-  pp2$tissueid <- cellInfo(rSet)[pp2$cellid, "tissueid"]
+  pp2$tissueid <- cellInfo(object)[pp2$cellid, "tissueid"]
   SummarizedExperiment::colData(res) <- pp2
-  SummarizedExperiment::rowData(res) <- featureInfo(rSet, mDataType)
+  SummarizedExperiment::rowData(res) <- featureInfo(object, mDataType)
   ##TODO:: Generalize this to multiple assay SummarizedExperiments!
   if(!is.null(SummarizedExperiment::assay(res, 1))) {
     SummarizedExperiment::assay(res, 2) <-
@@ -243,8 +243,8 @@ setMethod('summarizeMolecularProfiles',
              dimnames=dimnames(assay(res, 1))
       )
   }
-  assayNames(res) <- assayNames(molecularProfilesSlot(rSet)[[mDataType]])
+  assayNames(res) <- assayNames(molecularProfilesSlot(object)[[mDataType]])
   res <- res[features,]
-  S4Vectors::metadata(res) <- S4Vectors::metadata(molecularProfilesSlot(rSet)[[mDataType]])
+  S4Vectors::metadata(res) <- S4Vectors::metadata(molecularProfilesSlot(object)[[mDataType]])
   return(res)
 }

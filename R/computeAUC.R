@@ -32,7 +32,7 @@
 #'
 #' @importFrom stats pnorm
 #' @importFrom caTools trapz
-#' @keywords internals
+#' @export
 # Added SF_as_log argument with default as false to match condition on line 93
 computeAUC <- function(D, SF, pars, lower, upper, trunc = TRUE,
                        SF_as_log = FALSE,

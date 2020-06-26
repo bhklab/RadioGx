@@ -288,7 +288,7 @@ Other dose-response metrics can be computed directly using radiation dose
 and cancer cell viability data.
 
 ```{r metrics_computed_from_dose_response_data}
-areaUnderDoseRespCurve <- computeAUC(D=radiationDoses, pars=LQmodel, lower=0,
+areaUnderDoseRespCurve <- RadioGx::computeAUC(D=radiationDoses, pars=LQmodel, lower=0,
                                      upper=1)
 print(areaUnderDoseRespCurve)
 ```
@@ -345,7 +345,7 @@ sensSummary[, 1:3]
 ### Summarizing Molecular Data
 
 ```{r summarize_molecular_data}
-mprofSummary <- RadioGx::summarizeMolecularProfiles(Cleveland, mDataType='rna', summary.stat='median', fill.missing=FALSE)
+mprofSummary <- summarizeMolecularProfiles(Cleveland, mDataType='rna', summary.stat='median', fill.missing=FALSE)
 ```
 
 ```{r show_summarized_sensitivity}
