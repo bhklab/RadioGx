@@ -35,10 +35,10 @@
 #' @importMethodsFrom CoreGx summarizeMolecularProfiles
 #' @export
 setMethod('summarizeMolecularProfiles',
-          sigature(object='RadioSet'),
+          signature(object='RadioSet'),
           function(object, mDataType, cell.lines, features, summary.stat=c("mean", "median", "first", "last", "and", "or"),
                    fill.missing=TRUE, summarize=TRUE, verbose=TRUE) {
-              .summarizeMolecularProfiles-RadioSet(object=object, mDataTye=mDataType, cell.lines=cell.lines,
+              .summarizeMolecularProfilesRadioSet(object=object, mDataTye=mDataType, cell.lines=cell.lines,
                                                    features=features, summary.stat=summary.stat,
                                                    fill.missing=fill.missing, summarize=summarize, verbose=verbose)
           })
@@ -82,7 +82,7 @@ setMethod('summarizeMolecularProfiles',
 #' @importFrom Biobase AnnotatedDataFrame
 #' @importFrom matrixStats rowMeans2 rowMedians
 #' @keywords internal
-.summarizeMolecularProfiles-RadioSet <- function(object,
+.summarizeMolecularProfilesRadioSet <- function(object,
                                        mDataType,
                                        cell.lines,
                                        features,

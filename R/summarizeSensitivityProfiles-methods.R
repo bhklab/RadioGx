@@ -34,7 +34,7 @@ setMethod('summarizeSensitivityProfiles',
           function(object, sensitivity.measure="AUC_recomputed", cell.lines, radiation.types,
                    summary.stat=c("mean", "median", "first", "last", "max", "min"), fill.missing=TRUE,
                    verbose=TRUE) {
-            .summarizeSensitivityProfiles-RadioSet(
+            .summarizeSensitivityProfilesRadioSet(
               object, sensitivity.measure, cell.lines, radiation.types, summary.stat, fill.missing, verbose
             )
           })
@@ -72,7 +72,7 @@ setMethod('summarizeSensitivityProfiles',
 #' @importFrom stats median
 #' @importFrom reshape2 acast
 #' @keywords internal
-.summarizeSensitivityProfiles-RadioSet <- function(
+.summarizeSensitivityProfilesRadioSet <- function(
   object,
   sensitivity.measure="AUC_recomputed",
   cell.lines,

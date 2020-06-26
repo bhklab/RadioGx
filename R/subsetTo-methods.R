@@ -58,7 +58,7 @@ setMethod(`[`, "RadioSet", function(x, i, j, ..., drop = FALSE) {
 setMethod("subsetTo",
           signature(object="RadioSet"),
           function(object , cells=NULL, radiationTypes=NULL, molecular.data.cells=NULL, keep.controls=TRUE, ...){
-              .subsetTo-RadioSet(object, cells, radiationTypes, molecular.data.cells, keep.controls, ...)
+              .subsetToRadioSet(object, cells, radiationTypes, molecular.data.cells, keep.controls, ...)
           })
 
 # @param object A \code{RadioSet} to be subsetted
@@ -76,7 +76,7 @@ setMethod("subsetTo",
 # @return A RadioSet with only the selected radiation types and cells
 #' @importFrom CoreGx .unionList
 #' @keywords internals
-.subsetTo-RadioSet <- function(object,
+.subsetToRadioSet <- function(object,
                      cells=NULL,
                      radiationTypes=NULL,
                      molecular.data.cells=NULL,

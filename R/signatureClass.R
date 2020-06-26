@@ -79,12 +79,12 @@ setMethod("show", signature=signature(object='RadioSig'),
 #' @importMethodsFrom CoreGx showSigAnnot
 #' @export
 setMethod("showSigAnnot", signature(object='RadioSig'), function(object) {
-  .showSigAnnot-RadioSig(object)
+  .showSigAnnotRadioSig(object)
 })
 
 
 #' @keywords internal
-.showSigAnnot-RadioSig <- function(object) {
+.showSigAnnotRadioSig <- function(object) {
   print(attr(object, 'Call'))
   print(attr(object, 'SessionInfo'))
   return(invisible(NULL))
