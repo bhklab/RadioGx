@@ -165,7 +165,7 @@ radSensitivitySig <- function(rSet,
     }
     radiation.types <- radiation.types[dix]
 
-    molecularProfilesSlot(rSet)[[mDataType]] <- summarizeMolecularProfiles(rSet = rSet,
+    molecularProfilesSlot(rSet)[[mDataType]] <- summarizeMolecularProfiles(object=rSet,
       mDataType = mDataType,
       summary.stat = molecular.summary.stat,
       verbose = verbose)[features, ]
