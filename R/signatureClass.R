@@ -78,7 +78,13 @@ setMethod("show", signature=signature(object='RadioSig'),
 #' @return Prints the RadioGx Signatures annotations to the output stream, and returns invisible NULL.
 #'
 #' @export
-showSigAnnot <- function(Sigs){
+setMethod("showSigAnnot", signature(Sigs='RadioSig'), function(Sigs) {
+  .showSigAnnot-RadioSig(Sigs)
+})
+
+
+#' @keywords internal
+.showSigAnnot-RadioSig <- function(Sigs) {
   print(attr(Sigs, 'Call'))
   print(attr(Sigs, 'SessionInfo'))
   return(invisible(NULL))
