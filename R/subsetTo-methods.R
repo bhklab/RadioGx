@@ -18,8 +18,7 @@ setMethod(`[`, "RadioSet", function(x, i, j, ..., drop = FALSE) {
     }
 })
 
-## FIXED? TODO:: Subset function breaks if it doesnt find cell line in
-##  sensitivity info
+## FIXED? TODO:: Subset function breaks if it doesnt find cell line in sensitivity info
 #' A function to subset a RadioSet to data containing only specified radiations,
 #'   cells and genes
 #'
