@@ -17,7 +17,7 @@ setMethod("sensitivitySlot", signature("RadioSet"), function(object) {
   callNextMethod(object)
 })
 
-##TODO:: Migrate this to CoreGx
+
 #' sensitivitySlot<- Replacement Generic
 #'
 #' @examples

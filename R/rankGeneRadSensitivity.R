@@ -16,7 +16,7 @@
 #' @importFrom stats complete.cases
 #' @importFrom stats p.adjust
 #'
-#' @export
+#' @noRd
 rankGeneRadSensitivity <- function(data,
                                      drugpheno,
                                      type, batch,
