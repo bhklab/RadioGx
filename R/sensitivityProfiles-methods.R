@@ -39,7 +39,7 @@ setReplaceMethod("sensitivityProfiles",
                  signature = signature(object="RadioSet",
                                        value="data.frame"),
                  function(object, value) {
-    callNextMethod(object, value)
+    callNextMethod(object=object, value=value)
 })
 #' @describeIn RadioSet Update the phenotypic data for the radiation dose
 #'   sensitivity
@@ -48,5 +48,5 @@ setReplaceMethod("sensitivityProfiles",
                  signature = signature(object="RadioSet",
                                        value="matrix"),
                  function(object, value) {
-    callNextMethod(object, value)
+    callNextMethod(object=object, value=value)
 })

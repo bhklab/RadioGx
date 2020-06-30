@@ -1,4 +1,3 @@
-
 #' fNames Getter
 #'
 #' Return the feature names for the specified molecular data type
@@ -13,7 +12,7 @@
 #'
 #' @describeIn RadioSet Return the feature names used in the dataset
 #'
-#' @importFrom CoreGx fNames
+#' @importMethodsFrom CoreGx fNames
 #' @importFrom methods callNextMethod
 #' @export
 setMethod("fNames",
@@ -39,7 +38,7 @@ setMethod("fNames",
 #'
 #' @describeIn RadioSet Set the feature names for a given molecular data type
 #'
-#' @importFrom CoreGx fNames<-
+#' @importMethodsFrom CoreGx fNames<-
 #' @importFrom methods callNextMethod
 #' @export
 setReplaceMethod("fNames",

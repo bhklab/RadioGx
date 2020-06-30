@@ -50,7 +50,7 @@ setReplaceMethod("molecularProfiles",
                  signature(object="RadioSet", mDataType ="character",
                            assay="character", value="matrix"),
                  function(object, mDataType, assay, value) {
-  callNextMethod(object, mDataType, assay, value)
+  callNextMethod(object=object, mDataType=mDataType, assay=assay, value=value)
 })
 #' @describeIn RadioSet Update the given type of molecular data from
 #'   the RadioSet
@@ -61,5 +61,5 @@ setReplaceMethod("molecularProfiles",
                                        assay="missing",
                                        value="matrix"),
                  function(object, mDataType, assay, value) {
-  callNextMethod(object, mDataType, assay, value)
+  callNextMethod(object=object, mDataType=mDataType, assay=assay, value=value)
 })

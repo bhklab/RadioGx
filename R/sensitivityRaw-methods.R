@@ -1,47 +1,40 @@
-
-##TODO:: Migrate this to CoreGx
-#' sensitivityRaw Generic
+#' sensitivityRaw Getter
 #'
 #' @examples
 #' data(clevelandSmall)
 #' sensitivityRaw(clevelandSmall)
 #'
-#' @param object A \code{RadiSet} to extract the raw sensitivity data from
-#' @param ... A \code{list} to allow new parameters in specific methods
+#' @param object A \code{RadioSet} to extract the raw sensitivity data from
+#' @param value A \code{array} containing the raw dose and viability data for the
+#'   rSet
 #'
 #' @return A \code{array} containing the raw sensitivity data
 #'
-#' @export
-setGeneric("sensitivityRaw", function(object, ...) standardGeneric("sensitivityRaw"))
 #' @describeIn RadioSet Retrive the raw dose and viability data from an rSet
-#' @inheritParams sensitivityRaw
+#'
+#' @importMethodsFrom CoreGx sensitivityRaw
 #' @export
 setMethod("sensitivityRaw", signature("RadioSet"), function(object) {
-  object@sensitivity$raw
+  callNextMethod(object)
 })
 
-##TODO:: Migrate this to CoreGx
-#' sensitivityRaw<- Replacement Generic
+
+#' sensitivityRaw<- Setter
 #'
 #' @examples
 #' data(clevelandSmall)
 #' sensitivityRaw(clevelandSmall) <- sensitivityRaw(clevelandSmall)
 #'
 #' @param object A \code{RadioSet} to extract the raw sensitivity data from
-#' @param ... A \code{list} to allow new parameters in specific methods
 #' @param value A \code{array} containing the raw dose and viability data for the
 #'   rSet
 #'
 #' @return A copy of the \code{RadioSet} containing the updated sensitivty data
 #'
+#' @describeIn RadioSet Update the raw dose and viability data in an rSet object
+#'
+#' @importMethodsFrom CoreGx sensitivityRaw<-
 #' @export
-setGeneric("sensitivityRaw<-", function(object, ..., value) standardGeneric("sensitivityRaw<-"))
-#' @describeIn RadioSet Set the raw dose and viability data for an rSet and return
-#'   and updated copty
-#' @inheritParams sensitivityRaw<-
-#' @export
-setReplaceMethod("sensitivityRaw", signature("RadioSet", "array"),
-                 function(object, value) {
-  object@sensitivity$raw <- value
-  object
+setReplaceMethod('sensitivityRaw', signature("RadioSet"), function(object, value) {
+  callNextMethod(object=object, value=value)
 })
