@@ -1,4 +1,3 @@
-##TODO:: Export this to CoreGx
 #' datasetType Generic
 #'
 #' A generic for retrieving the dataset type of an rSet object
@@ -8,25 +7,19 @@
 #' datasetType(clevelandSmall)
 #'
 #' @param object A \code{RadioSet} from which to retrieve the dataset type
-#' @param ... A \code{list} containing fall through arguments; this allows
-#'   addition of new parameters to methods for this generic
 #'
 #' @return A \code{character} vector containing the dataset tpye
 #'
-#' @export
-setGeneric("datasetType", function(object, ...) standardGeneric("datasetType"))
-
-#' @inheritParams datasetType
-#' @describeIn RadioSet Update the dataset type of an rSet and return a copy of
-#'     the updated object
+#' @describeIn RadioSet Return the dataset type of an rSet object
+#'
+#' @importFrom methods callNextMethod
+#' @importMethodsFrom CoreGx datasetType
 #' @export
 setMethod("datasetType", signature("RadioSet"), function(object) {
-    ##TODO:: Add error handling to this function
-    object@datasetType
+    callNextMethod(object)
 })
 
 
-##TODO:: Export this to CoreGx
 #' datasetType<- Replacement Generic
 #'
 #' A generic for updating the dataset type of a RadioSet object
@@ -39,15 +32,12 @@ setMethod("datasetType", signature("RadioSet"), function(object) {
 #' @param value A \code{character} vector containing the dataset type
 #'
 #' @return A \code{character} vector containing the dataset tpye
-#'
-#' @export
-setGeneric("datasetType<-",  function(object, value) standardGeneric("datasetType<-"))
-#' @inheritParams datasetType<-
 #' @describeIn RadioSet Update the dataset type of an rSet and return a copy of
 #'     the updated object
+#'
+#' @importFrom methods callNextMethod
+#' @importMethodsFrom CoreGx datasetType<-
 #' @export
 setReplaceMethod("datasetType", signature("RadioSet"), function(object, value) {
-    ##TODO:: Add error handling to this function
-    object@datasetType <- value
-    object
+    callNextMethod(object, value)
 })

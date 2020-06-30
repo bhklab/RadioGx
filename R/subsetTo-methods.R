@@ -54,7 +54,7 @@ setMethod(`[`, "RadioSet", function(x, i, j, ..., drop = FALSE) {
 #' @return A RadioSet with only the selected radiation types and cells
 #'
 #' @importMethodsFrom CoreGx subsetTo
-#' @exprot
+#' @export
 setMethod("subsetTo",
           signature(object="RadioSet"),
           function(object , cells=NULL, radiationTypes=NULL, molecular.data.cells=NULL, keep.controls=TRUE, ...){

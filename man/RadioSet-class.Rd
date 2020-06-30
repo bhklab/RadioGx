@@ -51,7 +51,7 @@
 \alias{sensitivityProfiles<-,RadioSet,data.frame-method}
 \alias{sensitivityProfiles<-,RadioSet,matrix-method}
 \alias{sensitivityRaw,RadioSet-method}
-\alias{sensitivityRaw<-,RadioSet,array-method}
+\alias{sensitivityRaw<-,RadioSet,ANY-method}
 \alias{sensitivitySlot,RadioSet-method}
 \alias{sensitivitySlot<-,RadioSet,list-method}
 \title{A Class to Contain RadioGenomic datasets together with their curations}
@@ -132,16 +132,16 @@
 
 \S4method{sensitivityRaw}{RadioSet}(object)
 
-\S4method{sensitivityRaw}{RadioSet,array}(object) <- value
+\S4method{sensitivityRaw}{RadioSet,ANY}(object) <- value
 
 \S4method{sensitivitySlot}{RadioSet}(object)
 
 \S4method{sensitivitySlot}{RadioSet,list}(object) <- value
 }
 \arguments{
-\item{object}{The \code{RadioSet} to update}
+\item{object}{A \code{RadioSet} to extract the raw sensitivity data from}
 
-\item{value}{A \code{data.frame} with the new sensitivity values}
+\item{value}{A \code{list} of new sensitivity slot data for the rSet}
 
 \item{mDataType}{the type of molecular data}
 
@@ -150,6 +150,10 @@
 \value{
 An object of the RadioSet class
 
+A \code{list} of named annotaiton
+
+A copy of the \code{RadioSet} with the updated annotation slot
+
 a \code{data.frame} with the cell annotations
 
 Updated \code{RadioSet}
@@ -157,6 +161,15 @@ Updated \code{RadioSet}
 A \code{vector} of the cell line names in the RadioSet
 
 Updated \code{RadioSet}
+
+A \code{list} of unique cell and tissue identifiers to check validity
+  of an rSet
+
+A copy of the \code{RadioSet} with the updated curation slot
+
+A \code{character} vector containing the dataset tpye
+
+A \code{character} vector containing the dataset tpye
 
 The date the RadioSet was created
 
@@ -201,6 +214,14 @@ A \code{character} vector of all the available sensitivity measures
 a \code{data.frame} with the experiment info
 
 Updated \code{RadioSet}
+
+A \code{array} containing the raw sensitivity data
+
+A copy of the \code{RadioSet} containing the updated sensitivty data
+
+A \code{list} of the sensitivity slot contents
+
+A copy of the \code{RadioSet} containing the updated sensitivty slot
 }
 \description{
 The RadioSet (RSet) class was developed to contain and organise large
@@ -221,6 +242,10 @@ Set cell line annotations for a RadioSet object
 Get the names of all cell lines in a RadioSet object
 
 Set the names of all cell lines in a RadioSet object
+
+A generic for retrieving the dataset type of an rSet object
+
+A generic for updating the dataset type of a RadioSet object
 
 Get the date a RadioSet object was created
 
@@ -282,10 +307,9 @@ on in the RadioSet
 
 \item \code{curation}: Retrieve the curation slot form an rSet
 
-\item \code{curation<-}: Update the annotation slot of a tSet
+\item \code{curation<-}: Update the curations for cell and tissue types in an rSet object
 
-\item \code{datasetType}: Update the dataset type of an rSet and return a copy of
-the updated object
+\item \code{datasetType}: Return the dataset type of an rSet object
 
 \item \code{datasetType<-}: Update the dataset type of an rSet and return a copy of
 the updated object
@@ -358,8 +382,7 @@ sensitivity
 
 \item \code{sensitivityRaw}: Retrive the raw dose and viability data from an rSet
 
-\item \code{sensitivityRaw<-}: Set the raw dose and viability data for an rSet and return
-and updated copty
+\item \code{sensitivityRaw<-}: Update the raw dose and viability data in an rSet object
 
 \item \code{sensitivitySlot}: Retrieve the contents of the sensitivity slot
 
@@ -406,6 +429,12 @@ RadioSet, for proper processing of the data}
 
 \examples{
 data(clevelandSmall)
+annotation(clevelandSmall)
+
+data(clevelandSmall)
+annotation(clevelandSmall) <- annotation(clevelandSmall)
+
+data(clevelandSmall)
 cellInf <- cellInfo(clevelandSmall)
 
 data(clevelandSmall)
@@ -416,6 +445,18 @@ cellNames(clevelandSmall)
 
 data(clevelandSmall)
 cellNames(clevelandSmall) <- cellNames(clevelandSmall)
+
+data(clevelandSmall)
+curation(clevelandSmall)
+
+data(clevelandSmall)
+curation(clevelandSmall) <- curation(clevelandSmall)
+
+data(clevelandSmall)
+datasetType(clevelandSmall)
+
+data(clevelandSmall)
+datasetType(clevelandSmall)
 
 dateCreated(clevelandSmall)
 
@@ -469,5 +510,17 @@ sensMeas <- sensitivityMeasures(clevelandSmall)
 sensProf <- sensitivityProfiles(clevelandSmall)
 
 sensitivityProfiles(clevelandSmall) <- sensitivityProfiles(clevelandSmall)
+
+data(clevelandSmall)
+sensitivityRaw(clevelandSmall)
+
+data(clevelandSmall)
+sensitivityRaw(clevelandSmall) <- sensitivityRaw(clevelandSmall)
+
+data(clevelandSmall)
+sensitivitySlot(clevelandSmall)
+
+data(clevelandSmall)
+sensitivitySlot(clevelandSmall) <- sensitivitySlot(clevelandSmall)
 
 }

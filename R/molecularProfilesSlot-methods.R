@@ -11,7 +11,7 @@
 #'
 #' @return A \code{list} containing the molecularProfiles from a cSet
 #'
-#' @importFrom CoreGx molecularProfilesSlot
+#' @importMethodsFrom CoreGx molecularProfilesSlot
 #' @importFrom methods callNextMethod
 #' @export
 setMethod("molecularProfilesSlot", signature("RadioSet"), function(object) {
@@ -32,10 +32,10 @@ setMethod("molecularProfilesSlot", signature("RadioSet"), function(object) {
 #'
 #' @return A copy of the \code{RadioSet} with the molecularProfiles slot updated
 #'
-#' @importFrom CoreGx molecularProfilesSlot<-
+#' @importMethodsFrom CoreGx molecularProfilesSlot<-
 #' @importFrom methods callNextMethod
 #' @export
 setReplaceMethod("molecularProfilesSlot", signature("RadioSet"),
                  function(object, value){
-  callNextMethod(object, value)
+  callNextMethod(object=object, object=value)
 })

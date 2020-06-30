@@ -1,4 +1,3 @@
-
 #' cellNames Getter
 #'
 #' Get the names of all cell lines in a RadioSet object
@@ -41,5 +40,5 @@ setReplaceMethod("cellNames",
                  signature = signature(object="RadioSet",
                                        value="character"),
                  function(object, value){
-    callNextMethod(object, value)
+    callNextMethod(object=object, value=value)
 })

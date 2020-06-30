@@ -1,8 +1,6 @@
-##TODO:: Export to CoreGx
 #' curation Slot Getter
 #'
 #' @param object A \code{RadioSet}
-#' @param ... A \code{list} to allow definition of new parameters on this generic
 #'
 #' @return A \code{list} of unique cell and tissue identifiers to check validity
 #'   of an rSet
@@ -11,21 +9,16 @@
 #' data(clevelandSmall)
 #' curation(clevelandSmall)
 #'
-#' @export
-setGeneric("curation", function(object, ...) standardGeneric("curation"))
 #' @describeIn RadioSet Retrieve the curation slot form an rSet
-#' @inheritParams curation
+#' @importMethodsFrom CoreGx curation
 #' @export
 setMethod('curation', signature("RadioSet"), function(object) {
-    object@curation
+    callNextMethod(object)
 })
 
-##TODO:: Export to CoreGx
-##FIXME:: How do I import generics from BiocGenerics?
 #' curation<- Slot Setter
 #'
 #' @param object A \code{RadioSet}
-#' @param ... A \code{list} to allow definition of new parameters on this generic
 #' @param value A \code{list} of curations for the cell and tissues types in the
 #'   rSet object
 #'
@@ -35,12 +28,9 @@ setMethod('curation', signature("RadioSet"), function(object) {
 #' data(clevelandSmall)
 #' curation(clevelandSmall) <- curation(clevelandSmall)
 #'
-#' @export
-setGeneric("curation<-", function(object, ..., value) standardGeneric("curation<-"))
-#' @describeIn RadioSet Update the annotation slot of a tSet
-#' @inheritParams annotation<-
+#' @describeIn RadioSet Update the curations for cell and tissue types in an rSet object
+#' @importMethodsFrom CoreGx curation<-
 #' @export
 setReplaceMethod("curation", signature("RadioSet", "list"), function(object, value) {
-    object@curation <- value
-    object
+    callNextMethod(object=object, value=value)
 })

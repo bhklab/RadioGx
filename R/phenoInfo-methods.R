@@ -47,5 +47,5 @@ setReplaceMethod("phenoInfo",
                                        mDataType ="character",
                                        value="data.frame"),
                  function(object, mDataType, value) {
-  callNextMethod(object, mDataType, value)
+  callNextMethod(object=object, mDataType=mDataType, value=value)
 })

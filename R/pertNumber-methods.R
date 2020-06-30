@@ -44,5 +44,5 @@ setReplaceMethod('pertNumber',
                  signature = signature(object="RadioSet",
                                        value="array"),
                  function(object, value) {
-                     callNextMethod(object, value)
+                     callNextMethod(object=object, value=value)
                  })
