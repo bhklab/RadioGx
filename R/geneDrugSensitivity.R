@@ -20,7 +20,7 @@
 #' @importFrom stats sd complete.cases lm glm anova pf formula var
 #' @importFrom scales rescale
 #'
-#' @export
+#' @noRd
 geneRadSensitivity <- function(x,
                                type,
                                batch,
