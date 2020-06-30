@@ -107,7 +107,7 @@ rankGeneRadSensitivity <- function(data,
       splitix <- parallel::splitIndices(nx=ncol(data), ncl=nthread)
       splitix <- splitix[vapply(splitix, length, numeric(1)) > 0]
       mcres <- BiocParallel::bplapply(splitix, function(x, data, type, batch, drugpheno, standardize) {
-        res <- t(apply(data[ , x, drop=FALSE], 2, geneDrugSensitivity, type=type, batch=batch, drugpheno=drugpheno, verbose=verbose, standardize=standardize))
+        res <- t(apply(data[ , x, drop=FALSE], 2, geneRadSensitivity, type=type, batch=batch, drugpheno=drugpheno, verbose=verbose, standardize=standardize))
         return(res)
       }, data=data[iix, , drop=FALSE], type=type[iix], batch=batch[iix], drugpheno=drugpheno[iix,,drop=FALSE], standardize=standardize)
       rest <- do.call(rbind, mcres)
