@@ -5,8 +5,6 @@
 #' sensitivityRaw(clevelandSmall)
 #'
 #' @param object A \code{RadioSet} to extract the raw sensitivity data from
-#' @param value A \code{array} containing the raw dose and viability data for the
-#'   rSet
 #'
 #' @return A \code{array} containing the raw sensitivity data
 #'
