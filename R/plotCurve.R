@@ -1,19 +1,26 @@
 #' Plot radiation dose-response curve
 #'
-#' @description This function plots doses of radiation against the cancer cell survival fractions thereby observed.
+#' This function plots doses of radiation against the cancer cell survival fractions thereby observed.
+#'
+#' @examples plotCurve(c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+#'   c(1.1, 0.8, 0.7, 0.45, 0.15, -0.1, -0.1, -0.4, -0.65, -0.75, -1.1),
+#'   filename = NULL)
+#'
 #' @param D vector of radiation doses
 #' @param SF vector of survival fractions corresponding to the doses
 #' @param pars parameters (alpha, beta) in the equation SF = exp(-alpha * D - beta * D ^ 2)
 #' @param filename name of PDF which will be created by the function
-#' @param fit_curve should the graph include a linear-quadratic curve of best fit? Defaults to TRUE.
-#' @param SF_as_log should SF be expressed in log10 on the graph? Defaults to TRUE.
-#' @examples plotCurve(c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10), c(1.1, 0.8, 0.7, 0.45, 0.15, -0.1, -0.1, -0.4, -0.65, -0.75, -1.1))
-#' @export
-#' @importFrom graphics lines plot points
+#' @param fit_curve should the graph include a linear-quadratic curve of best fit? Defaults to TRUE
+#' @param SF_as_log should SF be expressed in log10 on the graph? Defaults to TRUE
+#'
+#' @return \code{nothing} Function works by side effects only
+#'
+#' @importFrom graphics lines plot points axis
 #' @importFrom grDevices dev.off pdf
-
-plotCurve <- function(D, SF, pars, filename = "dose_response_plot.pdf", fit_curve = TRUE) {
-  CoreGx:::.sanitizeInput(x = D,
+#'
+#' @export
+plotCurve <- function(D, SF, pars, filename = "dose_response_plot.pdf", fit_curve = TRUE, SF_as_log = TRUE) {
+  CoreGx::.sanitizeInput(x = D,
                           y = SF,
                           x_as_log = FALSE,
                           y_as_log = FALSE,
@@ -27,22 +34,22 @@ plotCurve <- function(D, SF, pars, filename = "dose_response_plot.pdf", fit_curv
     if (missing(pars)) {
       pars <- unlist(linearQuadraticModel(D, SF))
     } else {
-      CoreGx:::.sanitizeInput(pars = pars,
+      CoreGx::.sanitizeInput(pars = pars,
                               x_as_log = FALSE,
                               y_as_log = FALSE,
                               y_as_pct = FALSE,
                               trunc = FALSE,
                               verbose = FALSE)
     }
-    print(paste0("A linear-quadratic curve was fit to the data with parameters alpha = ", pars[[1]], " and beta = ", pars[[2]], "."))
-    trendlineDs <- CoreGx:::.GetSupportVec(D)
+    message(paste0("A linear-quadratic curve was fit to the data with parameters alpha = ", pars[[1]], " and beta = ", pars[[2]], "."))
+    trendlineDs <- CoreGx::.getSupportVec(D)
     trendlineSFs <- .linearQuadratic(trendlineDs, pars = pars, SF_as_log = TRUE)
   }
 
   xlim <- range(D)
   xlim <- mean(xlim) + padding * c((xlim[1] - mean(xlim)), xlim[2] - mean(xlim))
   if (!missing(SF)) {
-    DSF <- CoreGx:::.reformatData(x = D,
+    DSF <- CoreGx::.reformatData(x = D,
                                  y = SF,
                                  x_to_log = FALSE,
                                  y_to_log = TRUE,
@@ -85,11 +92,10 @@ plotCurve <- function(D, SF, pars, filename = "dose_response_plot.pdf", fit_curv
     lines(trendlineDs, trendlineSFs, col = "blue", pch = 19)
   }
 
-  ticks <- CoreGx:::.GetSupportVec(x=signif(ylim,1), 10)
-  labels <- sapply(ticks, function(i) as.expression(bquote(10^ .(round(i, 2)))))
-  # labels <- sapply(ticks, function(i) return(sprintf("%0.1e", 10^i)))
+  ticks <- CoreGx::.getSupportVec(x=signif(ylim,1), 10)
+  labels <- unlist(lapply(ticks, function(i) as.expression(bquote(10^ .(round(i, 2))))))
   axis(2, at=ticks, labels=labels)
   dev.off()
-  
+
   return(invisible(0))
 }

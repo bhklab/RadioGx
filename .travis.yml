@@ -1,0 +1,29 @@
+language: r
+r_packages:
+- covr
+r_github_packages:
+- bhklab/CoreGx
+bioc_packages:
+- SummarizedExperiment
+cache: packages
+matrix:
+  include:
+  - r: bioc-devel
+    os: linux
+    dist: bionic
+    addons:
+      apt:
+        update: true
+        packages:
+        - x11proto-xf86vidmode-dev
+        - tcl8.5-dev
+        - tk8.5-dev
+        - xvfb
+    script:
+    - R CMD build . --resave-data --compact-vignettes=gs+qpdf
+    - travis_wait 30 xvfb-run R CMD check *.tar.gz
+after_success:
+- travis_wait 30 Rscript -e 'library(covr);codecov(type="all")'
+notifications:
+  slack:
+    secure: qEbwv5zHhrYUtqz768aZbCXlvt8CBrArkGRVHIXUGkAMAtQ3lVDT1CTU9aoC0yS7N6CJ60Mcf9MoMaVBk6YEgimYHyC4kfn9NNSPrlZ9uP89gpE+3Ck5042ab2pax1uwK6OSM/qe6w143G1jSZb9jGkBJ3wG2AoCSngPxEVQIP3SkieLEfsmSvjzuMvq2ubue/pLtc4CfKXS/tVJVkxWkjZR4TCbRyvMyFcXWi8v/qpJVnMDamkW7QtT4DJ/BgB1dS2rzIlIk8pwQz8K12hjkJE7BC5GEBfuKfCMCPy7fIPgALFIkG2Jv0sZbVR/wqSDwzMgG6KUrXeNKHfoZVVO/ys/39YupwHUdPDd58+M5ybtesyGILvyGwvIil+ua6R2UAd+K3eic+VZHuaA6U30KGRXIo/QoJvfUaydfjlb+HfyUMLGvECw0TFeKZiNcOg4RPrAdqQZOo78+6NGDVjO811FUUZJ74WA155jaONr+pPkXcVFyIwAlnKE0lQKHgX1+0jcdwRqSnPzp3487DW/aoJ3cKHP5GpN7/8BquiszNb76u5+2GAP9tV8t7lWNfiMseyXJLdlA68mifJWkscB7IPt7fx0JLPjZZn6HjRgTAcbeNyUCB4u3nRKRYEZIUnXJ2L9penFDLm04pLpRiVfKVXhXy9gw61WauFrULL/KcI=

@@ -4,33 +4,58 @@
 \alias{computeAUC}
 \title{computeAUC: computes AUC}
 \usage{
-computeAUC(D, SF, pars, lower, upper, trunc = TRUE, area.type = c("Fitted",
-  "Actual"), verbose = TRUE)
+computeAUC(
+  D,
+  SF,
+  pars,
+  lower,
+  upper,
+  trunc = TRUE,
+  SF_as_log = FALSE,
+  area.type = c("Fitted", "Actual"),
+  verbose = TRUE
+)
 }
 \arguments{
 \item{D}{vector of dosages}
 
 \item{SF}{vector of survival fractions}
 
-\item{pars}{parameters (alpha, beta) in equation y = exp(-alpha * x - beta * x ^ 2)}
+\item{pars}{parameters (alpha, beta) in equation
+y = exp(-alpha * x - beta * x ^ 2)}
 
 \item{lower}{lower bound of dose region to compute AUC over}
 
 \item{upper}{upper bound of dose region to compute AUC over}
 
-\item{trunc}{should survival fractions be truncated downward to 1 if they exceed 1?}
+\item{trunc}{should survival fractions be truncated downward to 1 if they
+exceed 1?}
 
-\item{area.type}{should the AUC of the raw (D, SF) points be returned, or should the AUC of a curve fit to said points be returned instead?}
+\item{SF_as_log}{A boolean indicating whether survival fraction is displayed
+on a log axis. Defaults to FALSE}
 
-\item{verbose}{how detailed should error and warning messages be? See details.}
+\item{area.type}{should the AUC of the raw (D, SF) points be returned, or
+should the AUC of a curve fit to said points be returned instead?}
+
+\item{verbose}{how detailed should error and warning messages be?
+See details.}
+}
+\value{
+\code{numeric} The area under the ROC curve
 }
 \description{
-This function computes the area under a dose-response curve of the form survival fraction SF = exp(-alpha * D - beta * D ^ 2).
+This function computes the area under a dose-response curve of
+  the form survival fraction SF = exp(-alpha * D - beta * D ^ 2).
 }
 \details{
-If lower and/or upper are missing, the function assumes their values to be the minimum and maximum D-values, respectively. For all warnings to be silent, set trunc = FALSE. For warnings to be output, set trunc = TRUE. For warnings to be output along with the arguments that triggered them, set trunc = 2.
+If lower and/or upper are missing, the function assumes their values
+  to be the minimum and maximum D-values, respectively. For all warnings to
+  be silent, set trunc = FALSE. For warnings to be output, set trunc = TRUE.
+  For warnings to be output along with the arguments that triggered them,
+  set trunc = 2.
 }
 \examples{
-computeAUC(pars = c(0.2, 0.1), lower = 0, upper = 4)
+computeAUC(D=c(0.1, 0.5, 0.7, 0.9), pars=c(0.2, 0.1), lower = 0,
+ upper = 1) # Returns 0.7039296
 
 }
