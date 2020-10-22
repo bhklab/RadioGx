@@ -1,8 +1,8 @@
 Package: RadioGx
 Type: Package
 Title: Analysis of Large-Scale Radio-Genomic Data 
-Version: 0.99.10
-Date: 2020-06-06
+Version: 0.99.11
+Date: 2020-10-22
 Authors@R: c(
   person("Venkata","Manem", email = "mail2mvskumar@gmail.com", 
     role = c("aut")),
@@ -63,4 +63,4 @@ Suggests:
     pander
 biocViews: Software, Pharmacogenetics, QualityControl, Survival, 
     Pharmacogenomics, Classification
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1

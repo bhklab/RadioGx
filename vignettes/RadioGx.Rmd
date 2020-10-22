@@ -82,29 +82,26 @@ and `r BiocStyle::Biocpkg('Xeva')` for downloading our curated versions of publi
 
 To get a list of available `RadioSet`s, use:
 
-```{r available_rsets, message=FALSE}
+```{r available_rsets, evel=FALSE, message=FALSE}
 RSets <- availableRSets()
-```
-
-```{r available_radiosets_table, echo=FALSE}
-knitr::kable(RSets[, c("RadioSet_name", "Date_updated", "DOI")])
 ```
 
 As the `r BiocStyle::Biocpkg('RadioGx')` package was only recently released, there is
 currently only one dataset available. Let's download the 'Cleveland' RSet, which contains
 a highly curated version of the data from Yang *et al.*, 2016.
 
-```{r download_rset}
+```{r download_rset, eval=FALSE}
 Cleveland <- downloadRSet('Cleveland', saveDir='.')
 ```
 
 ```{r printing_a_radioset, hide=TRUE}
-Cleveland
+data(clevelandSmall)
+clevelandSmall
 ```
 
 Similar to PharmacoGx and Xeva, a summary of the contents of the RadioSet is printed
-when calling a RadioSet in the console. We can see that the Cleveland RSet contains
-sensitivity information for 540 cell-lines treated with a single type of radiation.
+when calling a RadioSet in the console. We can see that the clevelandSmall RSet contains
+sensitivity information for 5 cell-lines treated with a single type of radiation.
 The RSet also contains rna^[microarray], rna-seq and cnv molecular data for a subset of available
 cell-lines.
 
@@ -124,7 +121,7 @@ accessor methods to retrieve the radiation types used in a given sensitivity exp
 
 ```{r radiation_info_accessor}
 # Get the radiation info data.frame from an RSet
-radInf <- radiationInfo(Cleveland)
+radInf <- radiationInfo(clevelandSmall)
 ```
 
 ```{r print_radinf, fig.wide = TRUE}
@@ -136,7 +133,7 @@ sensitivity and perturbation experiments in the near future. The following metho
 types as a `character` vector instead of a `data.frame`.
 
 ```{r radiation_types_accessor}
-radTypes <- radiationTypes(Cleveland)
+radTypes <- radiationTypes(clevelandSmall)
 radTypes
 ```
 ### Accessing molecular data
@@ -145,10 +142,10 @@ Molecular data in an `RSet` is contained in the `molecularProfiles` slot and can
 
 ```{r molecular_data_slot_accessors}
 # Get the list (equivalent to @molecularProfiles, except that it is robust to changes in RSet structure
-str(molecularProfilesSlot(Cleveland), max.level=2)
+str(molecularProfilesSlot(clevelandSmall), max.level=2)
 
 # Get the names from the list
-mDataNames(Cleveland)
+mDataNames(clevelandSmall)
 ```
 
 All molecular data in an RSet (any class inheriting from CoreSet, actually) is contained in a `SummarizedExperiment`
@@ -158,31 +155,31 @@ in the structure of a `RadioSet` object.
 
 ```{r sample_meta_data}
 # Get sample metadata
-phenoInf <- phenoInfo(Cleveland, 'cnv')
+phenoInf <- phenoInfo(clevelandSmall, 'cnv')
 ```
 
 To keep the document formatted nicely, the following tables have been subset to the first three rows and columns.
 
 ```{r print_sample_meta_data, echo=FALSE, fig.small=TRUE}
-knitr::kable(phenoInf[1:3, 1:3], row.names=FALSE)
+knitr::kable(phenoInf[, 1:5], row.names=FALSE)
 ```
 
 ```{r feature_meta_data}
 # Get feature metadata
-featInfo <- featureInfo(Cleveland, 'rna')
+featInfo <- featureInfo(clevelandSmall, 'rna')
 ```
 
 ```{r print_feature_meta_data, echo=FALSE, align="center"}
-knitr::kable(featInfo[1:3, 1:3], row.names=FALSE)
+knitr::kable(featInfo[1:3, 1:5], row.names=FALSE)
 ```
 
 ```{r molecular_data, fig.wide=TRUE}
 # Access the moleclar feature data
-mProf <- molecularProfiles(Cleveland, 'rnaseq')
+mProf <- molecularProfiles(clevelandSmall, 'rnaseq')
 ```
 
 ```{r print_molecular_profile_data, echo=FALSE}
-knitr::kable(mProf[1:3, 1:3])
+knitr::kable(mProf[1:3, 1:5])
 ```
 
 ### Accessing response data
@@ -192,22 +189,22 @@ only sensitivity experiments have been included in a `RadioSet`.
 
 ```{r response_data_accessors}
 # Get sensitivity slot
-sens <- sensitivitySlot(Cleveland)
+sens <- sensitivitySlot(clevelandSmall)
 ```
 
 ```{r }
 # Get sensitivity raw data
-sensRaw <- sensitivityRaw(Cleveland)
+sensRaw <- sensitivityRaw(clevelandSmall)
 ```
 
 ```{r }
 # Get sensitivity profiles
-sensProf <- sensitivityProfiles(Cleveland)
+sensProf <- sensitivityProfiles(clevelandSmall)
 ```
 
 ```{r }
 # Get sensitivity info
-sensInfo <- sensitivityInfo(Cleveland)
+sensInfo <- sensitivityInfo(clevelandSmall)
 ```
 
 ## Fitting Linear Quadratic (LQ) Models
@@ -220,7 +217,7 @@ a RadioSet or with raw dose-response data.
 
 ```{r model_fit}
 # Extract raw sensitvity data from the RadioSet
-sensRaw <- sensitivityRaw(Cleveland)
+sensRaw <- sensitivityRaw(clevelandSmall)
 ```
 
 ```{r structure_sensitivity_raw}
@@ -236,11 +233,11 @@ after each dose in the experimental series.
 
 ```{r cellline_names}
 # Find a cancer cell-line of interest
-head(sensitivityInfo(Cleveland)$cellid)
+head(sensitivityInfo(clevelandSmall)$cellid)
 ```
 
 ```{r selecting_cancer_cell_line}
-cancerCellLine <- sensitivityInfo(Cleveland)$cellid[1]
+cancerCellLine <- sensitivityInfo(clevelandSmall)$cellid[1]
 print(cancerCellLine)
 ```
 
@@ -335,7 +332,7 @@ using `summary.stat`^[Available options are 'mean', 'median', 'first', 'last']. 
 specified using `sensitivity.measure`^[See `sensitivityMeasures(RSet)` for available options].
 
 ```{r summarize_sensitivity}
-sensSummary <- summarizeSensitivityProfiles(Cleveland)
+sensSummary <- summarizeSensitivityProfiles(clevelandSmall)
 ```
 
 ```{r show_summarized_sensivitiy}
@@ -345,14 +342,14 @@ sensSummary[, 1:3]
 ### Summarizing Molecular Data
 
 ```{r summarize_molecular_data}
-mprofSummary <- summarizeMolecularProfiles(Cleveland, mDataType='rna', summary.stat='median', fill.missing=FALSE)
+mprofSummary <- summarizeMolecularProfiles(clevelandSmall, mDataType='rna', summary.stat='median', fill.missing=FALSE)
 ```
 
 ```{r show_summarized_sensitivity}
 mprofSummary
 ```
 
-Due to a lack of replicates in the Cleveland `RSet`, the returned `SummarizedExperiment` object contains the same information as
+Due to a lack of replicates in the clevelandSmall `RSet`, the returned `SummarizedExperiment` object contains the same information as
 the original. For other experiments with replicates, however, the result should contain one column per unique cell-line id. For
 ease of interoperability with the response data contained in an `RSet`, if `fill.missing` is `r FALSE` empty columns for the
 cell-lines in the sensitivity experiment, but not in the molecular profile will be added to the `SummarizedExperiment` such
@@ -367,10 +364,10 @@ Using this method one could identify signatures associated with either radio-sen
 Combining this signature with drug response gene signatures from `r BiocStyle::Biocpkg('PharmacoGx')`, as will
 be done in the subsequent section, one can identify drugs which could augment the effectiveness of a
 given radiation signature. Perhaps more powerfully, drugs which target features associated with radio-resistance
-can be found, potentially synergistically increasing the overall effectiveness of the combine treatment.
+can be found, potentially synergistically increasing the overall effectiveness of the combined treatment.
 
 ```{r compute_molecular_signature}
-radSensSig <- radSensitivitySig(Cleveland, mDataType='rna', features=fNames(Cleveland, 'rna')[2:5], nthread=15)
+radSensSig <- radSensitivitySig(clevelandSmall, mDataType='rna', features=fNames(clevelandSmall, 'rna')[2:5], nthread=1)
 ```
 
 ```{r exploring_molecular_signature}
