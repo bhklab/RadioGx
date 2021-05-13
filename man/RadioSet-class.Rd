@@ -22,7 +22,7 @@
 \alias{curation,RadioSet-method}
 \alias{curation<-,RadioSet,list-method}
 \alias{datasetType,RadioSet-method}
-\alias{datasetType<-,RadioSet-method}
+\alias{datasetType<-,RadioSet,ANY-method}
 \alias{dateCreated,RadioSet-method}
 \alias{fNames,RadioSet,character-method}
 \alias{fNames<-,RadioSet,character,character-method}
@@ -74,7 +74,7 @@
 
 \S4method{datasetType}{RadioSet}(object)
 
-\S4method{datasetType}{RadioSet}(object) <- value
+\S4method{datasetType}{RadioSet,ANY}(object) <- value
 
 \S4method{dateCreated}{RadioSet}(object)
 

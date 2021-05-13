@@ -15,10 +15,10 @@
 #' @importMethodsFrom CoreGx fNames
 #' @importFrom methods callNextMethod
 #' @export
-setMethod("fNames",
-          signature("RadioSet", "character"),
-          function(object, mDataType){
-  callNextMethod(object, mDataType)
+setMethod("fNames", signature("RadioSet", "character"), 
+    function(object, mDataType)
+{
+    callNextMethod(object=object, mDataType=mDataType)
 })
 
 #' fNames<- Setter
@@ -41,10 +41,8 @@ setMethod("fNames",
 #' @importMethodsFrom CoreGx fNames<-
 #' @importFrom methods callNextMethod
 #' @export
-setReplaceMethod("fNames",
-                 signature = signature(object="RadioSet",
-                                       mDataType='character',
-                                       value="character"),
-                 function(object, mDataType, value) {
-    callNextMethod(object, mDataType, value)
+setReplaceMethod("fNames", signature(object="RadioSet", mDataType='character',
+    value="character"), function(object, mDataType, value) 
+{
+    callNextMethod(object=object, mDataType=mDataType, value=value)
 })
