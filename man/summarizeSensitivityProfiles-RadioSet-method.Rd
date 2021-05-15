@@ -16,23 +16,23 @@ drug vs cell line table}
 )
 }
 \arguments{
-\item{object}{[`RadioSet`] The RadioSet from which to extract the data}
+\item{object}{`RadioSet` The RadioSet from which to extract the data}
 
-\item{sensitivity.measure}{[`character`] which sensitivity sensitivity.measure to use? Use the
+\item{sensitivity.measure}{`character` which sensitivity sensitivity.measure to use? Use the
 sensitivityMeasures function to find out what measures are available for each PSet.}
 
-\item{cell.lines}{[`character`] The cell lines to be summarized.
+\item{cell.lines}{`character` The cell lines to be summarized.
  If any cell lines has no data, it will be filled with
 missing values}
 
-\item{radiation.types}{[`character`] The radiation types to be summarized.
+\item{radiation.types}{`character` The radiation types to be summarized.
 If any radiation type has no data, it will be filled with
 missing values}
 
-\item{summary.stat}{[`character`] which summary method to use if there are repeated
+\item{summary.stat}{`character` which summary method to use if there are repeated
 cell line-drug experiments? Choices are "mean", "median", "first", or "last"}
 
-\item{fill.missing}{[`boolean`] should the missing cell lines not in the
+\item{fill.missing}{`logical(1)` should the missing cell lines not in the
 molecular data object be filled in with missing values?}
 
 \item{verbose}{Should the function print progress messages?}

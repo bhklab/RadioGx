@@ -11,7 +11,7 @@ setMethod(`[`, "RadioSet", function(x, i, j, ..., drop = FALSE) {
     if(is.character(i)&&is.character(j)){
         return(subsetTo(x, cells=i, radiations=j,  molecular.data.cells=i))
     }
-    else if(is.numeric(i) && is.numeric(j) && (as.integer(i)==i) &&
+    else if (is.numeric(i) && is.numeric(j) && (as.integer(i)==i) &&
             (as.integer(j)==j)){
         return(subsetTo(x, cells=cellNames(x)[i], radiations=radiationTypes(x)[j],
                         molecular.data.cells=cellNames(x)[i]))
@@ -58,10 +58,11 @@ setMethod(`[`, "RadioSet", function(x, i, j, ..., drop = FALSE) {
 setMethod("subsetTo",
           signature(object="RadioSet"),
           function(object , cells=NULL, radiationTypes=NULL, molecular.data.cells=NULL, keep.controls=TRUE, ...){
-              .subsetToRadioSet(object, cells, radiationTypes, molecular.data.cells, keep.controls, ...)
+              .subsetToRadioSet(object, cells, radiationTypes, 
+              molecular.data.cells, keep.controls, ...)
           })
 
-# @param object A \code{RadioSet} to be subsetted
+# @param object A `RadioSet` to be subsetted
 # @param cells A list or vector of cell names as used in the dataset to which
 #   the object will be subsetted. If left blank, then all cells will be left in
 #   the dataset.
@@ -74,7 +75,7 @@ setMethod("subsetTo",
 #   the controls be kept in the dataset? Defaults to true.
 # @param ... Other arguments passed by other function within the package
 # @return A RadioSet with only the selected radiation types and cells
-#' @importFrom CoreGx .unionList
+#' @importFrom CoreGx .unionList .message .warning .error
 #' @keywords internals
 .subsetToRadioSet <- function(object,
                      cells=NULL,
@@ -116,37 +117,38 @@ setMethod("subsetTo",
     ### because the arguments are passed to the anonymous
     ### function in lapply, so it does not recognize them as missing
     
-    molecularProfilesSlot(object) <- lapply(molecularProfilesSlot(object),
-                                            function(SE, cells, radiationTypes,
-                                                     molecular.data.cells){
-                                                
-                                                molecular.data.type <- ifelse(length(grep("rna",
-                                                                                          S4Vectors::metadata(SE)$annotation) > 0), "rna", S4Vectors::metadata(SE)$annotation)
-                                                if (length(grep(molecular.data.type, names(molecular.data.cells))) > 0) {
-                                                    cells <- molecular.data.cells[[molecular.data.type]]
-                                                }
-                                                
-                                                column_indices <- NULL
-                                                
-                                                if (length(cells)==0 && length(radiationTypes) == 0) {
-                                                    column_indices <- seq_len(ncol(SE)) # This still returns the number of samples in an SE, but without a label
-                                                }
-                                                if(length(cells) == 0 && datasetType(object) == "sensitivity") {
-                                                    column_indices <- seq_len(ncol(SE))
-                                                }
-                                                
-                                                cell_line_index <- NULL
-                                                if(length(cells)!=0) {
-                                                    if (!all(cells %in% cellNames(object))) {
-                                                        stop("Some of the cell names passed to function did not match to names in the RadoSet. Please ensure you are using cell names as returned by the cellNames function")
-                                                    }
-                                                    cell_line_index <- which(SummarizedExperiment::colData(SE)[["cellid"]] %in% cells)
-                                                }
-                                                radiationTypes_index <- NULL
-                                                if(datasetType(object)=="perturbation" || datasetType(object)=="both"){
-                                                    if(length(radiationTypes) != 0) {
-                                                        if (!all(radiationTypes %in% radiationTypes(object))) {
-                                                            stop("Some of the radiation types passed to function did not match
+    molecularProfilesSlot(object) <- 
+        lapply(molecularProfilesSlot(object), 
+            function(SE, cells, radiationTypes, molecular.data.cells) {                          
+                molecular.data.type <- 
+                    if (length(grep("rna", S4Vectors::metadata(SE)$annotation) > 0))
+                        "rna"
+                    else
+                        S4Vectors::metadata(SE)$annotation
+                if (length(grep(molecular.data.type, names(molecular.data.cells))) > 0)
+                    cells <- molecular.data.cells[[molecular.data.type]]
+                
+                column_indices <- NULL
+                
+                if (length(cells)==0 && length(radiationTypes) == 0) {
+                    column_indices <- seq_len(ncol(SE)) # This still returns the number of samples in an SE, but without a label
+                }
+                if (length(cells) == 0 && datasetType(object) == "sensitivity") {
+                    column_indices <- seq_len(ncol(SE))
+                }
+                
+                cell_line_index <- NULL
+                if(length(cells)!=0) {
+                    if (!all(cells %in% cellNames(object))) {
+                        stop("Some of the cell names passed to function did not match to names in the RadoSet. Please ensure you are using cell names as returned by the cellNames function")
+                    }
+                    cell_line_index <- which(SummarizedExperiment::colData(SE)[["cellid"]] %in% cells)
+                }
+                radiationTypes_index <- NULL
+                if(datasetType(object)=="perturbation" || datasetType(object)=="both"){
+                    if(length(radiationTypes) != 0) {
+                        if (!all(radiationTypes %in% radiationTypes(object))) {
+                            stop("Some of the radiation types passed to function did not match
                to names in the RadioSet. Please ensure you are using radiation
                names as returned by the radiations function")
                                                         }

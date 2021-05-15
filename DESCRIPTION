@@ -1,7 +1,7 @@
 Package: RadioGx
 Type: Package
 Title: Analysis of Large-Scale Radio-Genomic Data 
-Version: 1.1.1
+Version: 1.1.2
 Date: 2021-05-13
 Authors@R: c(
   person("Venkata","Manem", email = "mail2mvskumar@gmail.com", 
@@ -36,7 +36,7 @@ VignetteBuilder: knitr
 VignetteEngine: knitr::rmarkdown
 Encoding: UTF-8
 LazyData: true
-Depends: R (>= 4.0), CoreGx
+Depends: R (>= 4.1), CoreGx
 Imports:
     SummarizedExperiment,
     S4Vectors,

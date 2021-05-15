@@ -27,65 +27,65 @@ doseResponseCurve(
 )
 }
 \arguments{
-\item{rad.type}{[string] The type(s) of radiation dosage to be
+\item{rad.type}{`character(1)` The type(s) of radiation dosage to be
 plotted. If the plot is desirable for more than one radioset, A unique drug
 id should be provided.}
 
-\item{cellline}{[string] A cell line name for which the radiation response
+\item{cellline}{`character(1)` A cell line name for which the radiation response
 curve should be plotted. If the plot is desirable for more than one
 radioset, a unique cell id should be provided.}
 
-\item{rSets}{[list] a list of RadioSet objects, for which the function
+\item{rSets}{`list` a list of RadioSet objects, for which the function
 should plot the curves.}
 
-\item{Ds, SFs}{[list] A list of Doses and SFs to plot, the function assumes
+\item{Ds, SFs}{`list` A list of Doses and SFs to plot, the function assumes
 that Ds[[i]] is plotted against SFs[[i]]. The names of the D list are used
 to create the legend labels}
 
-\item{trunc}{[bool] Should the viability values be truncated to lie in
+\item{trunc}{`logical(1)` Should the viability values be truncated to lie in
 [0-100] before doing the fitting}
 
-\item{legends.label}{[vector] A vector of sensitivity measurment types which
+\item{legends.label}{`numeric` A vector of sensitivity measurment types which
 could be any combination of  ic50_published, auc_published, auc_recomputed
 and auc_recomputed_star. A legend will be displayed on the top right of the
 plot which each line of the legend is the values of requested sensitivity
 measerments for one of the requested rSets. If this parameter is missed no
 legend would be provided for the plot.}
 
-\item{ylim}{[vector] A vector of two numerical values to be used as ylim of
+\item{ylim}{`numeric` A vector of two numerical values to be used as ylim of
 the plot. If this parameter would be missed c(0,100) would be used as the
 ylim of the plot.}
 
-\item{xlim}{[vector] A vector of two numerical values to be used as xlim of
+\item{xlim}{`numeric` A vector of two numerical values to be used as xlim of
 the plot. If this parameter would be missed the minimum and maximum
 concentrations between all the rSets would be used as plot xlim.}
 
-\item{mycol}{[vector] A vector with the same lenght of the rSets parameter
+\item{mycol}{`numeric` A vector with the same lenght of the rSets parameter
 which will determine the color of the curve for the pharmaco sets. If this
 parameter is missed default colors from Rcolorbrewer package will be used
 as curves color.}
 
-\item{title}{[character] The title of the graph. If no title is provided,
+\item{title}{`character` The title of the graph. If no title is provided,
 then it defaults to Drug':'Cell Line'.}
 
-\item{plot.type}{[character] Plot type which can be the actual one ("Actual")
+\item{plot.type}{`character` Plot type which can be the actual one ("Actual")
 or the one fitted by logl logistic regression ("Fitted") or both of them
 ("Both"). If this parameter is missed by default actual curve is plotted.}
 
-\item{summarize.replicates}{[character] If this parameter is set to true
+\item{summarize.replicates}{`character` If this parameter is set to true
 replicates are summarized and replicates are plotted individually otherwise}
 
-\item{lwd}{[numeric] The line width to plot with}
+\item{lwd}{`numeric` The line width to plot with}
 
-\item{cex}{[numeric] The cex parameter passed to plot}
+\item{cex}{`numeric` The cex parameter passed to plot}
 
-\item{cex.main}{[numeric] The cex.main parameter passed to plot, controls the
+\item{cex.main}{`numeric` The cex.main parameter passed to plot, controls the
 size of the titles}
 
 \item{legend.loc}{And argument passable to xy.coords for the position to
 place the legend.}
 
-\item{verbose}{[boolean] Should warning messages about the data passed in be
+\item{verbose}{`logical(1)` Should warning messages about the data passed in be
 printed?}
 }
 \value{

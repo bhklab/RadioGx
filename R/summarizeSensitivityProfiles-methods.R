@@ -9,18 +9,18 @@
 #' data(clevelandSmall)
 #' GDSCauc <- summarizeSensitivityProfiles(clevelandSmall, sensitivity.measure='AUC_published')
 #'
-#' @param object [`RadioSet`] The RadioSet from which to extract the data
-#' @param sensitivity.measure [`character`] which sensitivity sensitivity.measure to use? Use the
+#' @param object `RadioSet` The RadioSet from which to extract the data
+#' @param sensitivity.measure `character` which sensitivity sensitivity.measure to use? Use the
 #'   sensitivityMeasures function to find out what measures are available for each PSet.
-#' @param cell.lines [`character`] The cell lines to be summarized.
+#' @param cell.lines `character` The cell lines to be summarized.
 #'    If any cell lines has no data, it will be filled with
 #'   missing values
-#' @param radiation.types [`character`] The radiation types to be summarized.
+#' @param radiation.types `character` The radiation types to be summarized.
 #'   If any radiation type has no data, it will be filled with
 #'   missing values
-#' @param summary.stat [`character`] which summary method to use if there are repeated
+#' @param summary.stat `character` which summary method to use if there are repeated
 #'   cell line-drug experiments? Choices are "mean", "median", "first", or "last"
-#' @param fill.missing [`boolean`] should the missing cell lines not in the
+#' @param fill.missing `logical(1)` should the missing cell lines not in the
 #'   molecular data object be filled in with missing values?
 #' @param verbose Should the function print progress messages?
 #'
@@ -51,7 +51,7 @@ setMethod('summarizeSensitivityProfiles',
 # GDSCauc <- summarizeSensitivityProfiles(clevelandSmall, sensitivity.measure='AUC_published')
 #
 # @param object [RadioSet] The RadioSet from which to extract the data
-# @param sensitivity.measure [character] which sensitivity sensitivity.measure to use? Use the
+# @param sensitivity.measure `character` which sensitivity sensitivity.measure to use? Use the
 #   sensitivityMeasures function to find out what measures are available for each PSet.
 # @param cell.lines \code{character} The cell lines to be summarized.
 #    If any cell lines has no data, it will be filled with
