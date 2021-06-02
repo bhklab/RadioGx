@@ -11,3 +11,4 @@ appveyor.yml
 ^rSet/*
 .idea*
 ^Cleveland.rds
+^\.github$
