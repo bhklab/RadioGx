@@ -36,7 +36,7 @@ linearQuadraticModel <- function (D,
                                   median_n = 1,
                                   trunc = FALSE,
                                   verbose = FALSE) {
-  match.arg(family)
+  family <- match.arg(family)
 
   CoreGx::.sanitizeInput(x = D,
                          y = SF,
