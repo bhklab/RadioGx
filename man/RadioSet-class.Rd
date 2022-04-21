@@ -32,10 +32,10 @@ type object for holding data for RNA, DNA, SNP and Copy Number Variation
 measurements respectively, with associated \code{fData} and \code{pData}
 containing the row and column metadata}
 
-\item{\code{cell}}{A \code{data.frame} containg the annotations for all the cell
+\item{\code{sample}}{A \code{data.frame} containg the annotations for all the cell
 lines profiled in the data set, across all data types}
 
-\item{\code{radiation}}{A \code{data.frame} containg the annotations for all the
+\item{\code{treatment}}{A \code{data.frame} containg the annotations for all the
 radiation treatment types used in the in the dataset, across all data types}
 
 \item{\code{sensitivity}}{A \code{list} containing all the data for the sensitivity

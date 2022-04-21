@@ -18,9 +18,9 @@
 #'   type object for holding data for RNA, DNA, SNP and Copy Number Variation
 #'   measurements respectively, with associated \code{fData} and \code{pData}
 #'   containing the row and column metadata
-#' @slot cell A \code{data.frame} containg the annotations for all the cell
+#' @slot sample A \code{data.frame} containg the annotations for all the cell
 #'   lines profiled in the data set, across all data types
-#' @slot radiation A \code{data.frame} containg the annotations for all the
+#' @slot treatment A \code{data.frame} containg the annotations for all the
 #'   radiation treatment types used in the in the dataset, across all data types
 #' @slot sensitivity A \code{list} containing all the data for the sensitivity
 #'   experiments, including \code{$info}, a \code{data.frame} containing the
@@ -145,9 +145,9 @@ RadioSet <-  function(name,
 
     curation <- list()
     # curation$radiation <- as.data.frame(curationDrug, stringsAsFactors = FALSE)
-    curation$cell <- as.data.frame(curationCell, stringsAsFactors = FALSE)
+    curation$sample <- as.data.frame(curationCell, stringsAsFactors = FALSE)
     curation$tissue <- as.data.frame(curationTissue, stringsAsFactors = FALSE)
-    ### TODO:: Make sure to fix the curation to check for matching row names to the radiation and cell line matrices!!!!!!
+    ### TODO:: Make sure to fix the curation to check for matching row names to the radiation and sample line matrices!!!!!!
 
 
     perturbation <- list()
@@ -158,7 +158,10 @@ RadioSet <-  function(name,
         perturbation$info <- "Not a perturbation dataset."
     }
 
-    rSet  <- .RadioSet(annotation=annotation, molecularProfiles=molecularProfiles, cell=as.data.frame(cell), radiation=as.data.frame(radiation), datasetType=datasetType, sensitivity=sensitivity, perturbation=perturbation, curation=curation)
+    rSet  <- .RadioSet(annotation=annotation, molecularProfiles=molecularProfiles,
+      sample=as.data.frame(cell), treatment=as.data.frame(radiation),
+      datasetType=datasetType, sensitivity=sensitivity,
+      perturbation=perturbation, curation=curation)
     if (verify) { checkRSetStructure(rSet)}
   if(length(sensitivityN) == 0 & datasetType %in% c("sensitivity", "both")) {
     sensNumber(rSet) <- .summarizeSensitivityNumbers(rSet)
@@ -179,19 +182,19 @@ RadioSet <-  function(name,
   }
 
   ## unique radiation identifiers
-  # radiationn <- sort(unique(sensitivityInfo(object)[ , "radiation.type"]))
+  # radiationn <- sort(unique(sensitivityInfo(object)[ , "treatmentid"]))
 
   ## consider all radiations
-  radiationn <- rownames(radiationInfo(object))
+  radiationn <- rownames(treatmentInfo(object))
 
   ## unique radiation identifiers
   # celln <- sort(unique(sensitivityInfo(object)[ , "sampleid"]))
 
   ## consider all cell lines
-  celln <- rownames(cellInfo(object))
+  celln <- rownames(sampleInfo(object))
 
   sensitivity.info <- matrix(0, nrow=length(celln), ncol=length(radiationn), dimnames=list(celln, radiationn))
-  radiation.types <- sensitivityInfo(object)[ , "radiation.type"]
+  radiation.types <- sensitivityInfo(object)[ , "treatmentid"]
   cellids <- sensitivityInfo(object)[ , "sampleid"]
   cellids <- cellids[grep("///", radiation.types, invert=TRUE)]
   radiation.types <- radiation.types[grep("///", radiation.types, invert=TRUE)]
@@ -210,7 +213,7 @@ RadioSet <-  function(name,
   mDT <- mDataNames(object)
 
   ## consider all cell lines
-  celln <- rownames(cellInfo(object))
+  celln <- rownames(sampleInfo(object))
 
   molecular.info <- matrix(0, nrow=length(celln), ncol=length(mDT), dimnames=list(celln, mDT))
 
@@ -229,9 +232,9 @@ RadioSet <-  function(name,
     stop ("Data type must be either perturbation or both")
   }
 
-  radiationn <- rownames(radiationInfo(object))
+  radiationn <- rownames(treatmentInfo(object))
 
-  celln <- rownames(cellInfo(object))
+  celln <- rownames(sampleInfo(object))
 
   perturbation.info <- array(0, dim=c(length(celln), length(radiationn), length(molecularProfilesSlot(object))), dimnames=list(celln, radiationn, names((molecularProfilesSlot(object)))))
 
@@ -309,7 +312,7 @@ checkRSetStructure <- function(object, plotDist=FALSE, result.dir=tempdir()) {
 
       # Checking sample metadata for required columns
       warning(ifelse("sampleid" %in% colnames(colData(profile)), "",
-                     sprintf("%s: cellid does not exist in colData (samples)
+                     sprintf("%s: sampleid does not exist in colData (samples)
                              columns", nn)))
       warning(ifelse("batchid" %in% colnames(colData(profile)), "",
                      sprintf("%s: batchid does not exist in colData (samples)
@@ -329,58 +332,58 @@ checkRSetStructure <- function(object, plotDist=FALSE, result.dir=tempdir()) {
 
       # Check that all cellids from the object are included in molecularProfiles
       if("sampleid" %in% colnames(rowData(profile))) {
-        if(!all(colData(profile)[,"sampleid"] %in% rownames(cellInfo(object)))) {
+        if(!all(colData(profile)[,"sampleid"] %in% rownames(sampleInfo(object)))) {
           warning(sprintf("%s: not all the cell lines in this profile are in
                           cell lines slot", nn))
         }
       }else {
-        warning(sprintf("%s: cellid does not exist in colData (samples)", nn))
+        warning(sprintf("%s: sampleid does not exist in colData (samples)", nn))
       }
     }
 
     ###
     # CHECKING CELL
     ###
-    if("tissueid" %in% colnames(cellInfo(object))) {
+    if("tissueid" %in% colnames(sampleInfo(object))) {
       if("unique.tissueid" %in% colnames(curation(object)$tissue))
       {
-        if(length(intersect(rownames(curation(object)$tissue), rownames(cellInfo(object)))) != nrow(cellInfo(object))) {
+        if(length(intersect(rownames(curation(object)$tissue), rownames(sampleInfo(object)))) != nrow(sampleInfo(object))) {
           message("rownames of curation tissue slot should be the same as cell slot (curated cell ids)")
         } else{
-          if(length(intersect(cellInfo(object)$tissueid, curation(object)$tissue$unique.tissueid)) != length(table(cellInfo(object)$tissueid))){
+          if(length(intersect(sampleInfo(object)$tissueid, curation(object)$tissue$unique.tissueid)) != length(table(sampleInfo(object)$tissueid))){
             message("tissueid should be the same as unique tissue id from tissue curation slot")
           }
         }
       } else {
         message("unique.tissueid which is curated tissue id across data set should be a column of tissue curation slot")
       }
-      if(any(is.na(cellInfo(object)[,"tissueid"]) | cellInfo(object)[,"tissueid"]=="", na.rm=TRUE)){
-        message(sprintf("There is no tissue type for this cell line(s): %s", paste(rownames(cellInfo(object))[which(is.na(cellInfo(object)[,"tissueid"]) | cellInfo(object)[,"tissueid"]=="")], collapse=" ")))
+      if(any(is.na(sampleInfo(object)[,"tissueid"]) | sampleInfo(object)[,"tissueid"]=="", na.rm=TRUE)){
+        message(sprintf("There is no tissue type for this cell line(s): %s", paste(rownames(sampleInfo(object))[which(is.na(sampleInfo(object)[,"tissueid"]) | sampleInfo(object)[,"tissueid"]=="")], collapse=" ")))
       }
     } else {
       warning("tissueid does not exist in cell slot")
     }
 
-    if("unique.cellid" %in% colnames(curation(object)$cell)) {
-      if(length(intersect(curation(object)$cell$unique.cellid, rownames(cellInfo(object)))) != nrow(cellInfo(object))) {
+    if("unique.sampleid" %in% colnames(curation(object)$sample)) {
+      if(length(intersect(curation(object)$sample$unique.sampleid, rownames(sampleInfo(object)))) != nrow(sampleInfo(object))) {
         message("rownames of cell slot should be curated cell ids")
       }
     } else {
-      message("unique.cellid which is curated cell id across data set should be a column of cell curation slot")
+      message("unique.sampleid which is curated cell id across data set should be a column of cell curation slot")
     }
 
-    if(length(intersect(rownames(curation(object)$cell), rownames(cellInfo(object)))) != nrow(cellInfo(object))) {
+    if(length(intersect(rownames(curation(object)$sample), rownames(sampleInfo(object)))) != nrow(sampleInfo(object))) {
       message("rownames of curation cell slot should be the same as cell slot (curated cell ids)")
     }
 
-    if(length(intersect(rownames(curation(object)$cell), rownames(cellInfo(object)))) != nrow(cellInfo(object))) {
+    if(length(intersect(rownames(curation(object)$sample), rownames(sampleInfo(object)))) != nrow(sampleInfo(object))) {
       message("rownames of curation radiation slot should be the same as radiation slot (curated radiation ids)")
     }
 
-    if(!is(cellInfo(object), "data.frame")) {
+    if(!is(sampleInfo(object), "data.frame")) {
       warning("cell slot class type should be dataframe")
     }
-    if(!is(radiationInfo(object), "data.frame")) {
+    if(!is(treatmentInfo(object), "data.frame")) {
       warning("radiation slot class type should be dataframe")
     }
     if(datasetType(object) %in% c("sensitivity", "both"))
@@ -389,24 +392,24 @@ checkRSetStructure <- function(object, plotDist=FALSE, result.dir=tempdir()) {
         warning("sensitivity info slot class type should be dataframe")
       }
       if("sampleid" %in% colnames(sensitivityInfo(object))) {
-        if(!all(sensitivityInfo(object)[,"sampleid"] %in% rownames(cellInfo(object)))) {
+        if(!all(sensitivityInfo(object)[,"sampleid"] %in% rownames(sampleInfo(object)))) {
           warning("not all the cell lines in sensitivity data are in cell slot")
         }
       }else {
-        warning("cellid does not exist in sensitivity info")
+        warning("sampleid does not exist in sensitivity info")
       }
 
       ###
       # CHECKING RADIATION
       ###
-      if("radiation.type" %in% colnames(sensitivityInfo(object))) {
-        radiation.ids <- unique(sensitivityInfo(object)[,"radiation.type"])
+      if("treatmentid" %in% colnames(sensitivityInfo(object))) {
+        radiation.ids <- unique(sensitivityInfo(object)[,"treatmentid"])
         radiation.ids <- radiation.ids[grep("///",radiation.ids, invert=TRUE)]
-        if(!all(radiation.ids %in% rownames(radiationInfo(object)))) {
+        if(!all(radiation.ids %in% rownames(treatmentInfo(object)))) {
           message("not all the radiations in sensitivity data are in radiation slot")
         }
       }else {
-        warning("radiation.type does not exist in sensitivity info")
+        warning("treatmentid does not exist in sensitivity info")
       }
 
       if(any(!is.na(sensitivityRaw(object)))) {
@@ -451,5 +454,5 @@ setMethod("show", signature=signature(object="RadioSet"),
 #' @return A named vector with the number of Cells and Drugs in the RadioSet
 #' @export
 setMethod("dim", signature=signature(x="RadioSet"), function(x){
-  return(c(Cells=length(cellNames(x)), Radiation=length(radiationTypes(x))))
+  return(c(Cells=length(sampleNames(x)), Radiation=length(treatmentNames(x))))
 })

@@ -40,6 +40,7 @@ Depends: R (>= 4.1), CoreGx
 Imports:
     SummarizedExperiment,
     BiocGenerics,
+    data.table,
     S4Vectors,
     Biobase,
     parallel,

@@ -46,7 +46,7 @@ availableRSets <- function(saveDir=tempdir(), fileName="availableRadioSets.csv",
 #'
 #' @examples
 #' if (interactive()) {
-#' drugMatrix_rat <- downloadRSet("Cleveland")
+#' cleveland <- downloadRSet("Cleveland")
 #' }
 #'
 #' @param name \code{Character} string, the name of the PhamracoSet to download.

@@ -90,22 +90,22 @@ setMethod('summarizeSensitivityProfiles',
                         collapse=", ")))
   }
   if (missing(cell.lines)) {
-    cell.lines <- cellNames(object)
+    cell.lines <- sampleNames(object)
   }
   if (missing(radiation.types)) {
     if (sensitivity.measure != "Synergy_score")
     {
-      radTypes <- radiationTypes(object)
+      radTypes <- treatmentNames(object)
     }else{
       radTypes <- sensitivityInfo(object)[grep("///",
-                                             sensitivityInfo(object)$radiation.type),
-                                        "radiation.type"]
+                                             sensitivityInfo(object)$treatmentid),
+                                        "treatmentid"]
     }
   }
 
   pp <- sensitivityInfo(object)
   ##FIXME: deal with duplicated rownames!
-  ppRows <- which(pp$sampleid %in% cell.lines & pp$radiation.type %in% radTypes)
+  ppRows <- which(pp$sampleid %in% cell.lines & pp$treatmentid %in% radTypes)
   if(sensitivity.measure != "max.conc") {
     dd <- sensitivityProfiles(object)
   } else {
@@ -123,7 +123,7 @@ setMethod('summarizeSensitivityProfiles',
   rownames(result) <- radTypes
   colnames(result) <- cell.lines
 
-  pp_dd <- cbind(pp[,c("sampleid", "radiation.type")],
+  pp_dd <- cbind(pp[,c("sampleid", "treatmentid")],
                  "sensitivity.measure"=dd[, sensitivity.measure])
 
   summary.function <- function(x) {
@@ -152,9 +152,9 @@ setMethod('summarizeSensitivityProfiles',
   }
 
   pp_dd <- pp_dd[pp_dd[,"sampleid"]%in%cell.lines &
-                   pp_dd[,"radiation.type"]%in%radTypes,]
+                   pp_dd[,"treatmentid"]%in%radTypes,]
 
-  tt <- reshape2::acast(pp_dd, radiation.type~cellid,
+  tt <- reshape2::acast(pp_dd, treatmentid~sampleid,
                         fun.aggregate=summary.function,
                         value.var="sensitivity.measure")
 

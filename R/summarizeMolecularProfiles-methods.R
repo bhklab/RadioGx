@@ -10,7 +10,7 @@
 #' @examples
 #' data(clevelandSmall)
 #' clevelandSmall <- summarizeMolecularProfiles(clevelandSmall,
-#'                     mDataType = "rna", cell.lines=cellNames(clevelandSmall),
+#'                     mDataType = "rna", cell.lines=sampleNames(clevelandSmall),
 #'                     summary.stat = 'median', fill.missing = TRUE, verbose=TRUE)
 #' clevelandSmall
 #'
@@ -55,7 +55,7 @@ setMethod('summarizeMolecularProfiles',
 # @examples
 # data(clevelandSmall)
 # clevelandSmall <- summarizeMolecularProfiles(clevelandSmall,
-#                     mDataType = "rna", cell.lines=cellNames(clevelandSmall),
+#                     mDataType = "rna", cell.lines=sampleNames(clevelandSmall),
 #                     summary.stat = 'median', fill.missing = TRUE, verbose=TRUE)
 # clevelandSmall
 #
@@ -121,7 +121,7 @@ setMethod('summarizeMolecularProfiles',
   }
 
   if (missing(cell.lines)) {
-    cell.lines <- cellNames(object)
+    cell.lines <- sampleNames(object)
   }
 
   dd <- molecularProfiles(object, mDataType)
@@ -231,7 +231,7 @@ setMethod('summarizeMolecularProfiles',
   }
   res <- SummarizedExperiment::SummarizedExperiment(dd2)
   pp2 <- S4Vectors::DataFrame(pp2, row.names=rownames(pp2))
-  pp2$tissueid <- cellInfo(object)[pp2$sampleid, "tissueid"]
+  pp2$tissueid <- sampleInfo(object)[pp2$sampleid, "tissueid"]
   SummarizedExperiment::colData(res) <- pp2
   SummarizedExperiment::rowData(res) <- featureInfo(object, mDataType)
   ##TODO:: Generalize this to multiple assay SummarizedExperiments!

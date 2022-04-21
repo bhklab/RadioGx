@@ -13,10 +13,24 @@ NULL
 setMethod("updateObject", signature("RadioSet"), function(object) {
     cSet <- callNextMethod(object)
     rSet <- as(cSet, "RadioSet")
-    names(curation(rSet)) <- gsub("drug", "treatment", names(curation(rSet)))
-    if ("treatment" %in% names(curation(rSet))) {
-        colnames(curation(rSet)$treatment) <- gsub("treatmentid", "treatmentid",
-            colnames(curation(rSet)$treatment))
+    # treatment slot
+    colnames(treatmentInfo(rSet)) <- gsub("X.radiation.|treatmentid|radiation",
+        "treatmentid", colnames(treatmentInfo(rSet)))
+    # sensitivity slot
+    colnames(sensitivityInfo(rSet)) <- gsub("treatmentid", "treatmentid",
+        colnames(sensitivityInfo(rSet)))
+    # curation slot
+    names(curation(rSet)) <- gsub("radiation", "treatment", names(curation(rSet)))
+    if ("radiation" %in% names(curation(rSet))) {
+        colnames(curation(rSet)$radiation) <- gsub("treatmentid|radiation",
+            "treatment", colnames(curation(rSet)$radiation))
+    }
+    # molecularProfiles slot
+    for (i in seq_along(molecularProfilesSlot(rSet))) {
+        colnames(colData(molecularProfilesSlot(rSet)[[i]])) <-
+            gsub("treatmentid|radiation", "treatmentid",
+                colnames(colData(molecularProfilesSlot(rSet)[[i]]))
+            )
     }
     validObject(rSet)
     return(rSet)

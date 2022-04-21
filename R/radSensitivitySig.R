@@ -13,7 +13,7 @@
 #' data(clevelandSmall)
 #' rad.sensitivity <- radSensitivitySig(clevelandSmall, mDataType="rna",
 #'              nthread=1, features = fNames(clevelandSmall, "rna")[1],
-#'              radiation.types=radiationTypes(clevelandSmall))
+#'              radiation.types=treatmentNames(clevelandSmall))
 #' print(rad.sensitivity)
 #'
 #' @param rSet A \code{RadioSet} of the perturbation experiment type
@@ -125,7 +125,7 @@ radSensitivitySig <- function(rSet,
   }
 
   if (missing(radiation.types)){
-    radiation.types <- radiationTypes(rSet)
+    radiation.types <- treatmentNames(rSet)
   }
 
   availcore <- parallel::detectCores()
@@ -178,7 +178,7 @@ radSensitivitySig <- function(rSet,
 
     drugpheno.all <- lapply(drugpheno.all, function(x) {x[phenoInfo(rSet, mDataType)[ ,"sampleid"], , drop = FALSE]})
 
-    type <- as.factor(cellInfo(rSet)[phenoInfo(rSet, mDataType)[ ,"sampleid"], "tissueid"])
+    type <- as.factor(sampleInfo(rSet)[phenoInfo(rSet, mDataType)[ ,"sampleid"], "tissueid"])
     batch <- phenoInfo(rSet, mDataType)[, "batchid"]
     batch[!is.na(batch) & batch == "NA"] <- NA
     batch <- as.factor(batch)
@@ -188,9 +188,9 @@ radSensitivitySig <- function(rSet,
       message("Computing radiation sensitivity signatures...")
     }
 
-    mcres <-  lapply(radiation.types, function(radiation.type, expr, drugpheno, type, batch, standardize, nthread) {
+    mcres <-  lapply(radiation.types, function(treatmentid, expr, drugpheno, type, batch, standardize, nthread) {
      res <- NULL
-     for(i in radiation.type) {
+     for(i in treatmentid) {
        ## using a linear model (x ~ concentration + cell + batch)
        dd <- lapply(drugpheno, function(rad) rad[, i])
        dd <- do.call(cbind, dd)
@@ -201,7 +201,7 @@ radSensitivitySig <- function(rSet,
        rr <- rankGeneRadSensitivity(data=expr, drugpheno=dd, type=type, batch=batch, single.type=FALSE, standardize=standardize, nthread=nthread, verbose=verbose)
        res <- c(res, list(rr$all))
      }
-     names(res) <- radiation.type
+     names(res) <- treatmentid
      return(res)
     }, expr=t(molecularProfiles(rSet, mDataType)[features, , drop=FALSE]), drugpheno=drugpheno.all, type=type, batch=batch, nthread=nthread, standardize=standardize)
 
