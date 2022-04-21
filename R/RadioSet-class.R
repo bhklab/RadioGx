@@ -173,75 +173,75 @@ RadioSet <-  function(name,
 # Constructor Helper Functions ----------------------------------------------
 
 .summarizeSensitivityNumbers <- function(object) {
-  
+
   if (datasetType(object) != "sensitivity" && datasetType(object) != "both") {
     stop ("Data type must be either sensitivity or both")
   }
-  
+
   ## unique radiation identifiers
   # radiationn <- sort(unique(sensitivityInfo(object)[ , "radiation.type"]))
-  
+
   ## consider all radiations
   radiationn <- rownames(radiationInfo(object))
-  
+
   ## unique radiation identifiers
-  # celln <- sort(unique(sensitivityInfo(object)[ , "cellid"]))
-  
+  # celln <- sort(unique(sensitivityInfo(object)[ , "sampleid"]))
+
   ## consider all cell lines
   celln <- rownames(cellInfo(object))
-  
+
   sensitivity.info <- matrix(0, nrow=length(celln), ncol=length(radiationn), dimnames=list(celln, radiationn))
   radiation.types <- sensitivityInfo(object)[ , "radiation.type"]
-  cellids <- sensitivityInfo(object)[ , "cellid"]
+  cellids <- sensitivityInfo(object)[ , "sampleid"]
   cellids <- cellids[grep("///", radiation.types, invert=TRUE)]
   radiation.types <- radiation.types[grep("///", radiation.types, invert=TRUE)]
-  
-  
+
+
   tt <- table(cellids, radiation.types)
   sensitivity.info[rownames(tt), colnames(tt)] <- tt
-  
+
   return(sensitivity.info)
 }
 
 
 .summarizeMolecularNumbers <- function(object) {
-  
+
   ## consider all molecular types
   mDT <- mDataNames(object)
-  
+
   ## consider all cell lines
   celln <- rownames(cellInfo(object))
-  
+
   molecular.info <- matrix(0, nrow=length(celln), ncol=length(mDT), dimnames=list(celln, mDT))
-  
+
   for(mDataType in mDT) {
-    tt <- table(phenoInfo(object, mDataType)$cellid)
+    tt <- table(phenoInfo(object, mDataType)$sampleid)
     molecular.info[names(tt), mDataType] <- tt
-    
+
   }
   return(molecular.info)
 }
 
 
 .summarizePerturbationNumbers <- function(object) {
-  
+
   if (datasetType(object) != "perturbation" && datasetType(object) != "both") {
     stop ("Data type must be either perturbation or both")
   }
-  
+
   radiationn <- rownames(radiationInfo(object))
-  
+
   celln <- rownames(cellInfo(object))
-  
+
   perturbation.info <- array(0, dim=c(length(celln), length(radiationn), length(molecularProfilesSlot(object))), dimnames=list(celln, radiationn, names((molecularProfilesSlot(object)))))
-  
+
   for (i in seq_len(length(molecularProfilesSlot(object)))) {
-    if (nrow(SummarizedExperiment::colData(molecularProfilesSlot(object)[[i]])) > 0 && all(is.element(c("cellid", "drugid"), colnames(SummarizedExperiment::colData(molecularProfilesSlot(object)[[i]]))))) {
-      tt <- table(SummarizedExperiment::colData(molecularProfilesSlot(object)[[i]])[ , "cellid"], SummarizedExperiment::colData(molecularProfilesSlot(object)[[i]])[ , "drugid"])
+    if (nrow(SummarizedExperiment::colData(molecularProfilesSlot(object)[[i]])) > 0 && all(is.element(c("sampleid", "treatmentid"), colnames(SummarizedExperiment::colData(molecularProfilesSlot(object)[[i]]))))) {
+      tt <- table(SummarizedExperiment::colData(molecularProfilesSlot(object)[[i]])[ , "sampleid"], SummarizedExperiment::colData(molecularProfilesSlot(object)[[i]])[ , "treatmentid"])
       perturbation.info[rownames(tt), colnames(tt), names(molecularProfilesSlot(object))[i]] <- tt
     }
   }
-  
+
   return(perturbation.info)
 }
 
@@ -253,28 +253,28 @@ RadioSet <-  function(name,
 #'
 #' This function checks the structure of a PharamcoSet, ensuring that the
 #' correct annotations are in place and all the required slots are filled so
-#' that matching of cells and radiations can be properly done across different 
+#' that matching of cells and radiations can be properly done across different
 #' types of data and with other studies.
 #'
 #' @examples
 #' checkRSetStructure(clevelandSmall)
 #'
 #' @param object A \code{RadioSet} object
-#' @param plotDist Should the function also plot the distribution of molecular 
+#' @param plotDist Should the function also plot the distribution of molecular
 #'     data?
-#' @param result.dir The path to the directory for saving the plots as a string, 
+#' @param result.dir The path to the directory for saving the plots as a string,
 #'     defaults to `tempdir()``
-#' 
-#' @return Prints out messages whenever describing the errors found in the 
+#'
+#' @return Prints out messages whenever describing the errors found in the
 #'     structure of the pset object passed in.
-#' 
+#'
 #' @importFrom graphics hist
 #' @importFrom grDevices dev.off pdf
 #' @export
 checkRSetStructure <- function(object, plotDist=FALSE, result.dir=tempdir()) {
     # Make directory to store results if it doesn't exist
     if(!file.exists(result.dir) & plotDist) { dir.create(result.dir, showWarnings=FALSE, recursive=TRUE) }
-    
+
     #####
     # Checking molecularProfiles
     #####
@@ -282,7 +282,7 @@ checkRSetStructure <- function(object, plotDist=FALSE, result.dir=tempdir()) {
     for( i in seq_along(molecularProfilesSlot(object))) {
       profile <- molecularProfilesSlot(object)[[i]]
       nn <- names(molecularProfilesSlot(object))[i]
-      
+
       # Testing plot rendering for rna and rnaseq
       if((S4Vectors::metadata(profile)$annotation == "rna" | S4Vectors::metadata(profile)$annotation == "rnaseq") & plotDist)
       {
@@ -290,8 +290,8 @@ checkRSetStructure <- function(object, plotDist=FALSE, result.dir=tempdir()) {
         hist(assays(profile)[[1]], breaks = 100)
         dev.off()
       }
-      
-      
+
+
       ## Test if sample and feature annotations dimensions match the assay
       warning(ifelse(nrow(rowData(profile)) != nrow(assays(profile)[[1]]),
                      sprintf("%s: number of features in fData is different from
@@ -305,16 +305,16 @@ checkRSetStructure <- function(object, plotDist=FALSE, result.dir=tempdir()) {
                      sprintf("%s: colData dimension is OK", nn)
       )
       )
-      
-      
+
+
       # Checking sample metadata for required columns
-      warning(ifelse("cellid" %in% colnames(colData(profile)), "",
+      warning(ifelse("sampleid" %in% colnames(colData(profile)), "",
                      sprintf("%s: cellid does not exist in colData (samples)
                              columns", nn)))
       warning(ifelse("batchid" %in% colnames(colData(profile)), "",
                      sprintf("%s: batchid does not exist in colData (samples)
                              columns", nn)))
-      
+
       # Checking mDataType of the SummarizedExperiment for required columns
       if(S4Vectors::metadata(profile)$annotation == "rna" |
          S4Vectors::metadata(profile)$annotation == "rnaseq")
@@ -326,10 +326,10 @@ checkRSetStructure <- function(object, plotDist=FALSE, result.dir=tempdir()) {
                        sprintf("%s: Symbol does not exist in rowData (features)
                                columns", nn)))
       }
-      
+
       # Check that all cellids from the object are included in molecularProfiles
-      if("cellid" %in% colnames(rowData(profile))) {
-        if(!all(colData(profile)[,"cellid"] %in% rownames(cellInfo(object)))) {
+      if("sampleid" %in% colnames(rowData(profile))) {
+        if(!all(colData(profile)[,"sampleid"] %in% rownames(cellInfo(object)))) {
           warning(sprintf("%s: not all the cell lines in this profile are in
                           cell lines slot", nn))
         }
@@ -337,7 +337,7 @@ checkRSetStructure <- function(object, plotDist=FALSE, result.dir=tempdir()) {
         warning(sprintf("%s: cellid does not exist in colData (samples)", nn))
       }
     }
-    
+
     ###
     # CHECKING CELL
     ###
@@ -360,7 +360,7 @@ checkRSetStructure <- function(object, plotDist=FALSE, result.dir=tempdir()) {
     } else {
       warning("tissueid does not exist in cell slot")
     }
-    
+
     if("unique.cellid" %in% colnames(curation(object)$cell)) {
       if(length(intersect(curation(object)$cell$unique.cellid, rownames(cellInfo(object)))) != nrow(cellInfo(object))) {
         message("rownames of cell slot should be curated cell ids")
@@ -368,15 +368,15 @@ checkRSetStructure <- function(object, plotDist=FALSE, result.dir=tempdir()) {
     } else {
       message("unique.cellid which is curated cell id across data set should be a column of cell curation slot")
     }
-    
+
     if(length(intersect(rownames(curation(object)$cell), rownames(cellInfo(object)))) != nrow(cellInfo(object))) {
       message("rownames of curation cell slot should be the same as cell slot (curated cell ids)")
     }
-    
+
     if(length(intersect(rownames(curation(object)$cell), rownames(cellInfo(object)))) != nrow(cellInfo(object))) {
       message("rownames of curation radiation slot should be the same as radiation slot (curated radiation ids)")
     }
-    
+
     if(!is(cellInfo(object), "data.frame")) {
       warning("cell slot class type should be dataframe")
     }
@@ -388,14 +388,14 @@ checkRSetStructure <- function(object, plotDist=FALSE, result.dir=tempdir()) {
       if(!is(sensitivityInfo(object), "data.frame")) {
         warning("sensitivity info slot class type should be dataframe")
       }
-      if("cellid" %in% colnames(sensitivityInfo(object))) {
-        if(!all(sensitivityInfo(object)[,"cellid"] %in% rownames(cellInfo(object)))) {
+      if("sampleid" %in% colnames(sensitivityInfo(object))) {
+        if(!all(sensitivityInfo(object)[,"sampleid"] %in% rownames(cellInfo(object)))) {
           warning("not all the cell lines in sensitivity data are in cell slot")
         }
       }else {
         warning("cellid does not exist in sensitivity info")
       }
-      
+
       ###
       # CHECKING RADIATION
       ###
@@ -408,7 +408,7 @@ checkRSetStructure <- function(object, plotDist=FALSE, result.dir=tempdir()) {
       }else {
         warning("radiation.type does not exist in sensitivity info")
       }
-      
+
       if(any(!is.na(sensitivityRaw(object)))) {
         if(!all(dimnames(sensitivityRaw(object))[[1]] %in% rownames(sensitivityInfo(object)))) {
           warning("For some experiments there is raw sensitivity data but no experimet information in sensitivity info")
@@ -437,30 +437,8 @@ checkRSetStructure <- function(object, plotDist=FALSE, result.dir=tempdir()) {
 #'
 #' @export
 setMethod("show", signature=signature(object="RadioSet"),
-    function(object) {
-        cat("Name: ", name(object), "\n")
-        cat("Date Created: ", dateCreated(object), "\n")
-    cat("Number of cell lines: ", nrow(cellInfo(object)), "\n")
-    cat("Number of radiation types: ", nrow(radiationInfo(object)), "\n")
-        if("dna" %in% names(molecularProfilesSlot(object))){
-          cat("DNA: \n");cat("\tDim: ", dim(
-            molecularProfiles(object, mDataType="dna")), "\n")}
-      if("rna" %in% names(molecularProfilesSlot(object))){cat("RNA: \n");
-        cat("\tDim: ", dim(molecularProfiles(object, mDataType="rna")), "\n")}
-      if("rnaseq" %in% names(molecularProfilesSlot(object))){cat("RNASeq: \n");
-        cat("\tDim: ", dim(molecularProfiles(object, mDataType="rnaseq")),
-            "\n")}
-      if("snp" %in% names(molecularProfilesSlot(object))){cat("SNP: \n");
-        cat("\tDim: ", dim(molecularProfiles(object, mDataType="snp")), "\n")}
-      if("cnv" %in% names(molecularProfilesSlot(object))){cat("CNV: \n");
-        cat("\tDim: ", dim(molecularProfiles(object, mDataType="cnv")), "\n")}
-        cat("Drug pertubation: \n")
-        cat("\tPlease look at pertNumber(rSet) to determine number of
-            experiments for each radiation-cell combination.\n")
-        cat("Drug sensitivity: \n")
-        cat("\tNumber of Experiments: ",nrow(sensitivityInfo(object)),"\n")
-        cat("\tPlease look at sensNumber(rSet) to determine number of
-            experiments for each radiation-cell combination.\n")
+      function(object) {
+    callNextMethod(object)
 })
 
 #' Get the dimensions of a RadioSet

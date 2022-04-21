@@ -105,7 +105,7 @@ setMethod('summarizeSensitivityProfiles',
 
   pp <- sensitivityInfo(object)
   ##FIXME: deal with duplicated rownames!
-  ppRows <- which(pp$cellid %in% cell.lines & pp$radiation.type %in% radTypes)
+  ppRows <- which(pp$sampleid %in% cell.lines & pp$radiation.type %in% radTypes)
   if(sensitivity.measure != "max.conc") {
     dd <- sensitivityProfiles(object)
   } else {
@@ -123,7 +123,7 @@ setMethod('summarizeSensitivityProfiles',
   rownames(result) <- radTypes
   colnames(result) <- cell.lines
 
-  pp_dd <- cbind(pp[,c("cellid", "radiation.type")],
+  pp_dd <- cbind(pp[,c("sampleid", "radiation.type")],
                  "sensitivity.measure"=dd[, sensitivity.measure])
 
   summary.function <- function(x) {
@@ -151,7 +151,7 @@ setMethod('summarizeSensitivityProfiles',
         })
   }
 
-  pp_dd <- pp_dd[pp_dd[,"cellid"]%in%cell.lines &
+  pp_dd <- pp_dd[pp_dd[,"sampleid"]%in%cell.lines &
                    pp_dd[,"radiation.type"]%in%radTypes,]
 
   tt <- reshape2::acast(pp_dd, radiation.type~cellid,

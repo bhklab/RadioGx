@@ -176,13 +176,13 @@ radSensitivitySig <- function(rSet,
 
     }
 
-    drugpheno.all <- lapply(drugpheno.all, function(x) {x[phenoInfo(rSet, mDataType)[ ,"cellid"], , drop = FALSE]})
+    drugpheno.all <- lapply(drugpheno.all, function(x) {x[phenoInfo(rSet, mDataType)[ ,"sampleid"], , drop = FALSE]})
 
-    type <- as.factor(cellInfo(rSet)[phenoInfo(rSet, mDataType)[ ,"cellid"], "tissueid"])
+    type <- as.factor(cellInfo(rSet)[phenoInfo(rSet, mDataType)[ ,"sampleid"], "tissueid"])
     batch <- phenoInfo(rSet, mDataType)[, "batchid"]
     batch[!is.na(batch) & batch == "NA"] <- NA
     batch <- as.factor(batch)
-    names(batch) <- phenoInfo(rSet, mDataType)[ , "cellid"]
+    names(batch) <- phenoInfo(rSet, mDataType)[ , "sampleid"]
     batch <- batch[rownames(drugpheno.all[[1]])]
     if (verbose) {
       message("Computing radiation sensitivity signatures...")
@@ -226,4 +226,3 @@ radSensitivitySig <- function(rSet,
 
     return(drug.sensitivity)
   }
-

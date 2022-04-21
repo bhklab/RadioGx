@@ -56,12 +56,20 @@ availableRSets <- function(saveDir=tempdir(), fileName="availableRadioSets.csv",
 #' @param rSetFileName \code{character} string, the file name to save the dataset under
 #' @param verbose \code{bool} Should status messages be printed during download.
 #'   Defaults to TRUE.
+#' @param timeout `numeric(1)` How long to wait before erroring due to timeout,
+#' in seconds. Default it 600s (10 minutes).
 #'
 #' @return A rSet object with the dataset, downloaded from our server
 #'
 #' @export
 #' @import downloader
-downloadRSet <- function(name, saveDir=tempdir(), rSetFileName=NULL, verbose=TRUE) {
+downloadRSet <- function(name, saveDir=tempdir(), rSetFileName=NULL,
+        verbose=TRUE, timeout=600) {
+
+    # change the download timeout since the files are big
+    opts <- options()
+    options(timeout=timeout)
+    on.exit(options(opts))
 
     if (missing(saveDir)) {message("Downloading to temporary folder... Use saveDir parameter to save to a specific path")}
     rSetTable <- availableRSets(saveDir = saveDir, verbose=FALSE)
@@ -69,7 +77,7 @@ downloadRSet <- function(name, saveDir=tempdir(), rSetFileName=NULL, verbose=TRU
     whichx <- match(name, rSetTable[, 1])
     if (is.na(whichx)) {
         stop('Unknown Dataset. Please use the availableRSets() function for the
-         table of available RadicoSets.')
+            table of available RadicoSets.')
     }
 
     if (!file.exists(saveDir)) {
@@ -81,11 +89,12 @@ downloadRSet <- function(name, saveDir=tempdir(), rSetFileName=NULL, verbose=TRU
     }
     if (!file.exists(file.path(saveDir, rSetFileName))) {
         downloader::download(url = as.character(rSetTable[whichx, "URL"]),
-                             destfile = file.path(saveDir, rSetFileName),
-                             quiet = !verbose, mode='wb')
+            destfile = file.path(saveDir, rSetFileName), quiet = !verbose,
+            mode='wb')
     }
 
     rSet <- readRDS(file.path(saveDir, rSetFileName))
+    rSet <- updateObject(rSet)
 
     return(rSet)
 }
