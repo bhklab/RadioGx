@@ -1,34 +1,34 @@
 Package: RadioGx
 Type: Package
-Title: Analysis of Large-Scale Radio-Genomic Data 
-Version: 1.5.0
-Date: 2021-05-13
+Title: Analysis of Large-Scale Radio-Genomic Data
+Version: 1.99.0
+Date: 2022-04-21
 Authors@R: c(
-  person("Venkata","Manem", email = "mail2mvskumar@gmail.com", 
+  person("Venkata","Manem", email = "mail2mvskumar@gmail.com",
     role = c("aut")),
-  person("Petr","Smirnov", email = "petr.smirnov@uhnresearch.ca", 
+  person("Petr","Smirnov", email = "petr.smirnov@uhnresearch.ca",
     role = c("aut")),
-  person("Ian","Smith", email = "ianc.smith@mail.utoronto.ca", 
+  person("Ian","Smith", email = "ianc.smith@mail.utoronto.ca",
     role = c("aut")),
-  person("Meghan","Lambie", email = "megan.lambie@mail.utoronto.ca", 
+  person("Meghan","Lambie", email = "megan.lambie@mail.utoronto.ca",
     role = c("aut")),
   person("Christopher","Eeles", email = "christopher.eeles@uhnresearch.ca",
     role = c("aut")),
-  person("Scott", "Bratman", email = "scott.bratman@rmp.uhn.ca", 
+  person("Scott", "Bratman", email = "scott.bratman@rmp.uhn.ca",
     role = c("aut")),
   person("Benjamin","Haibe-Kains", email = "benjamin.haibe.kains@utoronto.ca",
     role = c("aut","cre"))
-  )  
+  )
 Description: Computational tool box for radio-genomic analysis which integrates
     radio-response data, radio-biological modelling and comprehensive cell line
     annotations for hundreds of cancer cell lines. The 'RadioSet' class enables
     creation and manipulation of standardized datasets including information
-    about cancer cells lines, radio-response assays and dose-response indicators. 
-    Included methods allow fitting and plotting dose-response data using 
+    about cancer cells lines, radio-response assays and dose-response indicators.
+    Included methods allow fitting and plotting dose-response data using
     established radio-biological models along with quality control to validate
-    results. Additional functions related to fitting and plotting dose response 
+    results. Additional functions related to fitting and plotting dose response
     curves, quantifying statistical correlation and calculating area under the
-    curve (AUC) or survival fraction (SF) are included. For more details please 
+    curve (AUC) or survival fraction (SF) are included. For more details please
     see the included documentation, references, as well as:
     Manem, V. et al (2018) <doi:10.1101/449793>.
 License: GPL-3
@@ -39,14 +39,16 @@ LazyData: true
 Depends: R (>= 4.1), CoreGx
 Imports:
     SummarizedExperiment,
+    BiocGenerics,
+    data.table,
     S4Vectors,
     Biobase,
     parallel,
     BiocParallel,
-    RColorBrewer, 
-    caTools, 
-    magicaxis, 
-    methods, 
+    RColorBrewer,
+    caTools,
+    magicaxis,
+    methods,
     reshape2,
     scales,
     grDevices,
@@ -62,6 +64,32 @@ Suggests:
     knitr,
     pander,
     markdown
-biocViews: Software, Pharmacogenetics, QualityControl, Survival, 
+biocViews: Software, Pharmacogenetics, QualityControl, Survival,
     Pharmacogenomics, Classification
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
+Collate:
+    'OERmodel.R'
+    'RadioSet-class.R'
+    'RadioSet-accessors.R'
+    'computeAUC.R'
+    'computeD10.R'
+    'computeSF2.R'
+    'computeSensitivity.R'
+    'datasets.R'
+    'doseResponseCurve.R'
+    'downloadRSet.R'
+    'geneDrugSensitivity.R'
+    'linearQuadratic.R'
+    'linearQuadraticInv.R'
+    'linearQuadraticModel.R'
+    'makeGrittyGuess.R'
+    'plotCurve.R'
+    'radSensitivitySig.R'
+    'rankGeneRadSensitivity.R'
+    'signatureClass.R'
+    'subsetTo-methods.R'
+    'summarizeMolecularProfiles-methods.R'
+    'summarizeSensitivityProfiles-methods.R'
+    'updateObject-methods.R'
+    'utilities.R'
+    'zzz.R'

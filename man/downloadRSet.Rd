@@ -4,7 +4,13 @@
 \alias{downloadRSet}
 \title{Download a RadioSet object}
 \usage{
-downloadRSet(name, saveDir = tempdir(), rSetFileName = NULL, verbose = TRUE)
+downloadRSet(
+  name,
+  saveDir = tempdir(),
+  rSetFileName = NULL,
+  verbose = TRUE,
+  timeout = 600
+)
 }
 \arguments{
 \item{name}{\code{Character} string, the name of the PhamracoSet to download.}
@@ -17,6 +23,9 @@ directory if it does not exist.}
 
 \item{verbose}{\code{bool} Should status messages be printed during download.
 Defaults to TRUE.}
+
+\item{timeout}{`numeric(1)` How long to wait before erroring due to timeout,
+in seconds. Default it 600s (10 minutes).}
 }
 \value{
 A rSet object with the dataset, downloaded from our server
@@ -29,7 +38,7 @@ a PharacoSet class, enabling use with all the analysis tools provided in
 }
 \examples{
 if (interactive()) {
-drugMatrix_rat <- downloadRSet("Cleveland")
+cleveland <- downloadRSet("Cleveland")
 }
 
 }

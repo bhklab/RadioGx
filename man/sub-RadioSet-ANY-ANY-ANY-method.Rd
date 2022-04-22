@@ -7,19 +7,24 @@
 \S4method{[}{RadioSet,ANY,ANY,ANY}(x, i, j, ..., drop = FALSE)
 }
 \arguments{
-\item{x}{a \code{RadioSet} object}
+\item{x}{object}
 
-\item{i}{Cell lines to keep in RSet}
+\item{i}{Cell lines to keep in object}
 
-\item{j}{Drugs to keep in RSet}
+\item{j}{Drugs to keep in object}
 
 \item{...}{further arguments}
 
 \item{drop}{A boolean flag of whether to drop single dimensions or not}
 }
 \value{
-Returns the subsetted RSet
+Returns the subsetted object
 }
 \description{
 `[`
+}
+\examples{
+data(clevelandSmall)
+clevelandSmall[sampleNames(clevelandSmall)[1], treatmentNames(clevelandSmall)[1]]
+
 }

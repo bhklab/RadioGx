@@ -1,7 +1,7 @@
 ---
 title: 'RadioGx: An R Package for Analysis of Large Radiogenomic Datasets'
 
-author:  
+author:
 - name: Venkata Manem
 - name: Petr Smirnov
 - name: Ian Smith
@@ -26,11 +26,11 @@ knitr::opts_chunk$set(echo = TRUE)
 The RadioGx package implements a standardized data structure for storing highly
 curated results from Radiogenomic experiments. Such experiments investigate the
 relationship between different cancer cell lines and their response to various
-doses and types of ionizing radiation. The package is intended for use in 
+doses and types of ionizing radiation. The package is intended for use in
 conjunction with the PharmacoGx package which provides a similar data structure
 and API for storing highly curated Pharmacogenomic experiments.
 
-On top of the S4 RadioSet class, this package also provides a standard API 
+On top of the S4 RadioSet class, this package also provides a standard API
 to access functions related to fitting dose response curves, calculating survival
 fraction and fitting linear-quadratic models. Additional functions for calculating
 the correlation between radiation dose and radiation response allow
@@ -43,8 +43,8 @@ as well as prospectively in new **in vitro** and **in vivo** models of cancer.
 
 # Creating a RadioSet
 
-Documentation for creating a RadioSet object will be added to this package 
-in the coming months. In the mean time consult the 'Creating A PharmacoSet' 
+Documentation for creating a RadioSet object will be added to this package
+in the coming months. In the mean time consult the 'Creating A PharmacoSet'
 vignette from the PharmacoGx Bioconductor package for an example of creating
 a related data structure.
 
@@ -233,11 +233,11 @@ after each dose in the experimental series.
 
 ```{r cellline_names}
 # Find a cancer cell-line of interest
-head(sensitivityInfo(clevelandSmall)$cellid)
+head(sensitivityInfo(clevelandSmall)$sampleid)
 ```
 
 ```{r selecting_cancer_cell_line}
-cancerCellLine <- sensitivityInfo(clevelandSmall)$cellid[1]
+cancerCellLine <- sensitivityInfo(clevelandSmall)$sampleid[1]
 print(cancerCellLine)
 ```
 
@@ -320,7 +320,7 @@ cell-lines can be explored using the `cellInfo` function.
 ```{r plotting_rad_dose_resp_rSet, fig.small=TRUE}
 doseResponseCurve(
   rSets=list(clevelandSmall),
-  cellline=cellInfo(clevelandSmall)$cellid[5]
+  cellline=cellInfo(clevelandSmall)$sampleid[5]
 )
 ```
 

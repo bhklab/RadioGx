@@ -9,20 +9,20 @@ checkRSetStructure(object, plotDist = FALSE, result.dir = tempdir())
 \arguments{
 \item{object}{A \code{RadioSet} object}
 
-\item{plotDist}{Should the function also plot the distribution of molecular 
+\item{plotDist}{Should the function also plot the distribution of molecular
 data?}
 
-\item{result.dir}{The path to the directory for saving the plots as a string, 
+\item{result.dir}{The path to the directory for saving the plots as a string,
 defaults to `tempdir()``}
 }
 \value{
-Prints out messages whenever describing the errors found in the 
+Prints out messages whenever describing the errors found in the
     structure of the pset object passed in.
 }
 \description{
 This function checks the structure of a PharamcoSet, ensuring that the
 correct annotations are in place and all the required slots are filled so
-that matching of cells and radiations can be properly done across different 
+that matching of cells and radiations can be properly done across different
 types of data and with other studies.
 }
 \examples{

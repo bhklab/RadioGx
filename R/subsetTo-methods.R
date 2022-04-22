@@ -1,20 +1,29 @@
-#' `[`
+#' @include RadioSet-accessors.R
+NULL
+
+#'`[`
 #'
-#' @param x a \code{RadioSet} object
-#' @param i Cell lines to keep in RSet
-#' @param j Drugs to keep in RSet
+#' @examples
+#' data(clevelandSmall)
+#' clevelandSmall[sampleNames(clevelandSmall)[1], treatmentNames(clevelandSmall)[1]]
+#'
+#' @param x object
+#' @param i Cell lines to keep in object
+#' @param j Drugs to keep in object
 #' @param ... further arguments
 #' @param drop A boolean flag of whether to drop single dimensions or not
-#' @return Returns the subsetted RSet
+#'
+#' @return Returns the subsetted object
+#'
 #' @export
 setMethod(`[`, "RadioSet", function(x, i, j, ..., drop = FALSE) {
-    if(is.character(i)&&is.character(j)){
+    if (is.character(i)&&is.character(j)) {
         return(subsetTo(x, cells=i, radiations=j,  molecular.data.cells=i))
     }
     else if (is.numeric(i) && is.numeric(j) && (as.integer(i)==i) &&
             (as.integer(j)==j)){
-        return(subsetTo(x, cells=cellNames(x)[i], radiations=radiationTypes(x)[j],
-                        molecular.data.cells=cellNames(x)[i]))
+        return(subsetTo(x, cells=sampleNames(x)[i], radiations=treatmentNames(x)[j],
+                        molecular.data.cells=sampleNames(x)[i]))
     }
 })
 
@@ -32,8 +41,8 @@ setMethod(`[`, "RadioSet", function(x, i, j, ..., drop = FALSE) {
 #' datasets.
 #'
 #' @examples
-#' clevelandRadiationTypes  <- radiationTypes(clevelandSmall)
-#' clevelandCells <- cellNames(clevelandSmall)
+#' clevelandRadiationTypes  <- treatmentNames(clevelandSmall)
+#' clevelandCells <- sampleNames(clevelandSmall)
 #' RSet <- subsetTo(clevelandSmall, radiationTypes = clevelandRadiationTypes[1],
 #'   cells = clevelandCells[1])
 #' RSet
@@ -58,7 +67,7 @@ setMethod(`[`, "RadioSet", function(x, i, j, ..., drop = FALSE) {
 setMethod("subsetTo",
           signature(object="RadioSet"),
           function(object , cells=NULL, radiationTypes=NULL, molecular.data.cells=NULL, keep.controls=TRUE, ...){
-              .subsetToRadioSet(object, cells, radiationTypes, 
+              .subsetToRadioSet(object, cells, radiationTypes,
               molecular.data.cells, keep.controls, ...)
           })
 
@@ -85,7 +94,7 @@ setMethod("subsetTo",
                      ...)
 {
     drop=FALSE
-    
+
     adArgs = list(...)
     if ("exps" %in% names(adArgs)) {
         exps <- adArgs[["exps"]]
@@ -102,64 +111,64 @@ setMethod("subsetTo",
     if(!missing(cells)){
         cells <- unique(cells)
     }
-    
+
     if(!missing(radiationTypes)){
         radiationTypes <- unique(radiationTypes)
     }
-    
+
     if(!missing(molecular.data.cells)){
         molecular.data.cells <- unique(molecular.data.cells)
     }
-    
+
     ### TODO:: implement strict subsetting at this level!!!!
-    
+
     ### the function missing does not work as expected in the context below,
     ### because the arguments are passed to the anonymous
     ### function in lapply, so it does not recognize them as missing
-    
-    molecularProfilesSlot(object) <- 
-        lapply(molecularProfilesSlot(object), 
-            function(SE, cells, radiationTypes, molecular.data.cells) {                          
-                molecular.data.type <- 
+
+    molecularProfilesSlot(object) <-
+        lapply(molecularProfilesSlot(object),
+            function(SE, cells, radiationTypes, molecular.data.cells) {
+                molecular.data.type <-
                     if (length(grep("rna", S4Vectors::metadata(SE)$annotation) > 0))
                         "rna"
                     else
                         S4Vectors::metadata(SE)$annotation
                 if (length(grep(molecular.data.type, names(molecular.data.cells))) > 0)
                     cells <- molecular.data.cells[[molecular.data.type]]
-                
+
                 column_indices <- NULL
-                
+
                 if (length(cells)==0 && length(radiationTypes) == 0) {
                     column_indices <- seq_len(ncol(SE)) # This still returns the number of samples in an SE, but without a label
                 }
                 if (length(cells) == 0 && datasetType(object) == "sensitivity") {
                     column_indices <- seq_len(ncol(SE))
                 }
-                
+
                 cell_line_index <- NULL
                 if(length(cells)!=0) {
-                    if (!all(cells %in% cellNames(object))) {
+                    if (!all(cells %in% sampleNames(object))) {
                         stop("Some of the cell names passed to function did not match to names in the RadoSet. Please ensure you are using cell names as returned by the cellNames function")
                     }
-                    cell_line_index <- which(SummarizedExperiment::colData(SE)[["cellid"]] %in% cells)
+                    cell_line_index <- which(SummarizedExperiment::colData(SE)[["sampleid"]] %in% cells)
                 }
                 radiationTypes_index <- NULL
                 if(datasetType(object)=="perturbation" || datasetType(object)=="both"){
                     if(length(radiationTypes) != 0) {
-                        if (!all(radiationTypes %in% radiationTypes(object))) {
+                        if (!all(radiationTypes %in% treatmentNames(object))) {
                             stop("Some of the radiation types passed to function did not match
                to names in the RadioSet. Please ensure you are using radiation
                names as returned by the radiations function")
                                                         }
-                                                        radiationTypes_index <- which(SummarizedExperiment::colData(SE)[["radiation.type"]] %in% radiationTypes)
+                                                        radiationTypes_index <- which(SummarizedExperiment::colData(SE)[["treatmentid"]] %in% radiationTypes)
                                                         if(keep.controls) {
                                                             control_indices <- which(SummarizedExperiment::colData(SE)[["xptype"]]=="control")
                                                             radiationTypes_index <- c(radiationTypes_index, control_indices)
                                                         }
                                                     }
                                                 }
-                                                
+
                                                 if(length(radiationTypes_index) != 0 && length(cell_line_index) != 0) {
                                                     if(length(intersect(radiationTypes_index, cell_line_index)) == 0) {
                                                         stop("This Drug - Cell Line combination was not tested together.")
@@ -173,14 +182,14 @@ setMethod("subsetTo",
                                                         column_indices <- cell_line_index
                                                     }
                                                 }
-                                                
+
                                                 row_indices <- seq_len(nrow(SummarizedExperiment::assay(SE, 1)))
-                                                
+
                                                 SE <- SE[row_indices, column_indices]
                                                 return(SE)
-                                                
+
                                             }, cells=cells, radiationTypes=radiationTypes, molecular.data.cells=molecular.data.cells)
-    
+
     if ((datasetType(object) == "sensitivity" | datasetType(object) == "both") & length(exps) != 0) {
         sensitivityInfo(object) <- sensitivityInfo(object)[exps, , drop=drop]
         rownames(sensitivityInfo(object)) <- names(exps)
@@ -190,13 +199,13 @@ setMethod("subsetTo",
         }
         sensitivityProfiles(object) <- sensitivityProfiles(object)[exps, , drop=drop]
         rownames(sensitivityProfiles(object)) <- names(exps)
-        
+
         sensNumber(object) <- .summarizeSensitivityNumbers(object)
     }
     else if ((datasetType(object) == "sensitivity" | datasetType(object) == "both") & (length(radiationTypes) != 0 | length(cells) != 0)) {
-        
-        radiationTypes_index <- which (sensitivityInfo(object)[, "radiation.type"] %in% radiationTypes)
-        cell_line_index <- which (sensitivityInfo(object)[,"cellid"] %in% cells)
+
+        radiationTypes_index <- which (sensitivityInfo(object)[, "treatmentid"] %in% radiationTypes)
+        cell_line_index <- which (sensitivityInfo(object)[,"sampleid"] %in% cells)
         if (length(radiationTypes_index) !=0 & length(cell_line_index) !=0 ) {
             if (length(intersect(radiationTypes_index, cell_line_index)) == 0) {
                 stop("This Drug - Cell Line combination was not tested together.")
@@ -216,7 +225,7 @@ setMethod("subsetTo",
         sensitivitySlot(object)[names(sensitivitySlot(object))[names(sensitivitySlot(object))!="n"]] <-
             lapply(sensitivitySlot(object)[names(sensitivitySlot(object))[names(sensitivitySlot(object))!="n"]],
                    function(x,i, drop){
-                       
+
                        if (length(dim(x))==2){
                            return(x[i,,drop=drop])
                        }
@@ -225,25 +234,25 @@ setMethod("subsetTo",
                        }
                    }, i=row_indices, drop=drop)
     }
-    
+
     if (length(radiationTypes)==0) {
         if(datasetType(object) == "sensitivity" | datasetType(object) == "both"){
-            radiationTypes <- unique(sensitivityInfo(object)[["radiation.type"]])
+            radiationTypes <- unique(sensitivityInfo(object)[["treatmentid"]])
         }
         if(datasetType(object) == "perturbation" | datasetType(object) == "both"){
-            radiationTypes <- union(radiationTypes, na.omit(.unionList(lapply(molecularProfilesSlot(object), function(SE){unique(colData(SE)[["radiation.type"]])}))))
+            radiationTypes <- union(radiationTypes, na.omit(.unionList(lapply(molecularProfilesSlot(object), function(SE){unique(colData(SE)[["treatmentid"]])}))))
         }
     }
     if (length(cells)==0) {
-        cells <- union(cells, na.omit(.unionList(lapply(molecularProfilesSlot(object), function(SE){unique(colData(SE)[["cellid"]])}))))
+        cells <- union(cells, na.omit(.unionList(lapply(molecularProfilesSlot(object), function(SE){unique(colData(SE)[["sampleid"]])}))))
         if (datasetType(object) =="sensitivity" | datasetType(object) == "both"){
-            cells <- union(cells, sensitivityInfo(object)[["cellid"]])
+            cells <- union(cells, sensitivityInfo(object)[["sampleid"]])
         }
     }
-    radiationInfo(object) <- radiationInfo(object)[radiationTypes , , drop=drop]
-    cellInfo(object) <- cellInfo(object)[cells , , drop=drop]
+    treatmentInfo(object) <- treatmentInfo(object)[radiationTypes , , drop=drop]
+    sampleInfo(object) <- sampleInfo(object)[cells , , drop=drop]
     curation(object)$radiation <- curation(object)$radiation[radiationTypes , , drop=drop]
-    curation(object)$cell <- curation(object)$cell[cells , , drop=drop]
+    curation(object)$sample <- curation(object)$sample[cells , , drop=drop]
     curation(object)$tissue <- curation(object)$tissue[cells , , drop=drop]
     if (datasetType(object) == "sensitivity" | datasetType(object) == "both"  & length(exps) == 0) {
         sensNumber(object) <- sensNumber(object)[cells, radiationTypes , drop=drop]

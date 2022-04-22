@@ -54,7 +54,7 @@ perturbation dataset.
 \examples{
 data(clevelandSmall)
 clevelandSmall <- summarizeMolecularProfiles(clevelandSmall,
-                    mDataType = "rna", cell.lines=cellNames(clevelandSmall),
+                    mDataType = "rna", cell.lines=sampleNames(clevelandSmall),
                     summary.stat = 'median', fill.missing = TRUE, verbose=TRUE)
 clevelandSmall
 

@@ -154,7 +154,7 @@ function(rad.type = "radiation",
     doses <- list(); responses <- list(); legend.values <- list(); j <- 0; rSetNames <- list()
     if(!missing(rSets)){
       for(i in seq_along(rSets)) {
-        exp_i <- which(sensitivityInfo(rSets[[i]])[ ,"cellid"] == cellline & sensitivityInfo(rSets[[i]])[ ,"radiation.type"] == rad.type)
+        exp_i <- which(sensitivityInfo(rSets[[i]])[ ,"sampleid"] == cellline & sensitivityInfo(rSets[[i]])[ ,"treatmentid"] == rad.type)
         if(length(exp_i) > 0) {
           if (summarize.replicates) {
             rSetNames[[i]] <- name(rSets[[i]])
@@ -212,7 +212,7 @@ function(rad.type = "radiation",
                 }
               } else {
                 tt <- unlist(strsplit(rownames(sensitivityInfo(rSets[[i]]))[exp], split="_"))
-                if (tt[1] == "radiation.type") {
+                if (tt[1] == "treatmentid") {
                   legend.values[[j]] <- tt[2]
                 }else{
                   legend.values[[j]] <- rownames(sensitivityInfo(rSets[[i]]))[exp]
@@ -315,4 +315,3 @@ function(rad.type = "radiation",
     legend(legend.loc, legend=legends, col=legends.col, bty="n", cex=cex, pch=c(15,15))
     return(invisible(NULL))
   }
-
