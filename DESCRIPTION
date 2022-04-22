@@ -67,7 +67,7 @@ Suggests:
 biocViews: Software, Pharmacogenetics, QualityControl, Survival,
     Pharmacogenomics, Classification
 RoxygenNote: 7.1.2
-Collate: 
+Collate:
     'OERmodel.R'
     'RadioSet-class.R'
     'RadioSet-accessors.R'
