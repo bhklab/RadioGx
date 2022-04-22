@@ -164,7 +164,8 @@ setReplaceMethod('name', signature("RadioSet"), function(object, value) {
 #' @rdname RadioSet-accessors
 #' @eval CoreGx:::.docs_CoreSet_get_sampleInfo(class_=.local_class,
 #' sample_=.local_sample)
-#' @importFrom CoreGx sampleInfo
+#' @importMethodsFrom CoreGx sampleInfo
+#' @importFrom CoreGx cellInfo
 #' @export
 setMethod("sampleInfo", "RadioSet", function(object) {
     callNextMethod(object)
@@ -174,6 +175,7 @@ setMethod("sampleInfo", "RadioSet", function(object) {
 #' @rdname RadioSet-accessors
 #' @eval CoreGx:::.docs_CoreSet_set_sampleInfo(class_=.local_class,
 #' data_=.local_data, sample_="cell")
+#' @importMethodsFrom CoreGx sampleInfo<-
 #' @importFrom CoreGx cellInfo<-
 #' @export
 setReplaceMethod("sampleInfo", signature(object="RadioSet",

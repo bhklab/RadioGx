@@ -60,31 +60,8 @@
 #' methods. For a much more detailed instruction on creating RadioSets, please
 #' see the "CreatingRadioSet" vignette.
 #'
-##TODO:: Figure out how to inherit constructor parameters?
-#' @param name A \code{character} string detailing the name of the dataset
-#' @param molecularProfiles A \code{list} of ExpressionSet objects containing
-#'   molecular profiles
-#' @param cell A \code{data.frame} containg the annotations for all the cell
-#'   lines profiled in the data set, across all data types
-#' @param radiation A \code{data.frame} containg the annotations for all the radiations
-#'   profiled in the data set, across all data types
-#' @param sensitivityInfo A \code{data.frame} containing the information for the
-#'   sensitivity experiments
-#' @param sensitivityRaw A 3 Dimensional \code{array} contaning the raw radiation
-#'   dose – response data for the sensitivity experiments
-#' @param sensitivityProfiles \code{data.frame} containing radiation sensitivity profile
-#'   statistics such as IC50 and AUC
-#' @param sensitivityN,perturbationN A \code{data.frame} summarizing the
-#'   available sensitivity/perturbation data
-#' @param curationCell,curationTissue A \code{data.frame} mapping
-#'   the names for radiations, cells and tissues used in the data set to universal
-#'   identifiers used between different RadioSet objects
-#' @param datasetType A \code{character} string of 'sensitivity',
-#'   'perturbation', or both detailing what type of data can be found in the
-#'   RadioSet, for proper processing of the data
-#' @param verify \code{boolean} Should the function verify the RadioSet and
-#'   print out any errors it finds after construction?
-
+#' @inheritParam CoreGx::CoreSet
+#'
 #' @return An object of class RadioSet
 #'
 #' @import methods
@@ -109,67 +86,40 @@ RadioSet <-  function(name,
                       datasetType=c("sensitivity", "perturbation", "both"),
                       verify = TRUE)
 {
-    datasetType <- match.arg(datasetType)
+    cSet <- CoreGx::CoreSet(
+        name=name,
+        sample=sample,
+        treatment=treatment,
+        sensitivityInfo=sensitivityInfo,
+        sensitivityRaw=sensitivityRaw,
+        sensitivityProfiles=sensitivityProfiles,
+        sensitivityN=sensitivityN,
+        perturbationN=perturbationN,
+        curationTreatment=curationTreatment,
+        curationSample=curationSample,
+        curationTissue=curationTissue,
+        datasetType=datasetType,
+        verify=verify
+    )
 
-    annotation <- list()
-    annotation$name <- as.character(name)
-    annotation$dateCreated <- date()
-    annotation$sessionInfo <- sessionInfo()
-    annotation$call <- match.call()
-
-    ## TODO:: If the colnames and rownames are not found below, it will fill with NAs. This is undersirable behaviour.
-    ## TODO:: Determine if I should use SummarizedExperiment construtor here?
-    for (i in seq_along(molecularProfiles)){
-      if (!is(molecularProfiles[[i]], "SummarizedExperiment")) {
-        stop(sprintf("Please provide the %s data as a SummarizedExperiment",
-                     names(molecularProfiles[i])))
-      }else{
-        rowData(molecularProfiles[[i]]) <-
-          rowData(molecularProfiles[[i]])[rownames(assays(molecularProfiles[[i]])[[1]]), , drop=FALSE]
-        colData(molecularProfiles[[i]]) <-
-          colData(molecularProfiles[[i]])[colnames(assays(molecularProfiles[[i]])[[1]]), , drop=FALSE]
-      }
-
-    }
-
-    sensitivity <- list()
-
-    if (!all(rownames(sensitivityInfo) == rownames(sensitivityProfiles) & rownames(sensitivityInfo) == dimnames(sensitivityRaw)[[1]])){
-        stop("Please ensure all the row names match between the sensitivity data.")
-    }
-
-    sensitivity$info <- as.data.frame(sensitivityInfo, stringsAsFactors = FALSE)
-    sensitivity$raw <- sensitivityRaw
-    sensitivity$profiles <- as.data.frame(sensitivityProfiles, stringsAsFactors = FALSE)
-    sensitivity$n <- sensitivityN
-
-    curation <- list()
-    # curation$radiation <- as.data.frame(curationDrug, stringsAsFactors = FALSE)
-    curation$sample <- as.data.frame(curationCell, stringsAsFactors = FALSE)
-    curation$tissue <- as.data.frame(curationTissue, stringsAsFactors = FALSE)
-    ### TODO:: Make sure to fix the curation to check for matching row names to the radiation and sample line matrices!!!!!!
-
-
-    perturbation <- list()
-    perturbation$n <- perturbationN
-    if (datasetType == "perturbation" || datasetType == "both") {
-        perturbation$info <- "The metadata for the perturbation experiments is available for each molecular type by calling the appropriate info function. \n For example, for RNA transcriptome perturbations, the metadata can be accessed using rnaInfo(rSet)."
-    } else {
-        perturbation$info <- "Not a perturbation dataset."
-    }
-
-    rSet  <- .RadioSet(annotation=annotation, molecularProfiles=molecularProfiles,
-      sample=as.data.frame(cell), treatment=as.data.frame(radiation),
-      datasetType=datasetType, sensitivity=sensitivity,
-      perturbation=perturbation, curation=curation)
+    rSet <- .RadioSet(
+        annotation=cSet@annotation,
+        molecularProfiles=cSet@molecularProfiles,
+        sample=cSet@sample,
+        treatment=cSet@treatment,
+        datasetType=cSet@datasetTypes,
+        treatmentResponse=cSet@treatmentResponse,
+        perturbation=cSet@perturbation,
+        curation=cSet@curation
+    )
     if (verify) { checkRSetStructure(rSet)}
-  if(length(sensitivityN) == 0 & datasetType %in% c("sensitivity", "both")) {
-    sensNumber(rSet) <- .summarizeSensitivityNumbers(rSet)
-  }
-    if(length(perturbationN) == 0  & datasetType %in% c("perturbation", "both")) {
-      pertNumber(rSet) <- .summarizePerturbationNumbers(rSet)
+    if(length(sensitivityN) == 0 & datasetType %in% c("sensitivity", "both")) {
+      sensNumber(rSet) <- .summarizeSensitivityNumbers(rSet)
     }
-  return(rSet)
+      if(length(perturbationN) == 0  & datasetType %in% c("perturbation", "both")) {
+        pertNumber(rSet) <- .summarizePerturbationNumbers(rSet)
+      }
+    return(rSet)
 }
 
 

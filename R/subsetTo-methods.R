@@ -1,16 +1,23 @@
 #' @include RadioSet-accessors.R
+NULL
 
-#' `[`
+#'`[`
 #'
-#' @param x a \code{RadioSet} object
-#' @param i Cell lines to keep in RSet
-#' @param j Drugs to keep in RSet
+#' @examples
+#' data(clevelandSmall)
+#' clevelandSmall[sampleNames(clevelandSmall)[1], treatmentNames(clevelandSmall)[1]]
+#'
+#' @param x object
+#' @param i Cell lines to keep in object
+#' @param j Drugs to keep in object
 #' @param ... further arguments
 #' @param drop A boolean flag of whether to drop single dimensions or not
-#' @return Returns the subsetted RSet
+#'
+#' @return Returns the subsetted object
+#'
 #' @export
 setMethod(`[`, "RadioSet", function(x, i, j, ..., drop = FALSE) {
-    if(is.character(i)&&is.character(j)){
+    if (is.character(i)&&is.character(j)) {
         return(subsetTo(x, cells=i, radiations=j,  molecular.data.cells=i))
     }
     else if (is.numeric(i) && is.numeric(j) && (as.integer(i)==i) &&

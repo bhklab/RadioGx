@@ -150,7 +150,7 @@
   if (!assertthat::are_equal(rSet_old@radiation, rSet_new@radiation))
     message("radiation slots are not equal!")
 
-  if (!assertthat::are_equal(rSet_old@sensitivity, sensitivitySlot(rSet_new)))
+  if (!assertthat::are_equal(rSet_old@treatmentResponse, sensitivitySlot(rSet_new)))
     message("sensitivty slots are not equal!")
 
   if (!assertthat::are_equal(rSet_old@datasetType, datasetType(rSet_new)))
