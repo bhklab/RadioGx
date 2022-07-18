@@ -189,7 +189,7 @@ only sensitivity experiments have been included in a `RadioSet`.
 
 ```{r response_data_accessors}
 # Get sensitivity slot
-sens <- sensitivitySlot(clevelandSmall)
+sens <- treatmentResponse(clevelandSmall)
 ```
 
 ```{r }

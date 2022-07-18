@@ -222,8 +222,8 @@ setMethod("subsetTo",
                 }
             }
         }
-        sensitivitySlot(object)[names(sensitivitySlot(object))[names(sensitivitySlot(object))!="n"]] <-
-            lapply(sensitivitySlot(object)[names(sensitivitySlot(object))[names(sensitivitySlot(object))!="n"]],
+        treatmentResponse(object)[names(treatmentResponse(object))[names(treatmentResponse(object))!="n"]] <-
+            lapply(treatmentResponse(object)[names(treatmentResponse(object))[names(treatmentResponse(object))!="n"]],
                    function(x,i, drop){
 
                        if (length(dim(x))==2){

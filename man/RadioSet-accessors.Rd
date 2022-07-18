@@ -58,6 +58,8 @@
 \alias{molecularProfiles}
 \alias{molecularProfiles<-,RadioSet,character,character,matrix-method}
 \alias{molecularProfiles<-,RadioSet,character,missing,matrix-method}
+\alias{molecularProfiles<-,RadioSet,missing,missing,list-method}
+\alias{molecularProfiles<-,RadioSet,missing,missing,MutliAssayExperiment-method}
 \alias{molecularProfiles<-}
 \alias{featureInfo,RadioSet-method}
 \alias{featureInfo}
@@ -97,12 +99,14 @@
 \alias{sensitivityProfiles<-,RadioSet,data.frame-method}
 \alias{sensitivityRaw,RadioSet-method}
 \alias{sensitivityRaw<-,RadioSet,array-method}
-\alias{sensitivitySlot,RadioSet-method}
+\alias{treatmentResponse,RadioSet-method}
+\alias{treatmentResponse}
 \alias{sensitivitySlot}
-\alias{sensitivitySlot<-,RadioSet,list_OR_LongTable-method}
+\alias{treatmentResponse<-,RadioSet,list_OR_LongTable-method}
+\alias{treatmentResponse<-}
+\alias{treamentResponse<-,RadioSet,list-method}
+\alias{treatmentResponse<-,RadioSet,LongTable-method}
 \alias{sensitivitySlot<-}
-\alias{sensitivitySlot<-,RadioSet,list-method}
-\alias{sensitivitySlot<-,RadioSet,LongTable-method}
 \alias{sensNumber,RadioSet-method}
 \alias{sensNumber}
 \alias{sensNumber<-,RadioSet,matrix-method}
@@ -189,9 +193,9 @@ radiationTypes(...) <- value
 
 \S4method{sensitivityRaw}{RadioSet,array}(object) <- value
 
-\S4method{sensitivitySlot}{RadioSet}(object)
+\S4method{treatmentResponse}{RadioSet}(object)
 
-\S4method{sensitivitySlot}{RadioSet,list_OR_LongTable}(object) <- value
+\S4method{treatmentResponse}{RadioSet,list_OR_LongTable}(object) <- value
 
 \S4method{sensNumber}{RadioSet}(object)
 
@@ -336,7 +340,8 @@ or 'both'
 \strong{molecularProfiles}: \code{matrix()} Retrieve an assay in a
 \code{SummarizedExperiment} from the \code{molecularProfiles} slot of a \code{RadioSet}
 object with the specified \code{mDataType}. Valid \code{mDataType} arguments can be
-found with \code{mDataNames(object)}. Arguments:
+found with \code{mDataNames(object)}. Exclude \code{mDataType} and \code{assay} to
+access the entire slot. Arguments:
 \itemize{
 \item assay: Optional \code{character(1)} vector specifying an assay in the
 \code{SummarizedExperiment} of the \code{molecularProfiles} slot of the
@@ -349,7 +354,7 @@ the given \code{mDataType}.
 \strong{molecularProfiles<-}: Update an assay in a \code{SummarizedExperiment} from
 the \code{molecularProfiles} slot of a RadioSet object with the specified
 \code{mDataType}. Valid \code{mDataType} arguments can be found with
-\code{mDataNames(object)}.
+\code{mDataNames(object)}. Omit \code{mDataType} and \code{assay} to update the slot.
 \itemize{
 \item assay: Optional \code{character(1)} vector specifying an assay in the
 \code{SummarizedExperiment} of the \code{molecularProfiles} slot of the
@@ -437,7 +442,7 @@ specified.
 
 \subsection{Methods:}{
 
-\strong{sensitivityInfo}: \code{DataFrame} or \code{data.frame} of sensitivity drug combo
+\strong{sensitivityInfo}: \code{DataFrame} or \code{data.frame} of sensitivity treatment combo
 by sample metadata for the \code{RadioSet} object. When the \code{dimension}
 parameter is used, it allows retrieval of the dimension specific metadata
 from the \code{LongTable} object in \verb{@treatmentResponse} of a RadioSet object.
@@ -450,12 +455,12 @@ from the \code{LongTable} object in \verb{@treatmentResponse} of a RadioSet obje
 similar to the old RadioSet implementation, where the \verb{@treatmentResponse} slot
 contained a list with a \verb{$info} \code{data.frame} item. When the \code{dimension}
 arugment is used, more complicated assignments can occur where 'sample'
-modifies the \verb{@sensitvity} \code{LongTable} colData, 'drug' the rowData and
+modifies the \verb{@sensitvity} \code{LongTable} colData, 'treatment' the rowData and
 'assay' the 'assay_metadata' assay.
 Arguments:
 \itemize{
 \item value: A \code{data.frame} of treatment response experiment metadata,
-documenting experiment level metadata (mapping to drugs and samples). If
+documenting experiment level metadata (mapping to treatments and samples). If
 the \verb{@treatmentResponse} slot doesn't contain a \code{LongTable} and \code{dimension} is
 not specified, you can only modify existing columns as returned by
 \code{sensitivityInfo(object)}.
@@ -463,7 +468,7 @@ not specified, you can only modify existing columns as returned by
 
 \strong{sensitivityMeaures}: Get the 'sensitivityMeasures' available in a \code{RadioSet}
 object. Each measure reprents some summary of sample sensitivity to a given
-drug, such as ic50, ec50, AUC, AAC, etc. The results are returned as a
+treatment, such as ic50, ec50, AUC, AAC, etc. The results are returned as a
 \code{character} vector with all available metrics for the PSet object.
 
 \strong{sensitivityMeaures}: Update the sensitivity meaure in a \code{RadioSet}
@@ -479,7 +484,7 @@ then length of the character vector must matcht he number of columns of the
 \strong{sensitivityProfiles}: Return the sensitivity profile summaries from the
 sensitivity slot. This data.frame cotanins vaarious sensitivity summary
 metrics, such as ic50, amax, EC50, aac, HS, etc as columns, with rows as
-drug by sample experiments.
+treatment by sample experiments.
 
 \strong{sensitivityProfiles<-}: Update the sensitivity profile summaries the
 sensitivity slot. Arguments:
@@ -500,26 +505,26 @@ dose or viability measurement for that experiment_id and replicate.
 }
 
 \strong{sensNumber}: Return a count of viability observations in a \code{RadioSet}
-object for each drug-combo by sample combination.
+object for each treatment-combo by sample combination.
 
 \strong{sensNumber<-}: Update the 'n' item, which holds a matrix with a count
-of drug by sample-line experiment counts, in the \code{list} in \verb{@treatmentResponse}
+of treatment by sample-line experiment counts, in the \code{list} in \verb{@treatmentResponse}
 slot of a \code{RadioSet} object. Will error when \verb{@sensitviity} contains
 a \code{LongTable} object, since the counts are computed on the fly. Arguments:
 \itemize{
-\item value: A \code{matrix} where rows are samples and columns are drugs, with a
+\item value: A \code{matrix} where rows are samples and columns are treatments, with a
 count of the number of experiments for each combination as the values.
 }
 
 \strong{pertNumber}: \code{array} Summary of available perturbation experiments
 from in a \code{RadioSet} object. Returns a 3D \code{array} with the number of
-perturbation experiments per drug and sample, and data type.
+perturbation experiments per treatment and sample, and data type.
 
 \strong{pertNumber<-}: Update the \verb{@perturbation$n} value in a \code{RadioSet} object,
 which stores a summary of the available perturbation experiments. Arguments:
 \itemize{
 \item value: A new 3D \code{array} with the number of perturbation experiments per
-drug and sample, and data type
+treatment and sample, and data type
 }
 }
 \examples{
@@ -570,6 +575,9 @@ molecularProfiles(clevelandSmall, 'rna') <- molecularProfiles(clevelandSmall, 'r
 molecularProfiles(clevelandSmall, 'rna', 'exprs') <-
     molecularProfiles(clevelandSmall, 'rna', 'exprs')
 
+# Replace the whole slot
+molecularProfiles(clevelandSmall) <- molecularProfiles(clevelandSmall)
+
 featureInfo(clevelandSmall, 'rna')
 
 featureInfo(clevelandSmall, 'rna') <- featureInfo(clevelandSmall, 'rna')
@@ -606,9 +614,9 @@ head(sensitivityRaw(clevelandSmall))
 
 sensitivityRaw(clevelandSmall) <- sensitivityRaw(clevelandSmall)
 
-sensitivitySlot(clevelandSmall)
+treatmentResponse(clevelandSmall)
 
-sensitivitySlot(clevelandSmall) <- sensitivitySlot(clevelandSmall)
+treatmentResponse(clevelandSmall) <- treatmentResponse(clevelandSmall)
 
 sensNumber(clevelandSmall)
 

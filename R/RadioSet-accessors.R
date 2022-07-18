@@ -533,24 +533,24 @@ setReplaceMethod('sensitivityRaw', signature("RadioSet", "array"),
 
 
 #
-# == sensitivitySlot
+# == treatmentResponse
 
 
 #' @rdname RadioSet-accessors
-#' @eval CoreGx:::.docs_CoreSet_get_sensitivitySlot(class_=.local_class,
+#' @eval CoreGx:::.docs_CoreSet_get_treatmentResponse(class_=.local_class,
 #'   data_=.local_data)
-#' @importMethodsFrom CoreGx sensitivitySlot
-setMethod("sensitivitySlot", signature("RadioSet"), function(object) {
+#' @importMethodsFrom CoreGx treatmentResponse
+setMethod("treatmentResponse", signature("RadioSet"), function(object) {
     callNextMethod(object=object)
 })
 
 
 
 #' @rdname RadioSet-accessors
-#' @importMethodsFrom CoreGx sensitivitySlot<-
-#' @eval CoreGx:::.docs_CoreSet_set_sensitivitySlot(class_=.local_class,
+#' @importMethodsFrom CoreGx treatmentResponse<-
+#' @eval CoreGx:::.docs_CoreSet_set_treatmentResponse(class_=.local_class,
 #' data_=.local_data)
-setReplaceMethod('sensitivitySlot', signature(object='RadioSet',
+setReplaceMethod('treatmentResponse', signature(object='RadioSet',
     value='list_OR_LongTable'), function(object, value)
 {
     callNextMethod(object=object, value=value)
