@@ -88,15 +88,16 @@ RadioSet <-  function(name,
 {
     cSet <- CoreGx::CoreSet(
         name=name,
-        sample=sample,
-        treatment=treatment,
+        sample=cell,
+        treatment=radiation,
+        molecularProfiles=molecularProfiles,
         sensitivityInfo=sensitivityInfo,
         sensitivityRaw=sensitivityRaw,
         sensitivityProfiles=sensitivityProfiles,
         sensitivityN=sensitivityN,
         perturbationN=perturbationN,
-        curationTreatment=curationTreatment,
-        curationSample=curationSample,
+        curationTreatment=radiation,
+        curationSample=curationCell,
         curationTissue=curationTissue,
         datasetType=datasetType,
         verify=verify
@@ -107,16 +108,16 @@ RadioSet <-  function(name,
         molecularProfiles=cSet@molecularProfiles,
         sample=cSet@sample,
         treatment=cSet@treatment,
-        datasetType=cSet@datasetTypes,
+        datasetType=cSet@datasetType,
         treatmentResponse=cSet@treatmentResponse,
         perturbation=cSet@perturbation,
         curation=cSet@curation
     )
     if (verify) { checkRSetStructure(rSet)}
-    if(length(sensitivityN) == 0 & datasetType %in% c("sensitivity", "both")) {
+    if (length(sensitivityN) == 0 && datasetType %in% c("sensitivity", "both")) {
       sensNumber(rSet) <- .summarizeSensitivityNumbers(rSet)
     }
-      if(length(perturbationN) == 0  & datasetType %in% c("perturbation", "both")) {
+      if (length(perturbationN) == 0  && datasetType %in% c("perturbation", "both")) {
         pertNumber(rSet) <- .summarizePerturbationNumbers(rSet)
       }
     return(rSet)
