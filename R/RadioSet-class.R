@@ -60,7 +60,7 @@
 #' methods. For a much more detailed instruction on creating RadioSets, please
 #' see the "CreatingRadioSet" vignette.
 #'
-#' @inheritParam CoreGx::CoreSet
+#' @inheritParams CoreGx::CoreSet
 #'
 #' @return An object of class RadioSet
 #'
