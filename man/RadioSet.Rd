@@ -20,6 +20,34 @@ RadioSet(
   verify = TRUE
 )
 }
+\arguments{
+\item{name}{A \code{character} string detailing the name of the dataset}
+
+\item{molecularProfiles}{A \code{list} of SummarizedExperiment objects containing
+molecular profiles for each molecular data type.}
+
+\item{sensitivityInfo}{A \code{data.frame} containing the information for the
+sensitivity experiments. Must contain a 'sampleid' column with unique
+identifiers to each sample, matching the \code{sample} object and a 'treatmentid'
+columns with unique indenifiers for each treatment, matching the \code{treatment}
+object.}
+
+\item{sensitivityRaw}{A 3 Dimensional \code{array} contaning the raw drug
+dose response data for the sensitivity experiments}
+
+\item{sensitivityProfiles}{\code{data.frame} containing drug sensitivity profile
+statistics such as IC50 and AUC}
+
+\item{sensitivityN, perturbationN}{A \code{data.frame} summarizing the
+available sensitivity/perturbation data}
+
+\item{datasetType}{A \code{character(1)} string of 'sensitivity',
+'preturbation', or 'both' detailing what type of data can be found in the
+\code{CoreSet}, for proper processing of the data}
+
+\item{verify}{\code{logical(1)}Should the function verify the CoreSet and
+print out any errors it finds after construction?}
+}
 \value{
 An object of class RadioSet
 }

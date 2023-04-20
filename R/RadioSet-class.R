@@ -62,7 +62,7 @@
 #'
 #' @inheritParams CoreGx::CoreSet
 #'
-#' @return An object of class RadioSet
+#' @return An object of class `RadioSet``
 #'
 #' @import methods
 #' @importFrom utils sessionInfo
