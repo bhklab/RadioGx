@@ -1,7 +1,5 @@
 #' Calcualte the gene radiation sensitivity score
 #'
-#' @examples
-#'
 #'
 #' @param x \code{numeric} vector of gene expression values
 #' @param type \code{factor} vector specifying the cell lines or type types

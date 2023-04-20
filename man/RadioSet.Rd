@@ -7,15 +7,16 @@
 RadioSet(
   name,
   molecularProfiles = list(),
-  cell = data.frame(),
-  radiation = data.frame(),
+  sample = data.frame(),
+  treatment = data.frame(),
   sensitivityInfo = data.frame(),
   sensitivityRaw = array(dim = c(0, 0, 0)),
   sensitivityProfiles = matrix(),
   sensitivityN = matrix(nrow = 0, ncol = 0),
   perturbationN = array(NA, dim = c(0, 0, 0)),
-  curationCell = data.frame(),
+  curationSample = data.frame(),
   curationTissue = data.frame(),
+  curationTreatment = data.frame(),
   datasetType = c("sensitivity", "perturbation", "both"),
   verify = TRUE
 )
@@ -25,6 +26,14 @@ RadioSet(
 
 \item{molecularProfiles}{A \code{list} of SummarizedExperiment objects containing
 molecular profiles for each molecular data type.}
+
+\item{sample}{A \code{data.frame} containing the annotations for all the sample
+profiled in the data set, across all data types. Must contain the mandatory
+\code{sampleid} column which uniquely identifies each sample in the object.}
+
+\item{treatment}{A \code{data.frame} containing annotations for all treatments
+profiled in the dataset. Must contain the mandatory \code{treatmentid} column
+which uniquely identifies each treatment in the object.}
 
 \item{sensitivityInfo}{A \code{data.frame} containing the information for the
 sensitivity experiments. Must contain a 'sampleid' column with unique
@@ -41,6 +50,10 @@ statistics such as IC50 and AUC}
 \item{sensitivityN, perturbationN}{A \code{data.frame} summarizing the
 available sensitivity/perturbation data}
 
+\item{curationSample, curationTissue, curationTreatment}{A \code{data.frame} mapping
+the names for samples, tissues and treatments used in the data set to
+universal identifiers used between different CoreSet objects}
+
 \item{datasetType}{A \code{character(1)} string of 'sensitivity',
 'preturbation', or 'both' detailing what type of data can be found in the
 \code{CoreSet}, for proper processing of the data}
@@ -49,7 +62,7 @@ available sensitivity/perturbation data}
 print out any errors it finds after construction?}
 }
 \value{
-An object of class RadioSet
+An object of class `RadioSet``
 }
 \description{
 A constructor that simplifies the process of creating RadioSets, as well
