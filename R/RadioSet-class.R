@@ -62,7 +62,7 @@
 #'
 #' @inheritParams CoreGx::CoreSet
 #'
-#' @return An object of class RadioSet
+#' @return An object of class `RadioSet``
 #'
 #' @import methods
 #' @importFrom utils sessionInfo
@@ -74,30 +74,31 @@
 #' @export
 RadioSet <-  function(name,
                       molecularProfiles=list(),
-                      cell=data.frame(),
-                      radiation=data.frame(),
+                      sample=data.frame(),
+                      treatment=data.frame(),
                       sensitivityInfo=data.frame(),
                       sensitivityRaw=array(dim=c(0,0,0)),
                       sensitivityProfiles=matrix(),
                       sensitivityN=matrix(nrow=0, ncol=0),
                       perturbationN=array(NA, dim=c(0,0,0)),
-                      curationCell = data.frame(),
+                      curationSample = data.frame(),
                       curationTissue = data.frame(),
+                      curationTreatment = data.frame(),
                       datasetType=c("sensitivity", "perturbation", "both"),
                       verify = TRUE)
 {
     cSet <- CoreGx::CoreSet(
         name=name,
-        sample=cell,
-        treatment=radiation,
+        sample=sample,
+        treatment=treatment,
         molecularProfiles=molecularProfiles,
         sensitivityInfo=sensitivityInfo,
         sensitivityRaw=sensitivityRaw,
         sensitivityProfiles=sensitivityProfiles,
         sensitivityN=sensitivityN,
         perturbationN=perturbationN,
-        curationTreatment=radiation,
-        curationSample=curationCell,
+        curationTreatment=curationTreatment,
+        curationSample=curationSample,
         curationTissue=curationTissue,
         datasetType=datasetType,
         verify=verify
