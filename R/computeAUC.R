@@ -122,7 +122,6 @@ computeAUC <- function(
     }
 
     if (SF_as_log == TRUE) {
-      # Modified condition to correct error
       return(
         pars[[1]] /
           2 *
