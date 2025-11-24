@@ -34,43 +34,57 @@
 #' @importFrom caTools trapz
 #' @export
 # Added SF_as_log argument with default as false to match condition on line 93
-computeAUC <- function(D, SF, pars, lower, upper, trunc = TRUE,
-                       SF_as_log = FALSE,
-                       area.type = c("Fitted", "Actual"),
-                       verbose = TRUE)
-  {
+computeAUC <- function(
+  D,
+  SF,
+  pars,
+  lower,
+  upper,
+  trunc = TRUE,
+  SF_as_log = FALSE,
+  area.type = c("Fitted", "Actual"),
+  verbose = TRUE
+) {
   area.type <- match.arg(area.type)
 
   if (!missing(SF)) {
-    CoreGx::.sanitizeInput(x = D,
-                            y = SF,
-                            x_as_log = FALSE,
-                            y_as_log = FALSE,
-                            y_as_pct = FALSE,
-                            trunc = trunc,
-                            verbose = FALSE)
+    CoreGx::.sanitizeInput(
+      x = D,
+      y = SF,
+      x_as_log = FALSE,
+      y_as_log = FALSE,
+      y_as_pct = FALSE,
+      trunc = trunc,
+      verbose = FALSE
+    )
 
-    DSF <- CoreGx::.reformatData(x = D,
-                                 y = SF,
-                                 x_to_log = FALSE,
-                                 y_to_log = FALSE,
-                                 y_to_frac = FALSE,
-                                 trunc = trunc)
+    DSF <- CoreGx::.reformatData(
+      x = D,
+      y = SF,
+      x_to_log = FALSE,
+      y_to_log = FALSE,
+      y_to_frac = FALSE,
+      trunc = trunc
+    )
     D <- DSF[["x"]]
     SF <- DSF[["y"]]
   } else if (!missing(pars)) {
-    CoreGx::.sanitizeInput(pars = pars,
-                            x_as_log = FALSE,
-                            y_as_log = FALSE,
-                            y_as_pct = FALSE,
-                            trunc = trunc,
-                            verbose = FALSE)
-    Dpars <- CoreGx::.reformatData(x = D,
-                                    pars = pars,
-                                    x_to_log = FALSE,
-                                    y_to_log = FALSE,
-                                    y_to_frac = FALSE,
-                                    trunc = trunc)
+    CoreGx::.sanitizeInput(
+      pars = pars,
+      x_as_log = FALSE,
+      y_as_log = FALSE,
+      y_as_pct = FALSE,
+      trunc = trunc,
+      verbose = FALSE
+    )
+    Dpars <- CoreGx::.reformatData(
+      x = D,
+      pars = pars,
+      x_to_log = FALSE,
+      y_to_log = FALSE,
+      y_to_frac = FALSE,
+      trunc = trunc
+    )
     D <- Dpars[["x"]]
     pars <- Dpars[["pars"]]
   } else {
@@ -79,22 +93,26 @@ computeAUC <- function(D, SF, pars, lower, upper, trunc = TRUE,
 
   if (!missing(lower) && !missing(upper)) {
     ###TODO:: Check if this function still works correctly
-    CoreGx::.sanitizeInput(pars = pars, # Added this line to resolve error returned from CoreGx
-                           lower = lower,
-                           upper = upper,
-                           x_as_log = FALSE,
-                           y_as_log = FALSE,
-                           y_as_pct = FALSE,
-                           trunc = trunc,
-                           verbose = verbose)
+    CoreGx::.sanitizeInput(
+      pars = pars, # Added this line to resolve error returned from CoreGx
+      lower = lower,
+      upper = upper,
+      x_as_log = FALSE,
+      y_as_log = FALSE,
+      y_as_pct = FALSE,
+      trunc = trunc,
+      verbose = verbose
+    )
   }
 
   if (area.type == "Fitted") {
     if (missing(pars)) {
-      pars <- unlist(linearQuadraticModel(D = D,
-                                          SF = SF,
-                                          trunc = trunc,
-                                          verbose = verbose))
+      pars <- unlist(linearQuadraticModel(
+        D = D,
+        SF = SF,
+        trunc = trunc,
+        verbose = verbose
+      ))
     }
     if (missing(lower)) {
       lower <- min(D)
@@ -103,23 +121,28 @@ computeAUC <- function(D, SF, pars, lower, upper, trunc = TRUE,
       upper <- max(D)
     }
 
-    if (SF_as_log == TRUE) { # Modified condition to correct error
-      return(pars[[1]] / 2 * (lower ^ 2 - upper ^ 2) + pars[[2]] / 3 * (lower ^ 3 - upper ^ 3))
+    if (SF_as_log == TRUE) {
+      return(
+        pars[[1]] /
+          2 *
+          (lower^2 - upper^2) +
+          pars[[2]] / 3 * (lower^3 - upper^3)
+      )
     } else {
       if (pars[[2]] == 0) {
         if (pars[[1]] == 0) {
           return(upper - lower)
         } else {
-          return((exp(-pars[[1]] * lower) - exp(-pars[[1]] * upper)) / pars[[1]])
+          return(
+            (exp(-pars[[1]] * lower) - exp(-pars[[1]] * upper)) / pars[[1]]
+          )
         }
       } else {
-        x <- CoreGx::.getSupportVec(x=D, output_length = 1000)
-        y <- .linearQuadratic(D=x, pars=pars, SF_as_log=FALSE)
+        x <- CoreGx::.getSupportVec(x = c(lower, upper), output_length = 1000)
+        y <- .linearQuadratic(D = x, pars = pars, SF_as_log = FALSE)
         return(caTools::trapz(x, y))
-
       }
     }
-
   } else if (area.type == "Actual") {
     if (missing(SF)) {
       stop("Please pass in SF-values.")
